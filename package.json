@@ -1,29 +1,35 @@
 {
   "name": "mediatwist-automation-engine",
   "version": "1.0.0",
-  "description": "Remotion video compositions + render pipeline for Mediatwist social posts",
+  "description": "AI-powered content engine: generate → render → upload → post",
+  "main": "workflows/runDailyEngine.js",
   "scripts": {
-    "studio": "npx remotion studio",
-    "render:feed": "npx remotion render src/index.ts FeedPost out/feed-post.mp4 --codec h264",
-    "render:reels": "npx remotion render src/index.ts ReelsPost out/reels-post.mp4 --codec h264",
-    "render:caption": "npx remotion render src/index.ts BrandedCaption out/caption-post.mp4 --codec h264",
-    "render:variations": "node scripts/renderVariations.js",
-    "render:all": "npm run render:feed && npm run render:reels && npm run render:caption"
+    "start":              "node workflows/runDailyEngine.js",
+    "engine":             "node workflows/runDailyEngine.js",
+    "studio":             "npx remotion studio",
+    "render:videos":      "node scripts/renderVideos.js",
+    "render:variations":  "node scripts/renderVariations.js",
+    "render:feed":        "npx remotion render src/index.ts FeedPost outputs/feed-post.mp4 --codec h264",
+    "render:reels":       "npx remotion render src/index.ts ReelsPost outputs/reels-post.mp4 --codec h264",
+    "render:caption":     "npx remotion render src/index.ts BrandedCaption outputs/caption-post.mp4 --codec h264"
   },
   "dependencies": {
-    "@remotion/cli": "4.0.290",
-    "@remotion/core": "4.0.290",
+    "@remotion/bundler":      "4.0.290",
+    "@remotion/cli":          "4.0.290",
+    "@remotion/core":         "4.0.290",
     "@remotion/google-fonts": "4.0.290",
-    "cloudinary": "^2.5.0",
-    "dotenv": "^16.4.5",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "remotion": "4.0.290"
+    "@remotion/renderer":     "4.0.290",
+    "axios":                  "^1.7.2",
+    "cloudinary":             "^2.5.0",
+    "dotenv":                 "^16.4.5",
+    "react":                  "^18.3.1",
+    "react-dom":              "^18.3.1",
+    "remotion":               "4.0.290"
   },
   "devDependencies": {
-    "@types/react": "^18.3.1",
+    "@types/react":     "^18.3.1",
     "@types/react-dom": "^18.3.1",
-    "typescript": "^5.5.4"
+    "typescript":       "^5.5.4"
   },
   "remotion": {
     "entryPoint": "src/index.ts"

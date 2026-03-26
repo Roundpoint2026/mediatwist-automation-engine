@@ -4,7 +4,8 @@
   "description": "AI-powered content engine: generate → render → upload → post",
   "main": "workflows/runDailyEngine.js",
   "scripts": {
-    "start":              "node workflows/runDailyEngine.js",
+    "start":              "node run.js",
+    "post":               "node run.js",
     "engine":             "node workflows/runDailyEngine.js",
     "studio":             "npx remotion studio",
     "render:videos":      "node scripts/renderVideos.js",

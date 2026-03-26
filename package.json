@@ -1,0 +1,31 @@
+{
+  "name": "mediatwist-automation-engine",
+  "version": "1.0.0",
+  "description": "Remotion video compositions + render pipeline for Mediatwist social posts",
+  "scripts": {
+    "studio": "npx remotion studio",
+    "render:feed": "npx remotion render src/index.ts FeedPost out/feed-post.mp4 --codec h264",
+    "render:reels": "npx remotion render src/index.ts ReelsPost out/reels-post.mp4 --codec h264",
+    "render:caption": "npx remotion render src/index.ts BrandedCaption out/caption-post.mp4 --codec h264",
+    "render:variations": "node scripts/renderVariations.js",
+    "render:all": "npm run render:feed && npm run render:reels && npm run render:caption"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.290",
+    "@remotion/core": "4.0.290",
+    "@remotion/google-fonts": "4.0.290",
+    "cloudinary": "^2.5.0",
+    "dotenv": "^16.4.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "4.0.290"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.1",
+    "typescript": "^5.5.4"
+  },
+  "remotion": {
+    "entryPoint": "src/index.ts"
+  }
+}

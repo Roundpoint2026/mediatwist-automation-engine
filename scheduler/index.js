@@ -375,9 +375,14 @@ async function queueDays(numDays) {
 // ─── Cron loop ────────────────────────────────────────────────────────────────
 
 function startScheduler() {
-  const cron = config.scheduler.cronExpression;
+  // Support multiple cron expressions separated by commas (e.g. "30 8 * * *,0 20 * * *")
+  const cronRaw = config.scheduler.cronExpression;
+  const cronExpressions = cronRaw.includes(',') && cronRaw.split(',').every(c => c.trim().split(/\s+/).length === 5)
+    ? cronRaw.split(',').map(c => c.trim())
+    : [cronRaw]; // single expression
+
   console.log(`\n 🕐  Mediatwist Scheduler started`);
-  console.log(`     Cron: ${cron}`);
+  cronExpressions.forEach(c => console.log(`     Cron: ${c}`));
   console.log(`     TZ:   ${config.scheduler.timezone}`);
   console.log(`     Waiting for next trigger...\n`);
 
@@ -387,7 +392,8 @@ function startScheduler() {
     const now = new Date();
     const nowMinute = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-${now.getHours()}-${now.getMinutes()}`;
 
-    if (cronMatches(cron, now) && lastRun !== nowMinute) {
+    const anyMatch = cronExpressions.some(expr => cronMatches(expr, now));
+    if (anyMatch && lastRun !== nowMinute) {
       lastRun = nowMinute;
       console.log(`\n ⏰  Cron triggered at ${now.toISOString()}`);
 

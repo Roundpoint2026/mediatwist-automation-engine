@@ -93,7 +93,7 @@ module.exports = {
 
   // ─── Scheduler ───────────────────────────────────────────────────────────
   scheduler: {
-    cronExpression: process.env.CRON_SCHEDULE || '0 9 * * *',  // Daily at 9 AM
+    cronExpression: process.env.CRON_SCHEDULE || '30 8 * * *,0 20 * * *',  // Twice daily: 8:30 AM + 8:00 PM ET
     timezone:       process.env.TZ || 'America/New_York',
   },
 };

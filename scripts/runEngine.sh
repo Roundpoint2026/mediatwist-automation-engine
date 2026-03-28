@@ -60,8 +60,19 @@ echo "[$(date)] Running: node scripts/renderAndPublish.js $EXTRA_FLAGS" >> "$CRO
 
 # Capture both stdout and stderr, with a 10-minute timeout
 TIMEOUT_SECONDS=600
-OUTPUT=$(timeout $TIMEOUT_SECONDS node scripts/renderAndPublish.js $EXTRA_FLAGS 2>&1)
-EXIT_CODE=$?
+
+# macOS doesn't have `timeout` — use perl workaround or gtimeout if available
+if command -v gtimeout &>/dev/null; then
+  OUTPUT=$(gtimeout $TIMEOUT_SECONDS node scripts/renderAndPublish.js $EXTRA_FLAGS 2>&1)
+  EXIT_CODE=$?
+elif command -v timeout &>/dev/null; then
+  OUTPUT=$(timeout $TIMEOUT_SECONDS node scripts/renderAndPublish.js $EXTRA_FLAGS 2>&1)
+  EXIT_CODE=$?
+else
+  # Fallback: run without timeout on macOS
+  OUTPUT=$(node scripts/renderAndPublish.js $EXTRA_FLAGS 2>&1)
+  EXIT_CODE=$?
+fi
 
 # Log full output
 echo "$OUTPUT" >> "$CRON_LOG"

@@ -9,6 +9,7 @@ import {
   staticFile,
 } from 'remotion';
 import { MEDIATWIST_COLORS } from '../lib/colors';
+import { BackgroundImage } from '../lib/BackgroundImage';
 
 export interface FeedPostProps {
   /** Main caption / body text */
@@ -19,6 +20,8 @@ export interface FeedPostProps {
   subText?: string;
   /** Override brand accent color */
   brandColor?: string;
+  /** Optional background photo URL — renders behind content with dark overlay */
+  backgroundImageUrl?: string;
 }
 
 /**
@@ -31,6 +34,7 @@ export const FeedPost: React.FC<FeedPostProps> = ({
   headline = 'Mediatwist',
   subText,
   brandColor = MEDIATWIST_COLORS.accent,
+  backgroundImageUrl,
 }) => {
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
@@ -76,6 +80,9 @@ export const FeedPost: React.FC<FeedPostProps> = ({
 
   return (
     <AbsoluteFill style={{ backgroundColor: MEDIATWIST_COLORS.dark, opacity: bgOpacity }}>
+
+      {/* Photo background (when provided) */}
+      <BackgroundImage src={backgroundImageUrl} overlayOpacity={0.55} blur={2} />
 
       {/* Radar grid background */}
       <svg

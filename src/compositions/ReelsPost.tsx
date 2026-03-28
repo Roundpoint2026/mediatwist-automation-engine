@@ -9,6 +9,7 @@ import {
   staticFile,
 } from 'remotion';
 import { MEDIATWIST_COLORS } from '../lib/colors';
+import { BackgroundImage } from '../lib/BackgroundImage';
 
 export interface ReelsPostProps {
   /** Main caption / body text */
@@ -19,6 +20,8 @@ export interface ReelsPostProps {
   ctaText?: string;
   /** Override brand accent color */
   brandColor?: string;
+  /** Optional background photo URL */
+  backgroundImageUrl?: string;
 }
 
 /**
@@ -31,6 +34,7 @@ export const ReelsPost: React.FC<ReelsPostProps> = ({
   headline = 'Did you know?',
   ctaText = 'Follow for more → @mediatwist',
   brandColor = MEDIATWIST_COLORS.accent,
+  backgroundImageUrl,
 }) => {
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
@@ -77,6 +81,9 @@ export const ReelsPost: React.FC<ReelsPostProps> = ({
 
   return (
     <AbsoluteFill style={{ backgroundColor: MEDIATWIST_COLORS.dark, opacity: bgOpacity }}>
+
+      {/* Photo background (when provided) */}
+      <BackgroundImage src={backgroundImageUrl} overlayOpacity={0.5} blur={2} zoomScale={1.12} />
 
       {/* Radar grid background */}
       <svg

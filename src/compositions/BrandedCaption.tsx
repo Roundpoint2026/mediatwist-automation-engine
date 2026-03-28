@@ -9,6 +9,7 @@ import {
   staticFile,
 } from 'remotion';
 import { MEDIATWIST_COLORS } from '../lib/colors';
+import { BackgroundImage } from '../lib/BackgroundImage';
 
 export interface BrandedCaptionProps {
   /** The caption or quote to display */
@@ -17,6 +18,8 @@ export interface BrandedCaptionProps {
   attribution?: string;
   /** Override brand accent color */
   brandColor?: string;
+  /** Optional background photo URL */
+  backgroundImageUrl?: string;
 }
 
 /**
@@ -28,6 +31,7 @@ export const BrandedCaption: React.FC<BrandedCaptionProps> = ({
   captionText,
   attribution = '— The Mediatwist Group',
   brandColor = MEDIATWIST_COLORS.accent,
+  backgroundImageUrl,
 }) => {
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
@@ -64,6 +68,9 @@ export const BrandedCaption: React.FC<BrandedCaptionProps> = ({
 
   return (
     <AbsoluteFill style={{ backgroundColor: MEDIATWIST_COLORS.dark, opacity: bgOpacity }}>
+
+      {/* Photo background (when provided) */}
+      <BackgroundImage src={backgroundImageUrl} overlayOpacity={0.5} blur={3} />
 
       {/* Radar grid background */}
       <svg

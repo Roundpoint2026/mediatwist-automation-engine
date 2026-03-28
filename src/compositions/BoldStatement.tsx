@@ -9,6 +9,7 @@ import {
   staticFile,
 } from 'remotion';
 import { MEDIATWIST_COLORS } from '../lib/colors';
+import { BackgroundImage } from '../lib/BackgroundImage';
 
 export interface BoldStatementProps {
   /** The main statement text — displayed HUGE */
@@ -17,6 +18,8 @@ export interface BoldStatementProps {
   tagline?: string;
   /** Override brand accent color */
   brandColor?: string;
+  /** Optional background photo URL — renders behind content with dark overlay */
+  backgroundImageUrl?: string;
 }
 
 /**
@@ -28,6 +31,7 @@ export const BoldStatement: React.FC<BoldStatementProps> = ({
   captionText,
   tagline = 'THE MEDIATWIST GROUP',
   brandColor = MEDIATWIST_COLORS.accent,
+  backgroundImageUrl,
 }) => {
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
@@ -65,6 +69,9 @@ export const BoldStatement: React.FC<BoldStatementProps> = ({
 
   return (
     <AbsoluteFill style={{ backgroundColor: MEDIATWIST_COLORS.dark, opacity: bgOpacity }}>
+
+      {/* Photo background (when provided) */}
+      <BackgroundImage src={backgroundImageUrl} overlayOpacity={0.6} blur={3} />
 
       {/* Geometric background accents */}
       <div style={{

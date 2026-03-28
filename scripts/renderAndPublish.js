@@ -63,7 +63,17 @@ function log(emoji, msg) { console.log(`  ${emoji} ${msg}`); }
 // ─── Composition Mapping ─────────────────────────────────────────────────────
 // Maps content engine compositionHints → Remotion composition IDs + props
 // Now with 8 compositions for maximum visual variety
-function mapToComposition(category, compositionHint, hook, body) {
+// backgroundImageUrl is an optional photo URL/staticFile path for composition backgrounds
+function mapToComposition(category, compositionHint, hook, body, backgroundImageUrl) {
+  const result = _mapToCompositionInner(category, compositionHint, hook, body);
+  // Inject backgroundImageUrl into every composition's props
+  if (backgroundImageUrl) {
+    result.props.backgroundImageUrl = backgroundImageUrl;
+  }
+  return result;
+}
+
+function _mapToCompositionInner(category, compositionHint, hook, body) {
   // Short hook for video overlay (first sentence or first 80 chars)
   const shortHook = hook.length > 100 ? hook.split('.')[0] + '.' : hook;
 
@@ -495,7 +505,7 @@ async function postToLinkedIn(caption, mediaUrl, localVideoPath) {
   // ── Step 1: Generate Content ─────────────────────────────────────────────
   console.log('\n ── STEP 1: CONTENT GENERATION ──────────────────────────────');
   const content = await contentEngine.generateDailyContent();
-  const { facebook, instagram, linkedin, metadata } = content;
+  const { facebook, instagram, linkedin, metadata, visual_direction } = content;
 
   log('📝', `Category: ${metadata.category}`);
   log('🎯', `Hook: "${facebook.hook.slice(0, 80)}..."`);
@@ -524,12 +534,15 @@ async function postToLinkedIn(caption, mediaUrl, localVideoPath) {
 
   // ── Step 2: Map to Remotion Composition ──────────────────────────────────
   console.log('\n ── STEP 2: REMOTION VIDEO RENDERING ────────────────────────');
+  const bgUrl = visual_direction?.backgroundImageUrl || null;
   const { compositionId, props } = mapToComposition(
     metadata.category,
     facebook.compositionHint,
     facebook.hook,
-    facebook.body
+    facebook.body,
+    bgUrl
   );
+  if (bgUrl) log('🖼️', `Background photo: ${bgUrl.substring(0, 80)}...`);
   log('🎬', `Composition: ${compositionId}`);
   log('📐', 'Format: 1080×1080 (feed)');
 

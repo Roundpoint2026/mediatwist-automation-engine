@@ -1,6 +1,93 @@
 const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
 const { getLeastUsedCategories, getUnusedHooks, isDuplicate, getRecentPosts, recordPost } = require('../memory/store.js');
 const config = require('../config/engine.js');
+
+/**
+ * Background photo URLs per category — curated from Unsplash (royalty-free).
+ * Each category has multiple options; one is picked at random per post.
+ * Users can also add their own photos to public/backgrounds/ and they'll be
+ * detected and mixed in automatically.
+ */
+const BACKGROUND_PHOTOS = {
+  'Industry Insight': [
+    'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1080&q=80',  // Earth from space — tech/global
+    'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1080&q=80',  // Matrix code rain
+    'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1080&q=80',  // Circuit board macro
+  ],
+  'Contrarian Marketing Take': [
+    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1080&q=80',  // Person thinking
+    'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1080&q=80',     // Conference room
+    'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1080&q=80',     // Team brainstorming
+  ],
+  'Case Study Breakdown': [
+    'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1080&q=80',  // Dashboard/analytics
+    'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1080&q=80',     // Data charts
+    'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=1080&q=80',     // Business meeting
+  ],
+  'Founder/Operator Mindset': [
+    'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1080&q=80',  // Laptop workspace
+    'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1080&q=80',  // Office desk
+    'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1080&q=80',  // Modern office
+  ],
+  'Social Media Myth Busting': [
+    'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1080&q=80',  // Social media apps
+    'https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=1080&q=80',  // Phone with social
+    'https://images.unsplash.com/photo-1563986768494-4dee2763ff3f?w=1080&q=80',  // Neon social icons
+  ],
+  'AI & Marketing Strategy': [
+    'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1080&q=80',  // AI abstract
+    'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1080&q=80',  // Robot/AI
+    'https://images.unsplash.com/photo-1555255707-c07966088b7b?w=1080&q=80',     // Neural network
+  ],
+  'Growth Hacking': [
+    'https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=1080&q=80',     // Rocket launch
+    'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1080&q=80',  // Growth chart
+    'https://images.unsplash.com/photo-1551434678-e076c223a692?w=1080&q=80',     // Team collaboration
+  ],
+  'Brand Authority': [
+    'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1080&q=80',  // Skyscraper/corporate
+    'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=1080&q=80',  // Luxury office
+    'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1080&q=80',  // Business suit
+  ],
+  'Paid Media Intelligence': [
+    'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1080&q=80',     // Analytics dashboard
+    'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1080&q=80',  // Data screen
+    'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=1080&q=80',  // Multiple screens
+  ],
+  'Content Strategy': [
+    'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1080&q=80',  // Laptop with coffee
+    'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=1080&q=80',  // Writing/notebook
+    'https://images.unsplash.com/photo-1542435503-956c469947f6?w=1080&q=80',     // Creative workspace
+  ],
+};
+
+/**
+ * Pick a background photo URL for a given category.
+ * First checks for local photos in public/backgrounds/, then falls back to Unsplash URLs.
+ */
+function pickBackgroundPhoto(category) {
+  const urls = BACKGROUND_PHOTOS[category] || [];
+
+  // Check for local photos in public/backgrounds/
+  const bgDir = path.resolve(__dirname, '../public/backgrounds');
+  let localPhotos = [];
+  try {
+    if (fs.existsSync(bgDir)) {
+      localPhotos = fs.readdirSync(bgDir)
+        .filter(f => /\.(jpg|jpeg|png|webp)$/i.test(f))
+        .map(f => `backgrounds/${f}`); // staticFile path format
+    }
+  } catch (_) {}
+
+  // Combine: local photos (as staticFile paths) + remote URLs
+  const allOptions = [...localPhotos, ...urls];
+
+  if (allOptions.length === 0) return null;
+
+  return allOptions[Math.floor(Math.random() * allOptions.length)];
+}
 
 /**
  * Content categories with executive-level, bold, authoritative copy
@@ -420,14 +507,15 @@ async function generateDailyContent() {
       timestamp: new Date().toISOString()
     },
     visual_direction: {
-      theme: `Bold executive-level ${selectedCategory.toLowerCase()} — black/yellow Mediatwist brand palette`,
+      theme: `Bold executive-level ${selectedCategory.toLowerCase()} — black/yellow Mediatwist brand palette with photo background`,
       layout: {
         logo_position: 'bottom-left',
         logo_clearspace_percentage: '25%',
         content_zone: 'top 80% of frame + right 75% of bottom area — all text and graphics here',
         safe_zones_description: 'Bottom-left 250×200px is RESERVED for logo overlay. No text, handles, or decorations may enter this zone. @mediatwist handle goes bottom-right.',
       },
-      background_style: 'Solid black (#0A0A0A) with subtle geometric/circuit-board accents in yellow (#FFD600) — accents must avoid bottom-left logo zone',
+      background_style: 'Photo background with dark overlay for readability + yellow (#FFD600) geometric accents — accents must avoid bottom-left logo zone',
+      backgroundImageUrl: pickBackgroundPhoto(selectedCategory),
       overlay_elements: 'Yellow accent lines, abstract shapes, progress bars — confined to content zone only, never overlapping bottom-left logo zone',
       text_style: 'Ultra-bold condensed uppercase font (Impact/Bebas Neue style) for headlines. White text with yellow highlights. @mediatwist handle at BOTTOM-RIGHT.',
       motion_style: categoryContent.compositionHint || 'kinetic-typography',

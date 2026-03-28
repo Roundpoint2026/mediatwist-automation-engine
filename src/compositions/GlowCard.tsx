@@ -9,6 +9,7 @@ import {
   staticFile,
 } from 'remotion';
 import { MEDIATWIST_COLORS } from '../lib/colors';
+import { BackgroundImage } from '../lib/BackgroundImage';
 
 export interface GlowCardProps {
   /** Main text content */
@@ -17,6 +18,8 @@ export interface GlowCardProps {
   tagline?: string;
   /** Override brand accent color */
   brandColor?: string;
+  /** Optional background photo URL — renders behind content with dark overlay */
+  backgroundImageUrl?: string;
 }
 
 /**
@@ -28,6 +31,7 @@ export const GlowCard: React.FC<GlowCardProps> = ({
   captionText,
   tagline = 'MEDIATWIST INSIGHT',
   brandColor = MEDIATWIST_COLORS.accent,
+  backgroundImageUrl,
 }) => {
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
@@ -76,6 +80,9 @@ export const GlowCard: React.FC<GlowCardProps> = ({
 
   return (
     <AbsoluteFill style={{ backgroundColor: '#050505', opacity: bgOpacity }}>
+
+      {/* Photo background (when provided) */}
+      <BackgroundImage src={backgroundImageUrl} overlayOpacity={0.65} blur={2} />
 
       {/* Background abstract illustration — hexagons & circuits */}
       <svg

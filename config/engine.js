@@ -80,6 +80,12 @@ module.exports = {
     accessToken:   process.env.CANVA_ACCESS_TOKEN || null,
     brandKitId:    process.env.CANVA_BRAND_KIT_ID || 'kAFgjxJ3nmw',
     queueFolderId: process.env.CANVA_QUEUE_FOLDER_ID || 'FAHFM_9suzw',
+    backgroundsFolderId: process.env.CANVA_BACKGROUNDS_FOLDER_ID || 'FAHFP77jWUQ',
+    backgroundSubfolders: {
+      quotes:    'FAHFPx33DuE',  // Quotes & Inspiration
+      business:  'FAHFP0EKpZM',  // Business & Office
+      abstract:  'FAHFP25xi28',  // Abstract & Textures
+    },
     enabled:       !!process.env.CANVA_ACCESS_TOKEN,
   },
 

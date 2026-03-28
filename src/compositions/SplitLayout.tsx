@@ -9,6 +9,7 @@ import {
   staticFile,
 } from 'remotion';
 import { MEDIATWIST_COLORS } from '../lib/colors';
+import { BackgroundImage } from '../lib/BackgroundImage';
 
 export interface SplitLayoutProps {
   /** Main caption text */
@@ -19,6 +20,8 @@ export interface SplitLayoutProps {
   tagline?: string;
   /** Override brand accent color */
   brandColor?: string;
+  /** Optional background photo URL */
+  backgroundImageUrl?: string;
 }
 
 /**
@@ -32,6 +35,7 @@ export const SplitLayout: React.FC<SplitLayoutProps> = ({
   headline = 'INSIGHT',
   tagline = 'THE MEDIATWIST GROUP',
   brandColor = MEDIATWIST_COLORS.accent,
+  backgroundImageUrl,
 }) => {
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
@@ -69,6 +73,9 @@ export const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   return (
     <AbsoluteFill style={{ backgroundColor: MEDIATWIST_COLORS.dark }}>
+
+      {/* Photo background (when provided) — shows through the dark right panel */}
+      <BackgroundImage src={backgroundImageUrl} overlayOpacity={0.5} blur={2} />
 
       {/* LEFT PANEL — Yellow accent */}
       <div style={{

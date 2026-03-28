@@ -9,6 +9,7 @@ import {
   staticFile,
 } from 'remotion';
 import { MEDIATWIST_COLORS } from '../lib/colors';
+import { BackgroundImage } from '../lib/BackgroundImage';
 
 export interface DataDashboardProps {
   /** Main title/headline */
@@ -19,6 +20,8 @@ export interface DataDashboardProps {
   stats: Array<{ label: string; value: string }>;
   /** Override brand accent color */
   brandColor?: string;
+  /** Optional background photo URL */
+  backgroundImageUrl?: string;
 }
 
 /**
@@ -36,6 +39,7 @@ export const DataDashboard: React.FC<DataDashboardProps> = ({
     { label: 'ROI', value: '+220%' },
   ],
   brandColor = MEDIATWIST_COLORS.accent,
+  backgroundImageUrl,
 }) => {
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
@@ -78,6 +82,9 @@ export const DataDashboard: React.FC<DataDashboardProps> = ({
 
   return (
     <AbsoluteFill style={{ backgroundColor: MEDIATWIST_COLORS.dark, opacity: bgOpacity }}>
+
+      {/* Photo background (when provided) */}
+      <BackgroundImage src={backgroundImageUrl} overlayOpacity={0.6} blur={3} />
 
       {/* Radar grid background */}
       <svg

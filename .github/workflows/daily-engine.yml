@@ -93,6 +93,20 @@ jobs:
           TZ=America/New_York
           EOF
 
+      # ── Auto token refresh ──────────────────────────────────────────
+      - name: Refresh Canva access token
+        run: |
+          echo "🔄 Refreshing Canva access token..."
+          node scripts/canvaRefresh.js 2>&1 || echo "⚠️ Canva token refresh failed — will try with existing token"
+          echo "✅ Canva token refresh complete"
+        continue-on-error: true
+
+      - name: Check Facebook token health
+        run: |
+          echo "🔍 Checking Facebook token..."
+          node publishers/tokenManager.js --check 2>&1 || echo "⚠️ Facebook token may be expired — check token:exchange"
+        continue-on-error: true
+
       - name: Sync Canva backgrounds
         run: |
           echo "Syncing Canva backgrounds to public/backgrounds/..."

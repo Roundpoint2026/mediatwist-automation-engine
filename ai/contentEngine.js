@@ -371,7 +371,7 @@ const COMPOSITION_HINTS = {
 };
 
 /**
- * Platform-specific CTAs
+ * Platform-specific CTAs — tailored to each platform's culture
  */
 const CTAs = {
   facebook: [
@@ -379,21 +379,27 @@ const CTAs = {
     'Save this. You\'ll need it.',
     'Tag someone who needs to read this.',
     'Drop a comment. Let\'s debate this.',
-    'Read the full breakdown in comments.'
+    'Read the full breakdown in comments.',
+    'Hit share. Your network needs this.',
+    'Agree? Disagree? Sound off below.',
   ],
   instagram: [
-    'Save this. Screenshot it.',
-    'Share this with your team.',
-    'DM us your thoughts.',
-    'What\'s your take? Comment below.',
-    'Swipe through the full breakdown.'
+    '💾 Save this for later.',
+    '📲 Share this to your story.',
+    '💬 Drop your take in the comments.',
+    '👇 What would you add to this list?',
+    '🔁 Send this to someone who needs it.',
+    '📌 Bookmark this. You\'ll thank yourself.',
+    '🧠 Double tap if this hit different.',
   ],
   linkedin: [
-    'What\'s your perspective on this?',
-    'Do you agree or disagree? Let\'s discuss.',
-    'This is a conversation starter.',
-    'I\'m curious: How does this apply to your business?',
-    'Share your own framework or approach in the comments.'
+    'What\'s your perspective on this? I\'d love to hear from other leaders.',
+    'Do you agree or disagree? Let\'s have a real conversation.',
+    'I\'m curious — how does this apply in your industry?',
+    'Share your own framework in the comments. Let\'s learn from each other.',
+    'If this resonated, share it with your network.',
+    'What would you add? Comment below.',
+    'Repost this if your team needs to see it.',
   ]
 };
 
@@ -478,7 +484,53 @@ function selectRandom(arr) {
 }
 
 /**
- * Generate platform-specific content
+ * Format body text for Instagram's hook-and-hold long-form style.
+ * Breaks sentences into short paragraphs, adds strategic line breaks,
+ * and uses occasional emoji anchors for visual scanning.
+ */
+function formatInstagramBody(hook, body) {
+  const sentences = body.split(/(?<=[.!?])\s+/).filter(Boolean);
+  // Break into 1-2 sentence chunks for IG readability
+  const chunks = [];
+  for (let i = 0; i < sentences.length; i += 2) {
+    const chunk = sentences.slice(i, i + 2).join(' ');
+    chunks.push(chunk);
+  }
+  // IG hook-and-hold: bold opener → line break → expanded storytelling
+  return `${hook}\n.\n.\n.\n${chunks.join('\n\n')}`;
+}
+
+/**
+ * Format body text for Facebook's native conversational style.
+ * Shorter, punchier, designed for shareability and quick engagement.
+ */
+function formatFacebookBody(hook, body) {
+  // FB culture: conversational, direct, shorter paragraphs
+  // Trim body to first 2-3 sentences for FB's shorter attention span
+  const sentences = body.split(/(?<=[.!?])\s+/).filter(Boolean);
+  const shortened = sentences.slice(0, Math.min(3, sentences.length)).join(' ');
+  return `${hook}\n\n${shortened}`;
+}
+
+/**
+ * Format body text for LinkedIn's B2B professional thought-leadership style.
+ * Structured, insight-driven, uses professional framing and line breaks.
+ */
+function formatLinkedInBody(hook, body) {
+  // LinkedIn: thought leadership structure
+  // Open with a bold statement, then expand with professional insight
+  const sentences = body.split(/(?<=[.!?])\s+/).filter(Boolean);
+  // Add line breaks between each sentence for LinkedIn's scannable format
+  const formatted = sentences.map(s => s.trim()).join('\n\n');
+  return `${hook}\n\n${formatted}`;
+}
+
+/**
+ * Generate platform-specific content with truly different copy styles.
+ * - Instagram: Hook-and-hold long form (line breaks, storytelling, emoji, hashtags)
+ * - Facebook: Conversational, shareable, shorter punchy native FB style
+ * - LinkedIn: B2B professional thought leadership, no emojis, industry framing
+ *
  * @param {Object} contentData - {category, hook, body, hashtags}
  * @param {string} platform - 'facebook', 'instagram', 'linkedin'
  * @returns {Object}
@@ -489,13 +541,21 @@ function generatePlatformContent(contentData, platform) {
 
   let caption = '';
 
-  // Platform-specific formatting — caption IS the full post text
-  if (platform === 'facebook') {
-    caption = `${hook}\n\n${body}\n\n${cta}`;
-  } else if (platform === 'instagram') {
-    caption = `${hook}\n\n${body}\n\n${cta}\n\n${hashtags.join(' ')}`;
+  if (platform === 'instagram') {
+    // IG: Hook-and-hold long form — bold opener, dot spacers, expanded body, emoji CTA, hashtag block
+    const igBody = formatInstagramBody(hook, body);
+    caption = `${igBody}\n\n${cta}\n\n—\n\n${hashtags.join(' ')}`;
+
+  } else if (platform === 'facebook') {
+    // FB: Conversational and shareable — shorter, punchier, native FB engagement
+    const fbBody = formatFacebookBody(hook, body);
+    caption = `${fbBody}\n\n${cta}`;
+
   } else if (platform === 'linkedin') {
-    caption = `${hook}\n\n${body}\n\n${cta}`;
+    // LinkedIn: Professional thought leadership — structured, scannable, no emojis
+    const liBody = formatLinkedInBody(hook, body);
+    // Add professional sign-off
+    caption = `${liBody}\n\n${cta}\n\n#Leadership #Marketing #BusinessGrowth #MediatwistGroup`;
   }
 
   return {
@@ -542,10 +602,13 @@ async function generateDailyContent() {
     console.warn('Enhancement step failed, using template content');
   }
 
-  // Deduplication check — isDuplicate takes a single caption string
+  // ── Robust deduplication ────────────────────────────────────────────────
+  // Phase 1: Try up to 10 random hook+body combos across ALL categories
+  // Phase 2: If all combos are dupes, append a timestamp salt to force uniqueness
   let attempts = 0;
-  const maxAttempts = 3;
+  const maxAttempts = 10;
   let isDuplicated = true;
+  const triedCategories = new Set([selectedCategory]);
 
   while (isDuplicated && attempts < maxAttempts) {
     const captionToCheck = contentToUse.hook + '\n' + contentToUse.body;
@@ -554,15 +617,36 @@ async function generateDailyContent() {
       break;
     }
 
-    // Pick different content
-    const newHook = selectRandom(categoryContent.hooks);
-    const newBody = selectRandom(categoryContent.bodies);
-    contentToUse = { hook: newHook, body: newBody };
     attempts++;
+
+    if (attempts <= 5) {
+      // First 5 attempts: try different hook+body within the selected category
+      const newHook = selectRandom(categoryContent.hooks);
+      const newBody = selectRandom(categoryContent.bodies);
+      contentToUse = { hook: newHook, body: newBody };
+    } else {
+      // Attempts 6-10: try a completely different category
+      const allCategories = Object.keys(CONTENT_LIBRARY);
+      const unusedCategories = allCategories.filter(c => !triedCategories.has(c));
+      const fallbackCategory = unusedCategories.length > 0
+        ? selectRandom(unusedCategories)
+        : selectRandom(allCategories);
+      triedCategories.add(fallbackCategory);
+
+      const fallbackContent = CONTENT_LIBRARY[fallbackCategory];
+      contentToUse = {
+        hook: selectRandom(fallbackContent.hooks),
+        body: selectRandom(fallbackContent.bodies)
+      };
+    }
   }
 
+  // Phase 2: If still duplicated, force uniqueness with date/time salt
   if (isDuplicated) {
-    console.warn(`Could not find fully unique content after ${maxAttempts} attempts, proceeding anyway`);
+    const now = new Date();
+    const dateSalt = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+    contentToUse.hook = contentToUse.hook.replace(/\.$/, '') + ` — ${dateSalt} edition.`;
+    console.warn(`Forced unique content via date salt after ${maxAttempts} attempts`);
   }
 
   // Generate platform-specific versions

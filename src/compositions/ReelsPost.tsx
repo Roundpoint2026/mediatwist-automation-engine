@@ -47,11 +47,12 @@ export const ReelsPost: React.FC<ReelsPostProps> = ({
   const radarO2 = interpolate(radarPhase2, [0, 100], [0.3, 0], { extrapolateRight: 'clamp' });
 
   // ── Vertical scan line ──────────────────────────────────
-  const scanY = interpolate(frame, [10, 200], [0, 1920], { extrapolateRight: 'clamp' });
+  // Scan line starts at y=320, NEVER enters logo zone (y=60-280)
+  const scanY = interpolate(frame, [10, 200], [320, 1920], { extrapolateRight: 'clamp' });
   const scanOpacity = interpolate(frame, [10, 30, 160, 200], [0, 0.4, 0.3, 0], { extrapolateRight: 'clamp' });
 
   // ── Logo ────────────────────────────────────────────────
-  const logoOpacity = interpolate(frame, [5, 25], [0, 0.9], { extrapolateRight: 'clamp' });
+  const logoOpacity = interpolate(frame, [5, 25], [0, 1], { extrapolateRight: 'clamp' });
   const logoScale = spring({ frame: frame - 5, fps, from: 0.85, to: 1, config: { damping: 200, stiffness: 120 } });
 
   // ── Badge ───────────────────────────────────────────────
@@ -87,7 +88,8 @@ export const ReelsPost: React.FC<ReelsPostProps> = ({
           <circle key={r} cx="540" cy="700" r={r} fill="none" stroke={brandColor} strokeWidth="1" opacity="0.05" />
         ))}
         {/* Crosshairs */}
-        <line x1="540" y1="200" x2="540" y2="1200" stroke={brandColor} strokeWidth="1" opacity="0.04" />
+        {/* Vertical crosshair starts below logo zone */}
+        <line x1="540" y1="320" x2="540" y2="1200" stroke={brandColor} strokeWidth="1" opacity="0.04" />
         <line x1="100" y1="700" x2="980" y2="700" stroke={brandColor} strokeWidth="1" opacity="0.04" />
         {/* Animated pulse */}
         <circle cx="540" cy="700" r={radarR1} fill="none" stroke={brandColor} strokeWidth="2" opacity={radarO1} />
@@ -116,23 +118,23 @@ export const ReelsPost: React.FC<ReelsPostProps> = ({
         background: `linear-gradient(90deg, ${brandColor}, transparent)`,
       }} />
 
-      {/* Logo — centered at top */}
+      {/* Logo — centered at top, ISOLATED zone (nothing overlaps) */}
       <div style={{
         position: 'absolute',
-        top: 80,
+        top: 60,
         left: '50%',
         transform: `translate(-50%, 0) scale(${Math.max(logoScale, 0)})`,
-        width: 130,
-        height: 130,
+        width: 220,
+        height: 220,
         opacity: logoOpacity,
       }}>
         <Img src={staticFile('logo.png')} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
       </div>
 
-      {/* Mediatwist badge */}
+      {/* Mediatwist badge — pushed down below logo zone with 60px+ gap */}
       <div style={{
         position: 'absolute',
-        top: 250,
+        top: 350,
         left: 70,
         opacity: badgeOpacity,
         transform: `translateX(${badgeX}px)`,
@@ -159,10 +161,10 @@ export const ReelsPost: React.FC<ReelsPostProps> = ({
         </div>
       </div>
 
-      {/* Headline */}
+      {/* Headline — below badge, clear of logo zone */}
       <div style={{
         position: 'absolute',
-        top: 320,
+        top: 430,
         left: 70,
         right: 70,
         opacity: headlineOpacity,
@@ -184,7 +186,7 @@ export const ReelsPost: React.FC<ReelsPostProps> = ({
       {/* Caption — center zone with accent bar */}
       <div style={{
         position: 'absolute',
-        top: 650,
+        top: 720,
         left: 70,
         right: 70,
         opacity: captionOpacity,

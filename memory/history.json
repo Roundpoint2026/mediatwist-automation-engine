@@ -289,6 +289,706 @@
       "compositionId": "BrandedCaption",
       "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774666332/mediatwist/2026/03/28/feed-1774666326683.mp4",
       "publishedAt": "2026-03-28T02:56:34.321Z"
+    },
+    {
+      "id": "post_1774667114348_zrefmx",
+      "platform": "facebook",
+      "category": "Paid Media Intelligence",
+      "hook": "The CPM game is over. Smart teams have already moved on.",
+      "captionHash": "0840f485c43514a6",
+      "compositionId": "DataDashboard",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774667102/mediatwist/2026/03/28/feed-1774667095577.mp4",
+      "publishedAt": "2026-03-28T03:05:14.348Z"
+    },
+    {
+      "id": "post_1774667145811_335d6w",
+      "platform": "instagram",
+      "category": "Paid Media Intelligence",
+      "hook": "The CPM game is over. Smart teams have already moved on.",
+      "captionHash": "79fb123a1e47083c",
+      "compositionId": "DataDashboard",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774667102/mediatwist/2026/03/28/feed-1774667095577.mp4",
+      "publishedAt": "2026-03-28T03:05:45.811Z"
+    },
+    {
+      "id": "post_1774667360241_yjypre",
+      "platform": "linkedin",
+      "category": "Paid Media Intelligence",
+      "hook": "The CPM game is over. Smart teams have already moved on.",
+      "captionHash": "b78401fad36f5dd1",
+      "compositionId": "DataDashboard",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774667102/mediatwist/2026/03/28/feed-1774667095577.mp4",
+      "publishedAt": "2026-03-28T03:09:20.241Z"
+    },
+    {
+      "id": "post_1774668080295_m4crnx",
+      "platform": "facebook",
+      "category": "Content Strategy",
+      "hook": "Content marketing is dead. Strategic content is alive.",
+      "captionHash": "ebdbe4d0e9a15fad",
+      "compositionId": "SplitLayout",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774668073/mediatwist/2026/03/28/feed-1774668067085.mp4",
+      "publishedAt": "2026-03-28T03:21:20.295Z"
+    },
+    {
+      "id": "post_1774668113903_w2f3ca",
+      "platform": "instagram",
+      "category": "Content Strategy",
+      "hook": "Content marketing is dead. Strategic content is alive.",
+      "captionHash": "90a519ff000b6df1",
+      "compositionId": "SplitLayout",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774668073/mediatwist/2026/03/28/feed-1774668067085.mp4",
+      "publishedAt": "2026-03-28T03:21:53.903Z"
+    },
+    {
+      "id": "post_1774668327313_uyu2bc",
+      "platform": "linkedin",
+      "category": "Content Strategy",
+      "hook": "Content marketing is dead. Strategic content is alive.",
+      "captionHash": "a5afd9c2381c9eca",
+      "compositionId": "SplitLayout",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774668073/mediatwist/2026/03/28/feed-1774668067085.mp4",
+      "publishedAt": "2026-03-28T03:25:27.313Z"
+    },
+    {
+      "id": "post_1774668445097_fy8w6b",
+      "platform": "facebook",
+      "category": "AI & Marketing Strategy",
+      "hook": "The actual opportunity with AI in marketing isn't what everyone's talking about.",
+      "captionHash": "cd0cfe3db9e51a09",
+      "compositionId": "futuristic-glitch",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774668436/mediatwist/posts/2026-03-27/kebslqqmgg4veq6zeqeh.mp4",
+      "publishedAt": "2026-03-28T03:27:25.097Z"
+    },
+    {
+      "id": "post_1774668517468_6c5uh4",
+      "platform": "facebook",
+      "category": "AI & Marketing Strategy",
+      "hook": "AI won't replace marketing—but marketing teams that don't use AI will be replaced.",
+      "captionHash": "4abe7e848878d5e6",
+      "compositionId": "GlowCard",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774668508/mediatwist/2026/03/28/feed-1774668502671.mp4",
+      "publishedAt": "2026-03-28T03:28:37.468Z"
+    },
+    {
+      "id": "post_1774668552750_y0goj6",
+      "platform": "instagram",
+      "category": "AI & Marketing Strategy",
+      "hook": "AI won't replace marketing—but marketing teams that don't use AI will be replaced.",
+      "captionHash": "481cf8ff828a58d4",
+      "compositionId": "GlowCard",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774668508/mediatwist/2026/03/28/feed-1774668502671.mp4",
+      "publishedAt": "2026-03-28T03:29:12.750Z"
+    },
+    {
+      "id": "post_1774668766184_mb9clk",
+      "platform": "linkedin",
+      "category": "AI & Marketing Strategy",
+      "hook": "AI won't replace marketing—but marketing teams that don't use AI will be replaced.",
+      "captionHash": "90395ce28405d14a",
+      "compositionId": "GlowCard",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774668508/mediatwist/2026/03/28/feed-1774668502671.mp4",
+      "publishedAt": "2026-03-28T03:32:46.184Z"
+    },
+    {
+      "id": "post_1774670334345_kfn8qp",
+      "platform": "facebook",
+      "category": "Growth Hacking",
+      "hook": "The fastest way to grow isn't paid media. It's this.",
+      "captionHash": "e2ce68de6e24b63e",
+      "compositionId": "exponential-curve",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774670325/mediatwist/posts/2026-03-27/xfqz8oozofxpkj8ve3tr.mp4",
+      "publishedAt": "2026-03-28T03:58:54.345Z"
+    },
+    {
+      "id": "post_1774673457199_u2smeq",
+      "platform": "facebook",
+      "category": "Industry Insight",
+      "hook": "87% of marketing leaders are measuring the wrong thing. The winners? They switched.",
+      "captionHash": "1f115f318b0da724",
+      "compositionId": "kinetic-typography",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774673449/mediatwist/posts/2026-03-28/o8vhnkgmvztuqrr2t1nj.mp4",
+      "publishedAt": "2026-03-28T04:50:57.199Z"
+    },
+    {
+      "id": "post_1774673534087_rrha6a",
+      "platform": "facebook",
+      "category": "Contrarian Marketing Take",
+      "hook": "The playbook that built successful brands 5 years ago is now a liability.",
+      "captionHash": "cfadfb0075a832f8",
+      "compositionId": "bold-text-motion",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774673525/mediatwist/posts/2026-03-28/bdxwy1nkzqfnmbxrucbx.mp4",
+      "publishedAt": "2026-03-28T04:52:14.087Z"
+    },
+    {
+      "id": "post_1774673619110_nygyu0",
+      "platform": "facebook",
+      "category": "Case Study Breakdown",
+      "hook": "They ignored industry playbooks and built something unprecedented.",
+      "captionHash": "85d57c8b74dc6de4",
+      "compositionId": "data-dashboard",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774673609/mediatwist/posts/2026-03-28/pnwa8uayf61jkdyvwa2r.mp4",
+      "publishedAt": "2026-03-28T04:53:39.110Z"
+    },
+    {
+      "id": "post_1774673866458_c0nhoj",
+      "platform": "facebook",
+      "category": "Founder/Operator Mindset",
+      "hook": "Most scaling problems are actually positioning problems.",
+      "captionHash": "b7efe760a1779b13",
+      "compositionId": "philosophical-typography",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774673764/mediatwist/posts/2026-03-28/ezs8ampq9fnsa3gfixjg.mp4",
+      "publishedAt": "2026-03-28T04:57:46.458Z"
+    },
+    {
+      "id": "post_1774673964457_b7v4ck",
+      "platform": "facebook",
+      "category": "Social Media Myth Busting",
+      "hook": "The social media playbook that worked for creators won't work for B2B brands.",
+      "captionHash": "6a176f730e289fa5",
+      "compositionId": "animated-stat-reveal",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774673928/mediatwist/posts/2026-03-28/cxtyykmacyilveihkg7w.mp4",
+      "publishedAt": "2026-03-28T04:59:24.457Z"
+    },
+    {
+      "id": "post_1774673964458_ynarco",
+      "platform": "instagram",
+      "category": "Social Media Myth Busting",
+      "hook": "The social media playbook that worked for creators won't work for B2B brands.",
+      "captionHash": "8792aa6bdb464385",
+      "compositionId": "animated-stat-reveal",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774673928/mediatwist/posts/2026-03-28/cxtyykmacyilveihkg7w.mp4",
+      "publishedAt": "2026-03-28T04:59:24.458Z"
+    },
+    {
+      "id": "post_1774674149389_i78gw6",
+      "platform": "facebook",
+      "category": "Growth Hacking",
+      "hook": "This growth lever works at any stage. Most teams ignore it completely.",
+      "captionHash": "d09a3f87fd1f172f",
+      "compositionId": "exponential-curve",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774674123/mediatwist/posts/2026-03-28/k7hdn8vx7yvjmoka61gz.mp4",
+      "publishedAt": "2026-03-28T05:02:29.389Z"
+    },
+    {
+      "id": "post_1774674149389_jrislm",
+      "platform": "instagram",
+      "category": "Growth Hacking",
+      "hook": "This growth lever works at any stage. Most teams ignore it completely.",
+      "captionHash": "32f276a346153762",
+      "compositionId": "exponential-curve",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774674123/mediatwist/posts/2026-03-28/k7hdn8vx7yvjmoka61gz.mp4",
+      "publishedAt": "2026-03-28T05:02:29.389Z"
+    },
+    {
+      "id": "post_1774674241199_k1c4pw",
+      "platform": "facebook",
+      "category": "Brand Authority",
+      "hook": "Authority is built through consistency, not cleverness.",
+      "captionHash": "44a711f3c401c0cc",
+      "compositionId": "elegant-minimal",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774674207/mediatwist/posts/2026-03-28/zrudmeb9mok7vefzrk32.mp4",
+      "publishedAt": "2026-03-28T05:04:01.199Z"
+    },
+    {
+      "id": "post_1774674241200_mp1ink",
+      "platform": "instagram",
+      "category": "Brand Authority",
+      "hook": "Authority is built through consistency, not cleverness.",
+      "captionHash": "acff7c2a70a66da8",
+      "compositionId": "elegant-minimal",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774674207/mediatwist/posts/2026-03-28/zrudmeb9mok7vefzrk32.mp4",
+      "publishedAt": "2026-03-28T05:04:01.200Z"
+    },
+    {
+      "id": "post_1774674346094_e4wy9q",
+      "platform": "facebook",
+      "category": "Paid Media Intelligence",
+      "hook": "Your competitors' paid strategy is probably built on data from 2 years ago.",
+      "captionHash": "5b63d4bd50429f4a",
+      "compositionId": "dynamic-dashboard",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774674312/mediatwist/posts/2026-03-28/pnlnpwgatoo76ri8zxlw.mp4",
+      "publishedAt": "2026-03-28T05:05:46.094Z"
+    },
+    {
+      "id": "post_1774674346096_v10zfv",
+      "platform": "instagram",
+      "category": "Paid Media Intelligence",
+      "hook": "Your competitors' paid strategy is probably built on data from 2 years ago.",
+      "captionHash": "3f5c98e65fc2ff49",
+      "compositionId": "dynamic-dashboard",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774674312/mediatwist/posts/2026-03-28/pnlnpwgatoo76ri8zxlw.mp4",
+      "publishedAt": "2026-03-28T05:05:46.096Z"
+    },
+    {
+      "id": "post_1774674780510_s3wiu4",
+      "platform": "facebook",
+      "category": "Content Strategy",
+      "hook": "Most content is noise. Here's what signal looks like.",
+      "captionHash": "49147a47d1824cdf",
+      "compositionId": "narrative-flow",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774674718/mediatwist/posts/2026-03-28/dqkggukabdqsbspa1b6p.mp4",
+      "publishedAt": "2026-03-28T05:13:00.510Z"
+    },
+    {
+      "id": "post_1774674780512_mug3z0",
+      "platform": "instagram",
+      "category": "Content Strategy",
+      "hook": "Most content is noise. Here's what signal looks like.",
+      "captionHash": "34c901325186ca9f",
+      "compositionId": "narrative-flow",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774674718/mediatwist/posts/2026-03-28/dqkggukabdqsbspa1b6p.mp4",
+      "publishedAt": "2026-03-28T05:13:00.512Z"
+    },
+    {
+      "id": "post_1774674958355_c7z5sz",
+      "platform": "linkedin",
+      "category": "Industry Insight",
+      "hook": "This industry shift will obsolete 40% of current marketing stacks by 2027.",
+      "captionHash": "5dc3d1e25f4168f9",
+      "compositionId": "kinetic-typography",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774674926/mediatwist/posts/2026-03-28/iqhspjn5jm6fucy4mdpw.mp4",
+      "publishedAt": "2026-03-28T05:15:58.355Z"
+    },
+    {
+      "id": "post_1774674958357_ssykhg",
+      "platform": "facebook",
+      "category": "Industry Insight",
+      "hook": "This industry shift will obsolete 40% of current marketing stacks by 2027.",
+      "captionHash": "c5f0bf572784f3db",
+      "compositionId": "kinetic-typography",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774674926/mediatwist/posts/2026-03-28/iqhspjn5jm6fucy4mdpw.mp4",
+      "publishedAt": "2026-03-28T05:15:58.357Z"
+    },
+    {
+      "id": "post_1774674958358_oihmef",
+      "platform": "instagram",
+      "category": "Industry Insight",
+      "hook": "This industry shift will obsolete 40% of current marketing stacks by 2027.",
+      "captionHash": "5ffcf82e69a6ed7f",
+      "compositionId": "kinetic-typography",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774674926/mediatwist/posts/2026-03-28/iqhspjn5jm6fucy4mdpw.mp4",
+      "publishedAt": "2026-03-28T05:15:58.358Z"
+    },
+    {
+      "id": "post_1774675076137_ucvbrt",
+      "platform": "linkedin",
+      "category": "Contrarian Marketing Take",
+      "hook": "Your biggest competitor is making this exact mistake right now.",
+      "captionHash": "28072bcac99076a0",
+      "compositionId": "bold-text-motion",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774675043/mediatwist/posts/2026-03-28/prxhzwuuqqea3oq961mt.mp4",
+      "publishedAt": "2026-03-28T05:17:56.137Z"
+    },
+    {
+      "id": "post_1774675076139_q5epoq",
+      "platform": "facebook",
+      "category": "Contrarian Marketing Take",
+      "hook": "Your biggest competitor is making this exact mistake right now.",
+      "captionHash": "8afee9670edd31e2",
+      "compositionId": "bold-text-motion",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774675043/mediatwist/posts/2026-03-28/prxhzwuuqqea3oq961mt.mp4",
+      "publishedAt": "2026-03-28T05:17:56.139Z"
+    },
+    {
+      "id": "post_1774675076140_wqnqzh",
+      "platform": "instagram",
+      "category": "Contrarian Marketing Take",
+      "hook": "Your biggest competitor is making this exact mistake right now.",
+      "captionHash": "6a05a27930cf962f",
+      "compositionId": "bold-text-motion",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774675043/mediatwist/posts/2026-03-28/prxhzwuuqqea3oq961mt.mp4",
+      "publishedAt": "2026-03-28T05:17:56.140Z"
+    },
+    {
+      "id": "post_1774675565793_drnpah",
+      "platform": "linkedin",
+      "category": "Case Study Breakdown",
+      "hook": "The metrics are staggering. The strategy is simpler than you'd expect.",
+      "captionHash": "9188169dd667ca71",
+      "compositionId": "data-dashboard",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774675533/mediatwist/posts/2026-03-28/zpkhlejwstlp42ajalkg.mp4",
+      "publishedAt": "2026-03-28T05:26:05.793Z"
+    },
+    {
+      "id": "post_1774675565794_ho8r9n",
+      "platform": "facebook",
+      "category": "Case Study Breakdown",
+      "hook": "The metrics are staggering. The strategy is simpler than you'd expect.",
+      "captionHash": "25310238045a34ae",
+      "compositionId": "data-dashboard",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774675533/mediatwist/posts/2026-03-28/zpkhlejwstlp42ajalkg.mp4",
+      "publishedAt": "2026-03-28T05:26:05.794Z"
+    },
+    {
+      "id": "post_1774675565796_35k6sw",
+      "platform": "instagram",
+      "category": "Case Study Breakdown",
+      "hook": "The metrics are staggering. The strategy is simpler than you'd expect.",
+      "captionHash": "78c1ef8ff6e55ec0",
+      "compositionId": "data-dashboard",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774675533/mediatwist/posts/2026-03-28/zpkhlejwstlp42ajalkg.mp4",
+      "publishedAt": "2026-03-28T05:26:05.796Z"
+    },
+    {
+      "id": "post_1774677047622_3ywhvi",
+      "platform": "linkedin",
+      "category": "Founder/Operator Mindset",
+      "hook": "You can't market your way out of a product-market fit problem.",
+      "captionHash": "4d0dd1679e6f116c",
+      "compositionId": "philosophical-typography",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774677023/mediatwist/posts/2026-03-28/irtyqf0ujdsveeneq5l3.mp4",
+      "publishedAt": "2026-03-28T05:50:47.622Z"
+    },
+    {
+      "id": "post_1774677047624_x4irtr",
+      "platform": "facebook",
+      "category": "Founder/Operator Mindset",
+      "hook": "You can't market your way out of a product-market fit problem.",
+      "captionHash": "c49b94b04f2b439c",
+      "compositionId": "philosophical-typography",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774677023/mediatwist/posts/2026-03-28/irtyqf0ujdsveeneq5l3.mp4",
+      "publishedAt": "2026-03-28T05:50:47.624Z"
+    },
+    {
+      "id": "post_1774677047625_vbap8f",
+      "platform": "instagram",
+      "category": "Founder/Operator Mindset",
+      "hook": "You can't market your way out of a product-market fit problem.",
+      "captionHash": "d27f176efeb5df7d",
+      "compositionId": "philosophical-typography",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774677023/mediatwist/posts/2026-03-28/irtyqf0ujdsveeneq5l3.mp4",
+      "publishedAt": "2026-03-28T05:50:47.625Z"
+    },
+    {
+      "id": "post_1774678782495_td5bi3",
+      "platform": "linkedin",
+      "category": "Social Media Myth Busting",
+      "hook": "That viral strategy everyone copies? It doesn't work the way you think.",
+      "captionHash": "59a8fb87bb856ec7",
+      "compositionId": "animated-stat-reveal",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774678721/mediatwist/posts/2026-03-28/qxqtdlayhqhnxtbgcrl8.mp4",
+      "publishedAt": "2026-03-28T06:19:42.495Z"
+    },
+    {
+      "id": "post_1774678782496_o9sfe0",
+      "platform": "facebook",
+      "category": "Social Media Myth Busting",
+      "hook": "That viral strategy everyone copies? It doesn't work the way you think.",
+      "captionHash": "bd70232dd7a4aaeb",
+      "compositionId": "animated-stat-reveal",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774678721/mediatwist/posts/2026-03-28/qxqtdlayhqhnxtbgcrl8.mp4",
+      "publishedAt": "2026-03-28T06:19:42.496Z"
+    },
+    {
+      "id": "post_1774678782497_o6n0lu",
+      "platform": "instagram",
+      "category": "Social Media Myth Busting",
+      "hook": "That viral strategy everyone copies? It doesn't work the way you think.",
+      "captionHash": "40c56648b81fee3f",
+      "compositionId": "animated-stat-reveal",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774678721/mediatwist/posts/2026-03-28/qxqtdlayhqhnxtbgcrl8.mp4",
+      "publishedAt": "2026-03-28T06:19:42.497Z"
+    },
+    {
+      "id": "post_1774679356142_4w7249",
+      "platform": "linkedin",
+      "category": "AI & Marketing Strategy",
+      "hook": "AI changes the competitive economics of content. Here's how.",
+      "captionHash": "fe21b3b9add92d03",
+      "compositionId": "futuristic-glitch",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774679313/mediatwist/posts/2026-03-28/p4fcuru38oqu2iminbdm.mp4",
+      "publishedAt": "2026-03-28T06:29:16.142Z"
+    },
+    {
+      "id": "post_1774679356144_nuqrre",
+      "platform": "facebook",
+      "category": "AI & Marketing Strategy",
+      "hook": "AI changes the competitive economics of content. Here's how.",
+      "captionHash": "36a16a73afadf6fb",
+      "compositionId": "futuristic-glitch",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774679313/mediatwist/posts/2026-03-28/p4fcuru38oqu2iminbdm.mp4",
+      "publishedAt": "2026-03-28T06:29:16.144Z"
+    },
+    {
+      "id": "post_1774679356145_qqov17",
+      "platform": "instagram",
+      "category": "AI & Marketing Strategy",
+      "hook": "AI changes the competitive economics of content. Here's how.",
+      "captionHash": "87b5c6462590b760",
+      "compositionId": "futuristic-glitch",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774679313/mediatwist/posts/2026-03-28/p4fcuru38oqu2iminbdm.mp4",
+      "publishedAt": "2026-03-28T06:29:16.145Z"
+    },
+    {
+      "id": "post_1774679492316_jj8hls",
+      "platform": "linkedin",
+      "category": "Growth Hacking",
+      "hook": "This growth tactic works because it's not actually marketing.",
+      "captionHash": "9802a2bcabb114da",
+      "compositionId": "exponential-curve",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774679460/mediatwist/posts/2026-03-28/qncjxphv8gjqzkxudurb.mp4",
+      "publishedAt": "2026-03-28T06:31:32.316Z"
+    },
+    {
+      "id": "post_1774679492318_ir1kte",
+      "platform": "facebook",
+      "category": "Growth Hacking",
+      "hook": "This growth tactic works because it's not actually marketing.",
+      "captionHash": "e9c04749dad13114",
+      "compositionId": "exponential-curve",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774679460/mediatwist/posts/2026-03-28/qncjxphv8gjqzkxudurb.mp4",
+      "publishedAt": "2026-03-28T06:31:32.318Z"
+    },
+    {
+      "id": "post_1774679492321_2szd13",
+      "platform": "instagram",
+      "category": "Growth Hacking",
+      "hook": "This growth tactic works because it's not actually marketing.",
+      "captionHash": "2e850855de12a59f",
+      "compositionId": "exponential-curve",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774679460/mediatwist/posts/2026-03-28/qncjxphv8gjqzkxudurb.mp4",
+      "publishedAt": "2026-03-28T06:31:32.321Z"
+    },
+    {
+      "id": "post_1774679828486_iyo6gi",
+      "platform": "linkedin",
+      "category": "Brand Authority",
+      "hook": "This is how premium brands think about marketing.",
+      "captionHash": "847207a8da24b29b",
+      "compositionId": "elegant-minimal",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774679794/mediatwist/posts/2026-03-28/iho1vpmdoqtmdeosyxqw.mp4",
+      "publishedAt": "2026-03-28T06:37:08.486Z"
+    },
+    {
+      "id": "post_1774679828489_p79tx4",
+      "platform": "facebook",
+      "category": "Brand Authority",
+      "hook": "This is how premium brands think about marketing.",
+      "captionHash": "a2f5f672b0457b19",
+      "compositionId": "elegant-minimal",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774679794/mediatwist/posts/2026-03-28/iho1vpmdoqtmdeosyxqw.mp4",
+      "publishedAt": "2026-03-28T06:37:08.489Z"
+    },
+    {
+      "id": "post_1774679828490_vm3w66",
+      "platform": "instagram",
+      "category": "Brand Authority",
+      "hook": "This is how premium brands think about marketing.",
+      "captionHash": "cbb20c4e97d38cfc",
+      "compositionId": "elegant-minimal",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774679794/mediatwist/posts/2026-03-28/iho1vpmdoqtmdeosyxqw.mp4",
+      "publishedAt": "2026-03-28T06:37:08.490Z"
+    },
+    {
+      "id": "post_1774680151689_y4v6ib",
+      "platform": "linkedin",
+      "category": "Paid Media Intelligence",
+      "hook": "This shift in paid media happened quietly. You might have missed it.",
+      "captionHash": "2de05d8607956e68",
+      "compositionId": "dynamic-dashboard",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774680119/mediatwist/posts/2026-03-28/im6nf6wh7pjfxuestys7.mp4",
+      "publishedAt": "2026-03-28T06:42:31.689Z"
+    },
+    {
+      "id": "post_1774680151691_l86z7p",
+      "platform": "facebook",
+      "category": "Paid Media Intelligence",
+      "hook": "This shift in paid media happened quietly. You might have missed it.",
+      "captionHash": "88b1736d484bb565",
+      "compositionId": "dynamic-dashboard",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774680119/mediatwist/posts/2026-03-28/im6nf6wh7pjfxuestys7.mp4",
+      "publishedAt": "2026-03-28T06:42:31.691Z"
+    },
+    {
+      "id": "post_1774680151692_ryucgh",
+      "platform": "instagram",
+      "category": "Paid Media Intelligence",
+      "hook": "This shift in paid media happened quietly. You might have missed it.",
+      "captionHash": "1c3116b6bc8b8c67",
+      "compositionId": "dynamic-dashboard",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774680119/mediatwist/posts/2026-03-28/im6nf6wh7pjfxuestys7.mp4",
+      "publishedAt": "2026-03-28T06:42:31.692Z"
+    },
+    {
+      "id": "post_1774681255266_7k5alj",
+      "platform": "linkedin",
+      "category": "Content Strategy",
+      "hook": "Your content strategy is costing you millions because it's not actually a strategy.",
+      "captionHash": "f1d788759eae4635",
+      "compositionId": "narrative-flow",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774681223/mediatwist/posts/2026-03-28/dnsfbhw8aqrwcaa8rgrr.mp4",
+      "publishedAt": "2026-03-28T07:00:55.266Z"
+    },
+    {
+      "id": "post_1774681255267_pi8d2u",
+      "platform": "facebook",
+      "category": "Content Strategy",
+      "hook": "Your content strategy is costing you millions because it's not actually a strategy.",
+      "captionHash": "0c98965f060067c1",
+      "compositionId": "narrative-flow",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774681223/mediatwist/posts/2026-03-28/dnsfbhw8aqrwcaa8rgrr.mp4",
+      "publishedAt": "2026-03-28T07:00:55.267Z"
+    },
+    {
+      "id": "post_1774681255269_z6lgij",
+      "platform": "instagram",
+      "category": "Content Strategy",
+      "hook": "Your content strategy is costing you millions because it's not actually a strategy.",
+      "captionHash": "ccce125da36ae000",
+      "compositionId": "narrative-flow",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774681223/mediatwist/posts/2026-03-28/dnsfbhw8aqrwcaa8rgrr.mp4",
+      "publishedAt": "2026-03-28T07:00:55.269Z"
+    },
+    {
+      "id": "post_1774681936631_kaegbu",
+      "platform": "linkedin",
+      "category": "Industry Insight",
+      "hook": "Your competitors are already using this—and you don't even know it yet.",
+      "captionHash": "b8fd33836af36487",
+      "compositionId": "kinetic-typography",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774681861/mediatwist/posts/2026-03-28/vmiy7ghqsmudvsc8ibc6.mp4",
+      "publishedAt": "2026-03-28T07:12:16.631Z"
+    },
+    {
+      "id": "post_1774681936632_v32q63",
+      "platform": "facebook",
+      "category": "Industry Insight",
+      "hook": "Your competitors are already using this—and you don't even know it yet.",
+      "captionHash": "1174e3af33ea44b1",
+      "compositionId": "kinetic-typography",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774681861/mediatwist/posts/2026-03-28/vmiy7ghqsmudvsc8ibc6.mp4",
+      "publishedAt": "2026-03-28T07:12:16.632Z"
+    },
+    {
+      "id": "post_1774681936634_r75pdf",
+      "platform": "instagram",
+      "category": "Industry Insight",
+      "hook": "Your competitors are already using this—and you don't even know it yet.",
+      "captionHash": "a8b35789fdaaa77c",
+      "compositionId": "kinetic-typography",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774681861/mediatwist/posts/2026-03-28/vmiy7ghqsmudvsc8ibc6.mp4",
+      "publishedAt": "2026-03-28T07:12:16.634Z"
+    },
+    {
+      "id": "post_1774682631519_ckyopc",
+      "platform": "linkedin",
+      "category": "Contrarian Marketing Take",
+      "hook": "Stop doing what \"best practices\" say. Here's what actually converts.",
+      "captionHash": "ab89b78c09ea69cf",
+      "compositionId": "bold-text-motion",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774682550/mediatwist/posts/2026-03-28/ampv19zblznnpjv7jph3.mp4",
+      "publishedAt": "2026-03-28T07:23:51.519Z"
+    },
+    {
+      "id": "post_1774682631522_jbg0eu",
+      "platform": "facebook",
+      "category": "Contrarian Marketing Take",
+      "hook": "Stop doing what \"best practices\" say. Here's what actually converts.",
+      "captionHash": "8b8e7de1fad7132b",
+      "compositionId": "bold-text-motion",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774682550/mediatwist/posts/2026-03-28/ampv19zblznnpjv7jph3.mp4",
+      "publishedAt": "2026-03-28T07:23:51.522Z"
+    },
+    {
+      "id": "post_1774682631523_052sdv",
+      "platform": "instagram",
+      "category": "Contrarian Marketing Take",
+      "hook": "Stop doing what \"best practices\" say. Here's what actually converts.",
+      "captionHash": "49d1b698762b2cea",
+      "compositionId": "bold-text-motion",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774682550/mediatwist/posts/2026-03-28/ampv19zblznnpjv7jph3.mp4",
+      "publishedAt": "2026-03-28T07:23:51.523Z"
+    },
+    {
+      "id": "post_1774682736624_xnhcx9",
+      "platform": "linkedin",
+      "category": "Case Study Breakdown",
+      "hook": "This company 10x'd their marketing efficiency. Here's exactly how.",
+      "captionHash": "50e7a403e9aba970",
+      "compositionId": "data-dashboard",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774682680/mediatwist/posts/2026-03-28/v7ucp10auqen9jfleoz9.mp4",
+      "publishedAt": "2026-03-28T07:25:36.624Z"
+    },
+    {
+      "id": "post_1774682736626_pnmiw2",
+      "platform": "facebook",
+      "category": "Case Study Breakdown",
+      "hook": "This company 10x'd their marketing efficiency. Here's exactly how.",
+      "captionHash": "f00a3c89e6c43995",
+      "compositionId": "data-dashboard",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774682680/mediatwist/posts/2026-03-28/v7ucp10auqen9jfleoz9.mp4",
+      "publishedAt": "2026-03-28T07:25:36.626Z"
+    },
+    {
+      "id": "post_1774682736628_awfn8y",
+      "platform": "instagram",
+      "category": "Case Study Breakdown",
+      "hook": "This company 10x'd their marketing efficiency. Here's exactly how.",
+      "captionHash": "3f7abe2e92a32e88",
+      "compositionId": "data-dashboard",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774682680/mediatwist/posts/2026-03-28/v7ucp10auqen9jfleoz9.mp4",
+      "publishedAt": "2026-03-28T07:25:36.628Z"
+    },
+    {
+      "id": "post_1774682893554_9fzjeo",
+      "platform": "linkedin",
+      "category": "Founder/Operator Mindset",
+      "hook": "The best marketing isn't marketing—it's how you've designed your business.",
+      "captionHash": "ffc7b8900de1d6cf",
+      "compositionId": "philosophical-typography",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774682866/mediatwist/posts/2026-03-28/krb5w9kammd54ddiirxl.mp4",
+      "publishedAt": "2026-03-28T07:28:13.554Z"
+    },
+    {
+      "id": "post_1774682893556_inpivb",
+      "platform": "facebook",
+      "category": "Founder/Operator Mindset",
+      "hook": "The best marketing isn't marketing—it's how you've designed your business.",
+      "captionHash": "dd38a46c379b1236",
+      "compositionId": "philosophical-typography",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774682866/mediatwist/posts/2026-03-28/krb5w9kammd54ddiirxl.mp4",
+      "publishedAt": "2026-03-28T07:28:13.556Z"
+    },
+    {
+      "id": "post_1774682893557_c70dts",
+      "platform": "instagram",
+      "category": "Founder/Operator Mindset",
+      "hook": "The best marketing isn't marketing—it's how you've designed your business.",
+      "captionHash": "2901a7cee1bd6293",
+      "compositionId": "philosophical-typography",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774682866/mediatwist/posts/2026-03-28/krb5w9kammd54ddiirxl.mp4",
+      "publishedAt": "2026-03-28T07:28:13.557Z"
+    },
+    {
+      "id": "post_1774683275654_vvn5wd",
+      "platform": "linkedin",
+      "category": "Social Media Myth Busting",
+      "hook": "LinkedIn's algorithm isn't complicated. The advice about it is just wrong.",
+      "captionHash": "6f097a655e97ad69",
+      "compositionId": "animated-stat-reveal",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774683257/mediatwist/posts/2026-03-28/yqjleyrmathvl36nj0go.mp4",
+      "publishedAt": "2026-03-28T07:34:35.654Z"
+    },
+    {
+      "id": "post_1774683275656_jqf3tn",
+      "platform": "facebook",
+      "category": "Social Media Myth Busting",
+      "hook": "LinkedIn's algorithm isn't complicated. The advice about it is just wrong.",
+      "captionHash": "95eb42073d02675a",
+      "compositionId": "animated-stat-reveal",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774683257/mediatwist/posts/2026-03-28/yqjleyrmathvl36nj0go.mp4",
+      "publishedAt": "2026-03-28T07:34:35.657Z"
+    },
+    {
+      "id": "post_1774683275658_gcd9ge",
+      "platform": "instagram",
+      "category": "Social Media Myth Busting",
+      "hook": "LinkedIn's algorithm isn't complicated. The advice about it is just wrong.",
+      "captionHash": "52eb6b2514a13a8c",
+      "compositionId": "animated-stat-reveal",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774683257/mediatwist/posts/2026-03-28/yqjleyrmathvl36nj0go.mp4",
+      "publishedAt": "2026-03-28T07:34:35.658Z"
     }
   ],
   "usedHooks": [
@@ -302,7 +1002,36 @@
     "You're measuring the wrong thing, so you're optimizing for the wrong thing.",
     "Your competitors are already using this. You're not.",
     "Your existing customers are your biggest untapped channel.",
-    "The companies charging 3x more aren't better—they're just clearer."
+    "The companies charging 3x more aren't better—they're just clearer.",
+    "The CPM game is over. Smart teams have already moved on.",
+    "Content marketing is dead. Strategic content is alive.",
+    "The actual opportunity with AI in marketing isn't what everyone's talking about.",
+    "AI won't replace marketing—but marketing teams that don't use AI will be replaced.",
+    "The fastest way to grow isn't paid media. It's this.",
+    "87% of marketing leaders are measuring the wrong thing. The winners? They switched.",
+    "The playbook that built successful brands 5 years ago is now a liability.",
+    "They ignored industry playbooks and built something unprecedented.",
+    "Most scaling problems are actually positioning problems.",
+    "The social media playbook that worked for creators won't work for B2B brands.",
+    "This growth lever works at any stage. Most teams ignore it completely.",
+    "Authority is built through consistency, not cleverness.",
+    "Your competitors' paid strategy is probably built on data from 2 years ago.",
+    "Most content is noise. Here's what signal looks like.",
+    "This industry shift will obsolete 40% of current marketing stacks by 2027.",
+    "Your biggest competitor is making this exact mistake right now.",
+    "The metrics are staggering. The strategy is simpler than you'd expect.",
+    "You can't market your way out of a product-market fit problem.",
+    "That viral strategy everyone copies? It doesn't work the way you think.",
+    "AI changes the competitive economics of content. Here's how.",
+    "This growth tactic works because it's not actually marketing.",
+    "This is how premium brands think about marketing.",
+    "This shift in paid media happened quietly. You might have missed it.",
+    "Your content strategy is costing you millions because it's not actually a strategy.",
+    "Your competitors are already using this—and you don't even know it yet.",
+    "Stop doing what \"best practices\" say. Here's what actually converts.",
+    "This company 10x'd their marketing efficiency. Here's exactly how.",
+    "The best marketing isn't marketing—it's how you've designed your business.",
+    "LinkedIn's algorithm isn't complicated. The advice about it is just wrong."
   ],
   "usedCategories": [
     {
@@ -420,6 +1149,286 @@
     {
       "category": "Brand Authority",
       "usedAt": "2026-03-28T02:56:34.321Z"
+    },
+    {
+      "category": "Paid Media Intelligence",
+      "usedAt": "2026-03-28T03:05:14.348Z"
+    },
+    {
+      "category": "Paid Media Intelligence",
+      "usedAt": "2026-03-28T03:05:45.811Z"
+    },
+    {
+      "category": "Paid Media Intelligence",
+      "usedAt": "2026-03-28T03:09:20.241Z"
+    },
+    {
+      "category": "Content Strategy",
+      "usedAt": "2026-03-28T03:21:20.295Z"
+    },
+    {
+      "category": "Content Strategy",
+      "usedAt": "2026-03-28T03:21:53.903Z"
+    },
+    {
+      "category": "Content Strategy",
+      "usedAt": "2026-03-28T03:25:27.313Z"
+    },
+    {
+      "category": "AI & Marketing Strategy",
+      "usedAt": "2026-03-28T03:27:25.097Z"
+    },
+    {
+      "category": "AI & Marketing Strategy",
+      "usedAt": "2026-03-28T03:28:37.468Z"
+    },
+    {
+      "category": "AI & Marketing Strategy",
+      "usedAt": "2026-03-28T03:29:12.750Z"
+    },
+    {
+      "category": "AI & Marketing Strategy",
+      "usedAt": "2026-03-28T03:32:46.184Z"
+    },
+    {
+      "category": "Growth Hacking",
+      "usedAt": "2026-03-28T03:58:54.345Z"
+    },
+    {
+      "category": "Industry Insight",
+      "usedAt": "2026-03-28T04:50:57.199Z"
+    },
+    {
+      "category": "Contrarian Marketing Take",
+      "usedAt": "2026-03-28T04:52:14.087Z"
+    },
+    {
+      "category": "Case Study Breakdown",
+      "usedAt": "2026-03-28T04:53:39.110Z"
+    },
+    {
+      "category": "Founder/Operator Mindset",
+      "usedAt": "2026-03-28T04:57:46.458Z"
+    },
+    {
+      "category": "Social Media Myth Busting",
+      "usedAt": "2026-03-28T04:59:24.457Z"
+    },
+    {
+      "category": "Social Media Myth Busting",
+      "usedAt": "2026-03-28T04:59:24.458Z"
+    },
+    {
+      "category": "Growth Hacking",
+      "usedAt": "2026-03-28T05:02:29.389Z"
+    },
+    {
+      "category": "Growth Hacking",
+      "usedAt": "2026-03-28T05:02:29.389Z"
+    },
+    {
+      "category": "Brand Authority",
+      "usedAt": "2026-03-28T05:04:01.199Z"
+    },
+    {
+      "category": "Brand Authority",
+      "usedAt": "2026-03-28T05:04:01.200Z"
+    },
+    {
+      "category": "Paid Media Intelligence",
+      "usedAt": "2026-03-28T05:05:46.094Z"
+    },
+    {
+      "category": "Paid Media Intelligence",
+      "usedAt": "2026-03-28T05:05:46.096Z"
+    },
+    {
+      "category": "Content Strategy",
+      "usedAt": "2026-03-28T05:13:00.510Z"
+    },
+    {
+      "category": "Content Strategy",
+      "usedAt": "2026-03-28T05:13:00.512Z"
+    },
+    {
+      "category": "Industry Insight",
+      "usedAt": "2026-03-28T05:15:58.355Z"
+    },
+    {
+      "category": "Industry Insight",
+      "usedAt": "2026-03-28T05:15:58.357Z"
+    },
+    {
+      "category": "Industry Insight",
+      "usedAt": "2026-03-28T05:15:58.358Z"
+    },
+    {
+      "category": "Contrarian Marketing Take",
+      "usedAt": "2026-03-28T05:17:56.137Z"
+    },
+    {
+      "category": "Contrarian Marketing Take",
+      "usedAt": "2026-03-28T05:17:56.139Z"
+    },
+    {
+      "category": "Contrarian Marketing Take",
+      "usedAt": "2026-03-28T05:17:56.140Z"
+    },
+    {
+      "category": "Case Study Breakdown",
+      "usedAt": "2026-03-28T05:26:05.793Z"
+    },
+    {
+      "category": "Case Study Breakdown",
+      "usedAt": "2026-03-28T05:26:05.794Z"
+    },
+    {
+      "category": "Case Study Breakdown",
+      "usedAt": "2026-03-28T05:26:05.796Z"
+    },
+    {
+      "category": "Founder/Operator Mindset",
+      "usedAt": "2026-03-28T05:50:47.622Z"
+    },
+    {
+      "category": "Founder/Operator Mindset",
+      "usedAt": "2026-03-28T05:50:47.624Z"
+    },
+    {
+      "category": "Founder/Operator Mindset",
+      "usedAt": "2026-03-28T05:50:47.625Z"
+    },
+    {
+      "category": "Social Media Myth Busting",
+      "usedAt": "2026-03-28T06:19:42.495Z"
+    },
+    {
+      "category": "Social Media Myth Busting",
+      "usedAt": "2026-03-28T06:19:42.496Z"
+    },
+    {
+      "category": "Social Media Myth Busting",
+      "usedAt": "2026-03-28T06:19:42.497Z"
+    },
+    {
+      "category": "AI & Marketing Strategy",
+      "usedAt": "2026-03-28T06:29:16.142Z"
+    },
+    {
+      "category": "AI & Marketing Strategy",
+      "usedAt": "2026-03-28T06:29:16.144Z"
+    },
+    {
+      "category": "AI & Marketing Strategy",
+      "usedAt": "2026-03-28T06:29:16.145Z"
+    },
+    {
+      "category": "Growth Hacking",
+      "usedAt": "2026-03-28T06:31:32.316Z"
+    },
+    {
+      "category": "Growth Hacking",
+      "usedAt": "2026-03-28T06:31:32.318Z"
+    },
+    {
+      "category": "Growth Hacking",
+      "usedAt": "2026-03-28T06:31:32.321Z"
+    },
+    {
+      "category": "Brand Authority",
+      "usedAt": "2026-03-28T06:37:08.486Z"
+    },
+    {
+      "category": "Brand Authority",
+      "usedAt": "2026-03-28T06:37:08.489Z"
+    },
+    {
+      "category": "Brand Authority",
+      "usedAt": "2026-03-28T06:37:08.490Z"
+    },
+    {
+      "category": "Paid Media Intelligence",
+      "usedAt": "2026-03-28T06:42:31.689Z"
+    },
+    {
+      "category": "Paid Media Intelligence",
+      "usedAt": "2026-03-28T06:42:31.691Z"
+    },
+    {
+      "category": "Paid Media Intelligence",
+      "usedAt": "2026-03-28T06:42:31.692Z"
+    },
+    {
+      "category": "Content Strategy",
+      "usedAt": "2026-03-28T07:00:55.266Z"
+    },
+    {
+      "category": "Content Strategy",
+      "usedAt": "2026-03-28T07:00:55.267Z"
+    },
+    {
+      "category": "Content Strategy",
+      "usedAt": "2026-03-28T07:00:55.269Z"
+    },
+    {
+      "category": "Industry Insight",
+      "usedAt": "2026-03-28T07:12:16.631Z"
+    },
+    {
+      "category": "Industry Insight",
+      "usedAt": "2026-03-28T07:12:16.632Z"
+    },
+    {
+      "category": "Industry Insight",
+      "usedAt": "2026-03-28T07:12:16.634Z"
+    },
+    {
+      "category": "Contrarian Marketing Take",
+      "usedAt": "2026-03-28T07:23:51.519Z"
+    },
+    {
+      "category": "Contrarian Marketing Take",
+      "usedAt": "2026-03-28T07:23:51.522Z"
+    },
+    {
+      "category": "Contrarian Marketing Take",
+      "usedAt": "2026-03-28T07:23:51.523Z"
+    },
+    {
+      "category": "Case Study Breakdown",
+      "usedAt": "2026-03-28T07:25:36.624Z"
+    },
+    {
+      "category": "Case Study Breakdown",
+      "usedAt": "2026-03-28T07:25:36.626Z"
+    },
+    {
+      "category": "Case Study Breakdown",
+      "usedAt": "2026-03-28T07:25:36.628Z"
+    },
+    {
+      "category": "Founder/Operator Mindset",
+      "usedAt": "2026-03-28T07:28:13.554Z"
+    },
+    {
+      "category": "Founder/Operator Mindset",
+      "usedAt": "2026-03-28T07:28:13.556Z"
+    },
+    {
+      "category": "Founder/Operator Mindset",
+      "usedAt": "2026-03-28T07:28:13.557Z"
+    },
+    {
+      "category": "Social Media Myth Busting",
+      "usedAt": "2026-03-28T07:34:35.654Z"
+    },
+    {
+      "category": "Social Media Myth Busting",
+      "usedAt": "2026-03-28T07:34:35.657Z"
+    },
+    {
+      "category": "Social Media Myth Busting",
+      "usedAt": "2026-03-28T07:34:35.658Z"
     }
   ],
   "contentHashes": [
@@ -451,28 +1460,100 @@
     "7e7c427b8b9e1ebe",
     "e2f62003d2adfb44",
     "f507922d8333dd00",
-    "fd06013c6daff95b"
+    "fd06013c6daff95b",
+    "0840f485c43514a6",
+    "79fb123a1e47083c",
+    "b78401fad36f5dd1",
+    "ebdbe4d0e9a15fad",
+    "90a519ff000b6df1",
+    "a5afd9c2381c9eca",
+    "cd0cfe3db9e51a09",
+    "4abe7e848878d5e6",
+    "481cf8ff828a58d4",
+    "90395ce28405d14a",
+    "e2ce68de6e24b63e",
+    "1f115f318b0da724",
+    "cfadfb0075a832f8",
+    "85d57c8b74dc6de4",
+    "b7efe760a1779b13",
+    "6a176f730e289fa5",
+    "8792aa6bdb464385",
+    "d09a3f87fd1f172f",
+    "32f276a346153762",
+    "44a711f3c401c0cc",
+    "acff7c2a70a66da8",
+    "5b63d4bd50429f4a",
+    "3f5c98e65fc2ff49",
+    "49147a47d1824cdf",
+    "34c901325186ca9f",
+    "5dc3d1e25f4168f9",
+    "c5f0bf572784f3db",
+    "5ffcf82e69a6ed7f",
+    "28072bcac99076a0",
+    "8afee9670edd31e2",
+    "6a05a27930cf962f",
+    "9188169dd667ca71",
+    "25310238045a34ae",
+    "78c1ef8ff6e55ec0",
+    "4d0dd1679e6f116c",
+    "c49b94b04f2b439c",
+    "d27f176efeb5df7d",
+    "59a8fb87bb856ec7",
+    "bd70232dd7a4aaeb",
+    "40c56648b81fee3f",
+    "fe21b3b9add92d03",
+    "36a16a73afadf6fb",
+    "87b5c6462590b760",
+    "9802a2bcabb114da",
+    "e9c04749dad13114",
+    "2e850855de12a59f",
+    "847207a8da24b29b",
+    "a2f5f672b0457b19",
+    "cbb20c4e97d38cfc",
+    "2de05d8607956e68",
+    "88b1736d484bb565",
+    "1c3116b6bc8b8c67",
+    "f1d788759eae4635",
+    "0c98965f060067c1",
+    "ccce125da36ae000",
+    "b8fd33836af36487",
+    "1174e3af33ea44b1",
+    "a8b35789fdaaa77c",
+    "ab89b78c09ea69cf",
+    "8b8e7de1fad7132b",
+    "49d1b698762b2cea",
+    "50e7a403e9aba970",
+    "f00a3c89e6c43995",
+    "3f7abe2e92a32e88",
+    "ffc7b8900de1d6cf",
+    "dd38a46c379b1236",
+    "2901a7cee1bd6293",
+    "6f097a655e97ad69",
+    "95eb42073d02675a",
+    "52eb6b2514a13a8c"
   ],
   "stats": {
-    "totalPosts": 29,
+    "totalPosts": 99,
     "byPlatform": {
-      "facebook": 11,
-      "instagram": 9,
-      "linkedin": 9
+      "facebook": 40,
+      "instagram": 32,
+      "linkedin": 27
     },
     "byCategory": {
       "market_insight": 1,
       "operator_mindset": 2,
       "test": 5,
-      "Industry Insight": 3,
-      "Contrarian Marketing Take": 3,
-      "Case Study Breakdown": 3,
-      "Founder/Operator Mindset": 3,
-      "Social Media Myth Busting": 3,
-      "AI & Marketing Strategy": 1,
-      "Growth Hacking": 2,
-      "Brand Authority": 3
+      "Industry Insight": 10,
+      "Contrarian Marketing Take": 10,
+      "Case Study Breakdown": 10,
+      "Founder/Operator Mindset": 10,
+      "Social Media Myth Busting": 11,
+      "AI & Marketing Strategy": 8,
+      "Growth Hacking": 8,
+      "Brand Authority": 8,
+      "Paid Media Intelligence": 8,
+      "Content Strategy": 8
     },
-    "lastRunAt": "2026-03-28T02:56:34.321Z"
+    "lastRunAt": "2026-03-28T07:34:35.658Z"
   }
 }

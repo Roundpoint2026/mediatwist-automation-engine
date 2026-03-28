@@ -117,6 +117,30 @@ async function executeEngine(options = {}) {
   console.log(DIVIDER);
 
   try {
+    // Step 0: Pre-flight token health check (skip for dry-run — no publishing needed)
+    if (!dryRun) {
+      const { preflightTokenCheck } = require('../publishers/tokenManager');
+      console.log('\n 🔑  Checking Meta token...');
+      const tokenStatus = await preflightTokenCheck();
+
+      if (!tokenStatus.valid) {
+        console.error(` ❌  Token INVALID: ${tokenStatus.error}`);
+        console.error('     Fix: Get a new token from Graph Explorer, then run:');
+        console.error('       npm run token:exchange && npm run token:page');
+        throw new Error(`Meta token invalid: ${tokenStatus.error}`);
+      }
+
+      if (tokenStatus.warning) {
+        console.warn(` ⚠️  ${tokenStatus.warning}`);
+      } else if (tokenStatus.isPageToken) {
+        console.log(' ✅  Token valid (never-expiring page token)');
+      } else {
+        console.log(` ✅  Token valid (expires: ${tokenStatus.expiresAt}, ${tokenStatus.daysRemaining} days remaining)`);
+      }
+    } else {
+      console.log('\n 🔑  Skipping token check (dry run)');
+    }
+
     // Step 1: Generate content
     const { generateDailyContent } = require('../ai/contentEngine');
     console.log('\n ⏳  Generating content...');
@@ -135,12 +159,33 @@ async function executeEngine(options = {}) {
       return { content, rendered: null, published: null };
     }
 
-    // Step 2: Render video for the post
+    // Step 2: Render visual asset (Canva ↔ Remotion routing)
     console.log('\n ⏳  Rendering visual asset...');
     let mediaUrl = null;
     let outputPath = null;
+    let visualEngine = 'unknown';
 
-    try {
+    const { getVisualEngine, renderWithCanva } = require('../ai/canvaEngine');
+    const engineMode = getVisualEngine();
+    console.log(`     Visual engine mode: ${engineMode}`);
+
+    // Determine render order based on engine mode
+    const tryCanva = async () => {
+      console.log('     Trying Canva...');
+      const canvaResult = await renderWithCanva(content.facebook, {
+        format: mapCompositionHint(content.facebook.compositionHint) === 'ReelsPost' ? 'reels' : 'feed',
+      });
+      if (canvaResult) {
+        outputPath = canvaResult.filePath;
+        visualEngine = `canva (${canvaResult.source})`;
+        console.log(` ✅  Canva ${canvaResult.source}: ${path.basename(outputPath)}`);
+        return true;
+      }
+      return false;
+    };
+
+    const tryRemotion = async () => {
+      console.log('     Trying Remotion...');
       const { bundle }                          = require('@remotion/bundler');
       const { renderMedia, selectComposition }  = require('@remotion/renderer');
       const entryPoint = path.resolve(__dirname, '../src/index.ts');
@@ -176,19 +221,54 @@ async function executeEngine(options = {}) {
         },
       });
       process.stdout.write('\n');
-      console.log(` ✅  Video rendered: ${path.basename(outputPath)}`);
+      visualEngine = 'remotion';
+      console.log(` ✅  Remotion rendered: ${path.basename(outputPath)}`);
+      return true;
+    };
+
+    try {
+      let rendered = false;
+
+      if (engineMode === 'canva') {
+        // Canva only — no fallback
+        rendered = await tryCanva();
+      } else if (engineMode === 'remotion') {
+        // Remotion only — no fallback
+        rendered = await tryRemotion();
+      } else if (engineMode === 'canva-first') {
+        // Try Canva first, fall back to Remotion
+        rendered = await tryCanva();
+        if (!rendered) {
+          console.log('     Canva unavailable — falling back to Remotion...');
+          rendered = await tryRemotion();
+        }
+      } else if (engineMode === 'remotion-first') {
+        // Try Remotion first, fall back to Canva
+        try {
+          rendered = await tryRemotion();
+        } catch (remotionErr) {
+          console.warn(`     Remotion failed: ${remotionErr.message}`);
+          console.log('     Falling back to Canva...');
+          rendered = await tryCanva();
+        }
+      }
+
+      if (!rendered) {
+        throw new Error('All visual engines failed');
+      }
 
       // Step 3: Upload to Cloudinary
       const { uploadMedia } = require('../publishers/cloudinary');
       console.log('\n ⏳  Uploading to Cloudinary...');
       mediaUrl = await uploadMedia(outputPath);
-      console.log(` ✅  Uploaded: ${mediaUrl}`);
+      console.log(` ✅  Uploaded: ${mediaUrl} (via ${visualEngine})`);
 
     } catch (renderErr) {
       console.warn(` ⚠️  Render/upload failed: ${renderErr.message}`);
       console.warn('     Falling back to image-only posting...');
       // Use Unsplash fallback image
       mediaUrl = content.facebook.imageUrl || 'https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=1080';
+      visualEngine = 'fallback-image';
     }
 
     // Step 4: Publish to all platforms
@@ -196,7 +276,6 @@ async function executeEngine(options = {}) {
     const { publishToAll } = require('../publishers');
 
     // Bridge content engine format → publisher format
-    // publishToAll expects { caption, imageUrl, videoUrl }
     const postPayload = {
       caption: content.facebook.caption,
       imageUrl: mediaUrl,
@@ -226,15 +305,16 @@ async function executeEngine(options = {}) {
           caption: post.caption,
           compositionId: post.compositionHint,
           mediaUrl,
+          visualEngine, // Track which engine was used
         });
       }
     });
 
     console.log(`\n${DIVIDER}`);
-    console.log(' 🎉  DAILY ENGINE COMPLETE');
+    console.log(` 🎉  DAILY ENGINE COMPLETE (visual: ${visualEngine})`);
     console.log(DIVIDER);
 
-    return { content, outputPath, mediaUrl, results };
+    return { content, outputPath, mediaUrl, visualEngine, results };
 
   } catch (err) {
     console.error(`\n ❌  Engine failed: ${err.message}`);

@@ -54,7 +54,7 @@ export const GlowCard: React.FC<GlowCardProps> = ({
   const particles = [
     { x: 120, y: 150, size: 6, delay: 0 },
     { x: 900, y: 200, size: 4, delay: 10 },
-    { x: 180, y: 850, size: 5, delay: 20 },
+    { x: 250, y: 750, size: 5, delay: 20 },
     { x: 950, y: 780, size: 7, delay: 5 },
     { x: 500, y: 100, size: 3, delay: 15 },
     { x: 80, y: 500, size: 4, delay: 25 },
@@ -89,12 +89,12 @@ export const GlowCard: React.FC<GlowCardProps> = ({
           opacity="0.08"
           transform={`rotate(${hexRotate}, 850, 160)`}
         />
-        {/* Medium hex — bottom left */}
+        {/* Medium hex — moved up to avoid logo zone */}
         <polygon
-          points="180,820 230,850 230,910 180,940 130,910 130,850"
+          points="180,680 230,710 230,770 180,800 130,770 130,710"
           fill="none" stroke={brandColor} strokeWidth="1"
           opacity="0.06"
-          transform={`rotate(${-hexRotate * 0.7}, 180, 880)`}
+          transform={`rotate(${-hexRotate * 0.7}, 180, 740)`}
         />
         {/* Circuit lines */}
         <path d="M 0 300 L 120 300 L 150 270 L 200 270" fill="none" stroke={brandColor} strokeWidth="1" opacity="0.06" />
@@ -139,10 +139,10 @@ export const GlowCard: React.FC<GlowCardProps> = ({
       {/* MAIN CARD — centered with glow border */}
       <div style={{
         position: 'absolute',
-        top: 120,
+        top: 100,
         left: 80,
         right: 80,
-        bottom: 120,
+        bottom: 190,
         opacity: cardOpacity,
         transform: `scale(${Math.max(cardScale, 0)})`,
       }}>
@@ -207,17 +207,14 @@ export const GlowCard: React.FC<GlowCardProps> = ({
             </h1>
           </div>
 
-          {/* Bottom of card — logo + handle */}
+          {/* Bottom of card — handle only (logo moved outside card) */}
           <div style={{
             display: 'flex',
-            justifyContent: 'space-between',
+            justifyContent: 'flex-end',
             alignItems: 'center',
             opacity: brandOpacity,
             marginTop: 20,
           }}>
-            <div style={{ width: 55, height: 55, transform: `scale(${Math.max(logoScale, 0)})` }}>
-              <Img src={staticFile('logo.png')} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-            </div>
             <span style={{
               color: brandColor,
               fontSize: 24,
@@ -229,6 +226,20 @@ export const GlowCard: React.FC<GlowCardProps> = ({
             </span>
           </div>
         </div>
+      </div>
+
+      {/* Logo — bottom left, ISOLATED zone outside the card */}
+      <div style={{
+        position: 'absolute',
+        bottom: 25,
+        left: 30,
+        width: 140,
+        height: 140,
+        opacity: brandOpacity,
+        transform: `scale(${Math.max(logoScale, 0)})`,
+        transformOrigin: 'bottom left',
+      }}>
+        <Img src={staticFile('logo.png')} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
       </div>
 
       {/* Corner accent lines */}

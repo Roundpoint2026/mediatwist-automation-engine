@@ -30,7 +30,8 @@ const { withRetry } = require('./retry');
 const { createLogger } = require('./logger');
 
 const logger = createLogger('publisher:instagram');
-const GRAPH_API_VERSION = 'v19.0';
+const GRAPH_API_VERSION = 'v20.0';
+const GRAPH_BASE = 'https://graph.facebook.com';
 
 /**
  * Detects if URL points to a video based on file extension or Content-Type.
@@ -74,32 +75,34 @@ async function detectMediaType(mediaUrl) {
 async function pollContainerStatus(
   containerId,
   accessToken,
-  maxAttempts = 10,
-  delayMs = 500
+  maxAttempts = 30,
+  delayMs = 3000
 ) {
   logger.info(`Polling container ${containerId} status...`);
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
       const response = await axios.get(
-        `https://graph.instagram.com/${GRAPH_API_VERSION}/${containerId}`,
+        `${GRAPH_BASE}/${GRAPH_API_VERSION}/${containerId}`,
         {
           params: {
-            fields: 'status,id',
+            fields: 'status,status_code,id',
             access_token: accessToken,
           },
         }
       );
 
-      const { status } = response.data;
+      const { status, status_code } = response.data;
+      const code = (status_code || '').toUpperCase();
+      const statusLower = (status || '').toLowerCase();
 
-      if (status === 'FINISHED') {
-        logger.info(`Container status: ${status}`);
+      if (code === 'FINISHED' || statusLower.startsWith('finished')) {
+        logger.info(`Container ready: ${status}`);
         return response.data;
       }
 
-      if (status === 'ERROR') {
-        throw new Error(`Container status is ERROR`);
+      if (code === 'ERROR' || statusLower.startsWith('error')) {
+        throw new Error(`Container status is ERROR: ${status}`);
       }
 
       logger.info(`Container status: ${status} (attempt ${attempt}/${maxAttempts})`);
@@ -137,7 +140,7 @@ async function pollContainerStatus(
  * @throws {Error} If required env vars missing, validation fails, or API errors
  */
 async function postToInstagram(mediaUrl, caption, options = {}) {
-  const { mediaType: forcedMediaType = null, pollMaxAttempts = 10 } = options;
+  const { mediaType: forcedMediaType = null, pollMaxAttempts = 30 } = options;
 
   // Validate credentials
   const { IG_ACCOUNT_ID, ACCESS_TOKEN } = process.env;
@@ -184,8 +187,9 @@ async function postToInstagram(mediaUrl, caption, options = {}) {
     };
 
     if (mediaType === 'VIDEO') {
+      // Instagram deprecated VIDEO media type — all videos are now REELS
       containerPayload.video_url = mediaUrl;
-      containerPayload.media_type = 'VIDEO';
+      containerPayload.media_type = 'REELS';
     } else {
       containerPayload.image_url = mediaUrl;
     }
@@ -193,7 +197,7 @@ async function postToInstagram(mediaUrl, caption, options = {}) {
     const containerResult = await withRetry(
       () =>
         axios.post(
-          `https://graph.instagram.com/${GRAPH_API_VERSION}/${IG_ACCOUNT_ID}/media`,
+          `${GRAPH_BASE}/${GRAPH_API_VERSION}/${IG_ACCOUNT_ID}/media`,
           containerPayload
         ),
       {
@@ -201,8 +205,10 @@ async function postToInstagram(mediaUrl, caption, options = {}) {
         delayMs: 2000,
         backoff: 'exponential',
         onRetry: (attempt, error, nextDelay) => {
+          const apiErr = error.response?.data?.error;
+          const detail = apiErr ? `${apiErr.message} (code: ${apiErr.code})` : error.message;
           logger.warn(
-            `Container creation retry (attempt ${attempt}): ${error.message}. Waiting ${nextDelay}ms...`
+            `Container creation retry (attempt ${attempt}): ${detail}. Waiting ${nextDelay}ms...`
           );
         },
       }
@@ -224,7 +230,7 @@ async function postToInstagram(mediaUrl, caption, options = {}) {
       containerId,
       ACCESS_TOKEN,
       pollMaxAttempts,
-      500
+      3000
     );
 
     // Step 3: Publish container
@@ -233,7 +239,7 @@ async function postToInstagram(mediaUrl, caption, options = {}) {
     const publishResult = await withRetry(
       () =>
         axios.post(
-          `https://graph.instagram.com/${GRAPH_API_VERSION}/${IG_ACCOUNT_ID}/media_publish`,
+          `${GRAPH_BASE}/${GRAPH_API_VERSION}/${IG_ACCOUNT_ID}/media_publish`,
           {
             creation_id: containerId,
             access_token: ACCESS_TOKEN,
@@ -265,7 +271,12 @@ async function postToInstagram(mediaUrl, caption, options = {}) {
 
     return published;
   } catch (err) {
-    const msg = `postToInstagram: Failed: ${err.message}`;
+    // Extract detailed error from Facebook API response
+    const apiError = err.response?.data?.error;
+    const detail = apiError
+      ? `${apiError.message} (code: ${apiError.code}, subcode: ${apiError.error_subcode || 'N/A'}, type: ${apiError.type})`
+      : err.message;
+    const msg = `postToInstagram: Failed: ${detail}`;
     logger.error(msg);
     throw new Error(msg);
   }

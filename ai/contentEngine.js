@@ -418,6 +418,19 @@ async function generateDailyContent() {
       handle: '@mediatwist',
       colors: ['Black', 'Yellow'],
       timestamp: new Date().toISOString()
+    },
+    visual_direction: {
+      theme: `Bold executive-level ${selectedCategory.toLowerCase()} — black/yellow Mediatwist brand palette`,
+      layout: {
+        logo_position: 'bottom-left',
+        logo_clearspace_percentage: '25%',
+        content_zone: 'top 80% of frame + right 75% of bottom area — all text and graphics here',
+        safe_zones_description: 'Bottom-left 250×200px is RESERVED for logo overlay. No text, handles, or decorations may enter this zone. @mediatwist handle goes bottom-right.',
+      },
+      background_style: 'Solid black (#0A0A0A) with subtle geometric/circuit-board accents in yellow (#FFD600) — accents must avoid bottom-left logo zone',
+      overlay_elements: 'Yellow accent lines, abstract shapes, progress bars — confined to content zone only, never overlapping bottom-left logo zone',
+      text_style: 'Ultra-bold condensed uppercase font (Impact/Bebas Neue style) for headlines. White text with yellow highlights. @mediatwist handle at BOTTOM-RIGHT.',
+      motion_style: categoryContent.compositionHint || 'kinetic-typography',
     }
   };
 

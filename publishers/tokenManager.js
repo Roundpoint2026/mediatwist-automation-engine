@@ -61,15 +61,22 @@ async function exchangeForLongLived(shortLivedToken) {
   });
 
   const { access_token, expires_in } = response.data;
-  const expiresDate = new Date(Date.now() + expires_in * 1000);
 
-  logger.success(`Long-lived token obtained. Expires: ${expiresDate.toISOString()} (~${Math.round(expires_in / 86400)} days)`);
+  let expiresAt = 'Unknown';
+  let daysApprox = '?';
+  if (expires_in && !isNaN(expires_in)) {
+    const expiresDate = new Date(Date.now() + expires_in * 1000);
+    expiresAt = expiresDate.toISOString();
+    daysApprox = Math.round(expires_in / 86400);
+  }
+
+  logger.success(`Long-lived token obtained. Expires: ${expiresAt} (~${daysApprox} days)`);
 
   return {
     access_token,
     token_type: response.data.token_type,
-    expires_in,
-    expires_at: expiresDate.toISOString(),
+    expires_in: expires_in || 0,
+    expires_at: expiresAt,
   };
 }
 
@@ -86,17 +93,48 @@ async function getPageToken(longLivedUserToken) {
 
   logger.info('Fetching never-expiring page access token...');
 
-  const response = await axios.get(`${GRAPH_API}/me/accounts`, {
-    params: { access_token: token },
-  });
+  // Fetch all pages with pagination support
+  let allPages = [];
+  let url = `${GRAPH_API}/me/accounts`;
+  let params = { access_token: token, limit: 100 };
 
-  const pages = response.data.data || [];
+  while (url) {
+    const response = await axios.get(url, { params });
+    const pages = response.data.data || [];
+    allPages = allPages.concat(pages);
+    // Follow pagination cursor if present
+    url = response.data.paging && response.data.paging.next ? response.data.paging.next : null;
+    params = {}; // next URL includes all params
+  }
+
+  logger.info(`Found ${allPages.length} page(s) accessible to this token`);
+
   const page = PAGE_ID
-    ? pages.find(p => p.id === PAGE_ID)
-    : pages[0];
+    ? allPages.find(p => p.id === PAGE_ID)
+    : allPages[0];
 
   if (!page) {
-    throw new Error(`Page not found. Available pages: ${pages.map(p => `${p.name} (${p.id})`).join(', ')}`);
+    // If page not found, try fetching the page token directly via PAGE_ID
+    if (PAGE_ID) {
+      logger.info(`Page ${PAGE_ID} not in /me/accounts list. Trying direct fetch...`);
+      try {
+        const directResponse = await axios.get(`${GRAPH_API}/${PAGE_ID}`, {
+          params: { fields: 'access_token,name,id', access_token: token },
+        });
+        if (directResponse.data && directResponse.data.access_token) {
+          logger.success(`Page token obtained directly for "${directResponse.data.name}" (${directResponse.data.id})`);
+          logger.info('This page token NEVER expires as long as the app is not removed from the page.');
+          return {
+            pageToken: directResponse.data.access_token,
+            pageId:    directResponse.data.id,
+            pageName:  directResponse.data.name,
+          };
+        }
+      } catch (directErr) {
+        logger.error(`Direct page fetch also failed: ${directErr.message}`);
+      }
+    }
+    throw new Error(`Page not found. Available pages: ${allPages.map(p => `${p.name} (${p.id})`).join(', ')}`);
   }
 
   logger.success(`Page token obtained for "${page.name}" (${page.id})`);
@@ -237,4 +275,81 @@ if (require.main === module) {
   });
 }
 
-module.exports = { exchangeForLongLived, getPageToken, checkToken, updateEnvToken };
+/**
+ * Pre-flight token health check for use before engine runs.
+ * Returns { valid, expiresAt, daysRemaining, isPageToken, warning }.
+ * If token expires within WARNING_DAYS, returns a warning message.
+ * If token is expired or invalid, returns valid: false with error.
+ *
+ * @param {number} [warningDays=7] - Warn if token expires within this many days
+ * @returns {Promise<object>}
+ */
+async function preflightTokenCheck(warningDays = 7) {
+  const token = process.env.ACCESS_TOKEN;
+  if (!token) {
+    return { valid: false, error: 'ACCESS_TOKEN not set in .env' };
+  }
+
+  try {
+    // Quick validity check
+    await axios.get(`${GRAPH_API}/me`, { params: { access_token: token }, timeout: 10000 });
+
+    // Get detailed token info
+    const { FB_APP_ID, FB_APP_SECRET } = process.env;
+    if (FB_APP_ID && FB_APP_SECRET) {
+      const debugResponse = await axios.get(`${GRAPH_API}/debug_token`, {
+        params: {
+          input_token:  token,
+          access_token: `${FB_APP_ID}|${FB_APP_SECRET}`,
+        },
+        timeout: 10000,
+      });
+
+      const data = debugResponse.data.data;
+
+      if (!data.is_valid) {
+        return { valid: false, error: 'Token is marked as invalid by Facebook' };
+      }
+
+      // expires_at === 0 means never-expiring page token
+      if (!data.expires_at || data.expires_at === 0) {
+        return {
+          valid: true,
+          expiresAt: 'Never',
+          daysRemaining: Infinity,
+          isPageToken: true,
+          warning: null,
+        };
+      }
+
+      const expiresAt = new Date(data.expires_at * 1000);
+      const now = new Date();
+      const daysRemaining = Math.round((expiresAt - now) / (1000 * 60 * 60 * 24));
+
+      let warning = null;
+      if (daysRemaining <= 0) {
+        return { valid: false, error: `Token expired on ${expiresAt.toISOString()}` };
+      } else if (daysRemaining <= warningDays) {
+        warning = `Token expires in ${daysRemaining} day(s) on ${expiresAt.toISOString()}. ` +
+          'Run: npm run token:exchange && npm run token:page';
+      }
+
+      return {
+        valid: true,
+        expiresAt: expiresAt.toISOString(),
+        daysRemaining,
+        isPageToken: data.type === 'PAGE',
+        warning,
+      };
+    }
+
+    // No app credentials to do deep check — token works, that's all we know
+    return { valid: true, expiresAt: 'Unknown (no FB_APP_ID/FB_APP_SECRET for debug)', daysRemaining: null, warning: null };
+
+  } catch (err) {
+    const fbError = err.response?.data?.error?.message || err.message;
+    return { valid: false, error: fbError };
+  }
+}
+
+module.exports = { exchangeForLongLived, getPageToken, checkToken, updateEnvToken, preflightTokenCheck };

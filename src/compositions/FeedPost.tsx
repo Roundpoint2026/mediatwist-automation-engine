@@ -44,11 +44,13 @@ export const FeedPost: React.FC<FeedPostProps> = ({
   const radarO = interpolate(radarPhase, [0, 100], [0.25, 0], { extrapolateRight: 'clamp' });
 
   // ── Horizontal scan line ────────────────────────────────
-  const scanY = interpolate(frame, [15, 120], [0, 1080], { extrapolateRight: 'clamp' });
+  // Scan line stops at y=880, NEVER enters logo zone (y=915+)
+  const scanY = interpolate(frame, [15, 120], [0, 880], { extrapolateRight: 'clamp' });
   const scanOpacity = interpolate(frame, [15, 30, 90, 120], [0, 0.5, 0.3, 0], { extrapolateRight: 'clamp' });
 
   // ── Accent bar grows down from top ──────────────────────
-  const barHeight = interpolate(frame, [5, 50], [0, 500], { extrapolateRight: 'clamp' });
+  // Accent bar capped so it never enters logo zone (top:80 + 400 = y:480, logo at y:915)
+  const barHeight = interpolate(frame, [5, 50], [0, 400], { extrapolateRight: 'clamp' });
 
   // ── Headline ────────────────────────────────────────────
   const headlineOpacity = interpolate(frame, [10, 35], [0, 1], { extrapolateRight: 'clamp' });
@@ -66,7 +68,7 @@ export const FeedPost: React.FC<FeedPostProps> = ({
   const subY = interpolate(frame, [75, 100], [15, 0], { extrapolateRight: 'clamp' });
 
   // ── Logo ────────────────────────────────────────────────
-  const logoOpacity = interpolate(frame, [5, 25], [0, 0.9], { extrapolateRight: 'clamp' });
+  const logoOpacity = interpolate(frame, [5, 25], [0, 1], { extrapolateRight: 'clamp' });
   const logoScale = spring({ frame: frame - 5, fps, from: 0.85, to: 1, config: { damping: 200, stiffness: 120 } });
 
   // ── Brand handle ────────────────────────────────────────
@@ -107,16 +109,16 @@ export const FeedPost: React.FC<FeedPostProps> = ({
         boxShadow: `0 0 20px ${brandColor}66`,
       }} />
 
-      {/* Logo — top right */}
+      {/* Logo — bottom left, ISOLATED zone (nothing else within 200px of this corner) */}
       <div style={{
         position: 'absolute',
-        top: 40,
-        right: 40,
-        width: 110,
-        height: 110,
+        bottom: 25,
+        left: 30,
+        width: 140,
+        height: 140,
         opacity: logoOpacity,
         transform: `scale(${Math.max(logoScale, 0)})`,
-        transformOrigin: 'top right',
+        transformOrigin: 'bottom left',
       }}>
         <Img src={staticFile('logo.png')} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
       </div>
@@ -190,8 +192,8 @@ export const FeedPost: React.FC<FeedPostProps> = ({
       {subText && (
         <div style={{
           position: 'absolute',
-          bottom: 120,
-          left: 70,
+          bottom: 240,
+          left: 200,
           right: 70,
           opacity: subOpacity,
           transform: `translateY(${subY}px)`,
@@ -210,24 +212,21 @@ export const FeedPost: React.FC<FeedPostProps> = ({
         </div>
       )}
 
-      {/* Bottom brand bar + handle */}
+      {/* Bottom brand bar — starts AFTER logo zone (left:200) */}
       <div style={{
         position: 'absolute',
         bottom: 0,
-        left: 0,
+        left: 200,
         right: 0,
         height: 5,
         background: `linear-gradient(90deg, ${brandColor}, transparent)`,
         opacity: brandOpacity,
       }} />
+      {/* Handle — bottom right (away from logo zone) */}
       <div style={{
         position: 'absolute',
-        bottom: 25,
-        left: 70,
-        right: 70,
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+        bottom: 50,
+        right: 50,
         opacity: brandOpacity,
       }}>
         <span style={{
@@ -239,17 +238,6 @@ export const FeedPost: React.FC<FeedPostProps> = ({
         }}>
           @mediatwist
         </span>
-        <div style={{ display: 'flex', gap: 6 }}>
-          {[0, 1, 2].map(i => (
-            <div key={i} style={{
-              width: i === 1 ? 8 : 5,
-              height: i === 1 ? 8 : 5,
-              borderRadius: '50%',
-              backgroundColor: brandColor,
-              opacity: i === 1 ? 1 : 0.4,
-            }} />
-          ))}
-        </div>
       </div>
 
     </AbsoluteFill>

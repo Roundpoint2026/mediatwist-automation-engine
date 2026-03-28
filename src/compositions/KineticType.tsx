@@ -41,7 +41,8 @@ export const KineticType: React.FC<KineticTypeProps> = ({
   const radarO2 = interpolate(radarPhase2, [0, 90], [0.35, 0], { extrapolateRight: 'clamp' });
 
   // ── Scanning line sweeps across ─────────────────────────
-  const scanX = interpolate(frame, [0, durationInFrames], [-100, 1200], { extrapolateRight: 'clamp' });
+  // Scan line starts at x=200, NEVER enters logo zone (x=30-170)
+  const scanX = interpolate(frame, [0, durationInFrames], [200, 1200], { extrapolateRight: 'clamp' });
   const scanOpacity = interpolate(frame, [10, 40, durationInFrames - 30, durationInFrames], [0, 0.4, 0.4, 0], { extrapolateRight: 'clamp' });
 
   // ── Split text into lines (sentences) for reveal ────────
@@ -58,14 +59,15 @@ export const KineticType: React.FC<KineticTypeProps> = ({
   const lineStartOffset = 30; // first line appears at frame 30
 
   // ── Logo ────────────────────────────────────────────────
-  const logoOpacity = interpolate(frame, [5, 25], [0, 0.9], { extrapolateRight: 'clamp' });
+  const logoOpacity = interpolate(frame, [5, 25], [0, 1], { extrapolateRight: 'clamp' });
   const logoScale = spring({ frame: frame - 5, fps, from: 0.85, to: 1, config: { damping: 200, stiffness: 120 } });
 
   // ── Bottom brand handle ─────────────────────────────────
   const brandOpacity = interpolate(frame, [durationInFrames - 60, durationInFrames - 30], [0, 1], { extrapolateRight: 'clamp' });
 
   // ── Accent bar height ───────────────────────────────────
-  const accentHeight = interpolate(frame, [20, 80], [0, 600], { extrapolateRight: 'clamp' });
+  // Accent bar capped at 500px so it never reaches logo zone (top:200 + 500 = y:700, logo starts at y:915)
+  const accentHeight = interpolate(frame, [20, 80], [0, 500], { extrapolateRight: 'clamp' });
 
   return (
     <AbsoluteFill style={{ backgroundColor: MEDIATWIST_COLORS.dark, opacity: bgOpacity }}>
@@ -109,16 +111,16 @@ export const KineticType: React.FC<KineticTypeProps> = ({
         background: `linear-gradient(90deg, ${brandColor}, transparent)`,
       }} />
 
-      {/* Logo — top right */}
+      {/* Logo — bottom left, ISOLATED zone */}
       <div style={{
         position: 'absolute',
-        top: 40,
-        right: 40,
-        width: 100,
-        height: 100,
+        bottom: 25,
+        left: 30,
+        width: 140,
+        height: 140,
         opacity: logoOpacity,
         transform: `scale(${Math.max(logoScale, 0)})`,
-        transformOrigin: 'top right',
+        transformOrigin: 'bottom left',
       }}>
         <Img src={staticFile('logo.png')} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
       </div>
@@ -169,11 +171,11 @@ export const KineticType: React.FC<KineticTypeProps> = ({
         })}
       </div>
 
-      {/* Brand handle — bottom left */}
+      {/* Brand handle — bottom right, away from logo */}
       <div style={{
         position: 'absolute',
-        bottom: 40,
-        left: 60,
+        bottom: 50,
+        right: 50,
         opacity: brandOpacity,
         display: 'flex',
         alignItems: 'center',
@@ -191,11 +193,11 @@ export const KineticType: React.FC<KineticTypeProps> = ({
         </span>
       </div>
 
-      {/* Bottom bar */}
+      {/* Bottom bar — starts AFTER logo zone */}
       <div style={{
         position: 'absolute',
         bottom: 0,
-        left: 0,
+        left: 200,
         right: 0,
         height: 5,
         background: `linear-gradient(90deg, ${brandColor}, transparent)`,

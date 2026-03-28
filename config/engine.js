@@ -62,6 +62,8 @@ module.exports = {
 
   // ─── Visual Engine ───────────────────────────────────────────────────────
   visual: {
+    // Engine routing: 'canva-first' | 'remotion-first' | 'canva-only' | 'remotion-only' | 'random'
+    engine:             process.env.VISUAL_ENGINE || 'canva-first',
     defaultComposition: process.env.REMOTION_COMPOSITION || 'FeedPost',
     outputDir:          'outputs',
     codec:              'h264',
@@ -71,6 +73,14 @@ module.exports = {
       reels:   { id: 'ReelsPost',       width: 1080, height: 1920, fps: 30, durationFrames: 450 },
       caption: { id: 'BrandedCaption',  width: 1080, height: 1080, fps: 30, durationFrames: 240 },
     },
+  },
+
+  // ─── Canva ─────────────────────────────────────────────────────────────
+  canva: {
+    accessToken:   process.env.CANVA_ACCESS_TOKEN || null,
+    brandKitId:    process.env.CANVA_BRAND_KIT_ID || 'kAFgjxJ3nmw',
+    queueFolderId: process.env.CANVA_QUEUE_FOLDER_ID || 'FAHFM_9suzw',
+    enabled:       !!process.env.CANVA_ACCESS_TOKEN,
   },
 
   // ─── Publishing ──────────────────────────────────────────────────────────

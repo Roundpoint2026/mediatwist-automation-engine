@@ -80,7 +80,7 @@ export const BoldStatement: React.FC<BoldStatementProps> = ({
       }} />
       <div style={{
         position: 'absolute',
-        bottom: 120,
+        bottom: 300,
         left: -100,
         width: 250,
         height: 250,
@@ -150,13 +150,13 @@ export const BoldStatement: React.FC<BoldStatementProps> = ({
         </span>
       </div>
 
-      {/* MAIN TEXT — uses the full canvas */}
+      {/* MAIN TEXT — uses the full canvas, clears logo zone at bottom-left */}
       <div style={{
         position: 'absolute',
         top: 160,
         left: 70,
         right: 70,
-        bottom: 180,
+        bottom: 220,
         display: 'flex',
         alignItems: 'center',
         opacity: textOpacity,
@@ -175,26 +175,27 @@ export const BoldStatement: React.FC<BoldStatementProps> = ({
         </h1>
       </div>
 
-      {/* Logo — bottom left */}
+      {/* Logo — bottom left, ISOLATED zone */}
       <div style={{
         position: 'absolute',
-        bottom: 50,
-        left: 70,
-        width: 70,
-        height: 70,
+        bottom: 25,
+        left: 30,
+        width: 140,
+        height: 140,
         opacity: logoOpacity,
         transform: `scale(${Math.max(logoScale, 0)})`,
+        transformOrigin: 'bottom left',
       }}>
         <Img src={staticFile('logo.png')} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
       </div>
 
-      {/* Bottom yellow bar — full width wipe */}
+      {/* Bottom yellow bar — starts AFTER logo zone */}
       <div style={{
         position: 'absolute',
         bottom: 0,
-        left: 0,
-        width: barWidth,
-        height: 8,
+        left: 200,
+        width: Math.max(barWidth - 200, 0),
+        height: 5,
         backgroundColor: brandColor,
         opacity: bottomOpacity,
       }} />

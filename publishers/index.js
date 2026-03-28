@@ -161,11 +161,12 @@ async function publishToAll(post, mediaUrl, options = {}) {
 
     linkedin: {
       name: 'LinkedIn',
-      shouldSkip: () => skipPlatforms.includes('linkedin') || isVideo,
+      shouldSkip: () => skipPlatforms.includes('linkedin'),
       publish: async () => {
         return postToLinkedIn(
           effectiveMediaUrl,
-          getTruncatedCaption('linkedin')
+          getTruncatedCaption('linkedin'),
+          { mediaType: isVideo ? 'VIDEO' : 'IMAGE' }
         );
       },
     },

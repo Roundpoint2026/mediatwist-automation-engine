@@ -49,11 +49,12 @@ export const DataDashboard: React.FC<DataDashboardProps> = ({
   const radarO = interpolate(radarPhase, [0, 90], [0.2, 0], { extrapolateRight: 'clamp' });
 
   // ── Scanning line ───────────────────────────────────────
-  const scanY = interpolate(frame, [30, 180], [0, 1080], { extrapolateRight: 'clamp' });
+  // Scan line stops at y=880, NEVER enters logo zone (y=915+)
+  const scanY = interpolate(frame, [30, 180], [0, 880], { extrapolateRight: 'clamp' });
   const scanOpacity = interpolate(frame, [30, 50, 150, 180], [0, 0.5, 0.3, 0], { extrapolateRight: 'clamp' });
 
   // ── Logo ────────────────────────────────────────────────
-  const logoOpacity = interpolate(frame, [5, 25], [0, 0.85], { extrapolateRight: 'clamp' });
+  const logoOpacity = interpolate(frame, [5, 25], [0, 1], { extrapolateRight: 'clamp' });
   const logoScale = spring({ frame: frame - 5, fps, from: 0.85, to: 1, config: { damping: 200, stiffness: 120 } });
 
   // ── Headline ────────────────────────────────────────────
@@ -116,25 +117,25 @@ export const DataDashboard: React.FC<DataDashboardProps> = ({
         background: `linear-gradient(90deg, ${brandColor}, transparent)`,
       }} />
 
-      {/* Logo — top left */}
+      {/* Logo — bottom left, ISOLATED zone */}
       <div style={{
         position: 'absolute',
-        top: 30,
+        bottom: 25,
         left: 30,
-        width: 80,
-        height: 80,
+        width: 140,
+        height: 140,
         opacity: logoOpacity,
         transform: `scale(${Math.max(logoScale, 0)})`,
-        transformOrigin: 'top left',
+        transformOrigin: 'bottom left',
       }}>
         <Img src={staticFile('logo.png')} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
       </div>
 
-      {/* Headline */}
+      {/* Headline — full width now, no logo overlap */}
       <div style={{
         position: 'absolute',
         top: 45,
-        left: 130,
+        left: 40,
         right: 40,
         opacity: headlineOpacity,
         transform: `translateY(${headlineY}px)`,
@@ -246,11 +247,11 @@ export const DataDashboard: React.FC<DataDashboardProps> = ({
         })}
       </div>
 
-      {/* Bottom brand */}
+      {/* Bottom brand — right side, away from logo */}
       <div style={{
         position: 'absolute',
-        bottom: 25,
-        left: 40,
+        bottom: 50,
+        right: 40,
         opacity: brandOpacity,
         display: 'flex',
         alignItems: 'center',
@@ -268,11 +269,11 @@ export const DataDashboard: React.FC<DataDashboardProps> = ({
         </span>
       </div>
 
-      {/* Bottom bar */}
+      {/* Bottom bar — starts AFTER logo zone */}
       <div style={{
         position: 'absolute',
         bottom: 0,
-        left: 0,
+        left: 200,
         right: 0,
         height: 5,
         background: `linear-gradient(90deg, ${brandColor}, transparent)`,

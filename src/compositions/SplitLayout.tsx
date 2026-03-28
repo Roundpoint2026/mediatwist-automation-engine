@@ -96,12 +96,12 @@ export const SplitLayout: React.FC<SplitLayoutProps> = ({
             fill="none" stroke={MEDIATWIST_COLORS.dark}
             strokeWidth="2" opacity={0.12 * Math.max(shape2, 0)}
           />
-          {/* Rotating square */}
+          {/* Rotating square — moved up away from logo zone */}
           <rect
-            x="130" y="760" width="120" height="120"
+            x="130" y="650" width="100" height="100"
             fill="none" stroke={MEDIATWIST_COLORS.dark}
             strokeWidth="2" opacity={0.1 * Math.max(shape3, 0)}
-            transform={`rotate(${shape4Rotate}, 190, 820)`}
+            transform={`rotate(${shape4Rotate}, 180, 700)`}
           />
           {/* Small dots grid */}
           {[0, 1, 2, 3, 4, 5].map(row =>
@@ -115,8 +115,8 @@ export const SplitLayout: React.FC<SplitLayoutProps> = ({
               />
             ))
           )}
-          {/* Horizontal lines */}
-          {[900, 930, 960].map(y => (
+          {/* Horizontal lines — pushed up to avoid logo zone */}
+          {[750, 780, 810].map(y => (
             <line key={y} x1="40" y1={y} x2="340" y2={y}
               stroke={MEDIATWIST_COLORS.dark} strokeWidth="1" opacity="0.1" />
           ))}
@@ -145,13 +145,13 @@ export const SplitLayout: React.FC<SplitLayoutProps> = ({
           </h1>
         </div>
 
-        {/* Logo at bottom of yellow panel */}
+        {/* Logo at bottom of yellow panel — ISOLATED, no text near it */}
         <div style={{
           position: 'absolute',
-          bottom: 50,
-          left: 40,
-          width: 60,
-          height: 60,
+          bottom: 30,
+          left: 30,
+          width: 140,
+          height: 140,
           opacity: brandOpacity,
         }}>
           <Img src={staticFile('logo.png')} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />

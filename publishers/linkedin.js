@@ -122,6 +122,7 @@ async function makeJsonRequest(method, path, body, accessToken) {
     'Authorization': `Bearer ${accessToken}`,
     'Content-Type': 'application/json',
     'X-Restli-Protocol-Version': '2.0.0',
+    'LinkedIn-Version': '202401',
   };
 
   if (payload) {
@@ -167,7 +168,10 @@ async function makeJsonRequest(method, path, body, accessToken) {
  *
  * @throws {Error} If required env vars missing, validation fails, or API errors
  */
-async function postToLinkedIn(imageUrl, caption, options = {}) {
+async function postToLinkedIn(mediaUrl, caption, options = {}) {
+  const { mediaType = 'IMAGE' } = options;
+  const isVideo = mediaType === 'VIDEO';
+
   // Validate credentials
   const { LINKEDIN_ACCESS_TOKEN, LINKEDIN_ORG_ID } = process.env;
 
@@ -179,8 +183,8 @@ async function postToLinkedIn(imageUrl, caption, options = {}) {
   }
 
   // Validate arguments
-  if (!imageUrl) {
-    const msg = 'postToLinkedIn: imageUrl is required';
+  if (!mediaUrl) {
+    const msg = 'postToLinkedIn: mediaUrl is required';
     logger.error(msg);
     throw new Error(msg);
   }
@@ -192,23 +196,25 @@ async function postToLinkedIn(imageUrl, caption, options = {}) {
   }
 
   try {
-    logger.info(`Posting to LinkedIn (org: ${LINKEDIN_ORG_ID ? 'yes' : 'no'})`);
+    logger.info(`Posting to LinkedIn (org: ${LINKEDIN_ORG_ID ? 'yes' : 'no'}, media: ${mediaType})`);
 
     // Determine owner URN: organization or personal
     let ownerUrn;
 
     if (LINKEDIN_ORG_ID) {
-      // Use organization directly
-      ownerUrn = LINKEDIN_ORG_ID;
+      // Ensure full URN format — accept both "11240225" and "urn:li:organization:11240225"
+      ownerUrn = LINKEDIN_ORG_ID.startsWith('urn:li:') ? LINKEDIN_ORG_ID : `urn:li:organization:${LINKEDIN_ORG_ID}`;
       logger.info(`Using organization owner: ${ownerUrn}`);
     } else {
       // Get personal member ID
       logger.info('Fetching LinkedIn member ID...');
 
+      // Try /v2/userinfo first (works with openid+profile scopes), fall back to /v2/me
+      let memberId = null;
       const meRes = await withRetry(
-        () => makeJsonRequest('GET', '/v2/me', null, LINKEDIN_ACCESS_TOKEN),
+        () => makeJsonRequest('GET', '/v2/userinfo', null, LINKEDIN_ACCESS_TOKEN),
         {
-          attempts: 3,
+          attempts: 2,
           delayMs: 2000,
           backoff: 'exponential',
           onRetry: (attempt, error, nextDelay) => {
@@ -219,18 +225,30 @@ async function postToLinkedIn(imageUrl, caption, options = {}) {
         }
       );
 
-      if (meRes.status !== 200 || !meRes.body?.id) {
+      if (meRes.status === 200 && meRes.body?.sub) {
+        memberId = meRes.body.sub;
+      } else {
+        // Fallback to /v2/me
+        logger.info('Trying /v2/me fallback...');
+        const meRes2 = await makeJsonRequest('GET', '/v2/me', null, LINKEDIN_ACCESS_TOKEN);
+        if (meRes2.status === 200 && meRes2.body?.id) {
+          memberId = meRes2.body.id;
+        }
+      }
+
+      if (!memberId) {
         const msg = `postToLinkedIn: Could not get member ID: ${JSON.stringify(meRes.body)}`;
         logger.error(msg);
         throw new Error(msg);
       }
 
-      ownerUrn = `urn:li:person:${meRes.body.id}`;
+      ownerUrn = `urn:li:person:${memberId}`;
       logger.info(`Using personal member owner: ${ownerUrn}`);
     }
 
     // Register upload asset
-    logger.info('Registering image upload asset...');
+    const recipe = isVideo ? 'urn:li:digitalmediaRecipe:feedshare-video' : 'urn:li:digitalmediaRecipe:feedshare-image';
+    logger.info(`Registering ${mediaType.toLowerCase()} upload asset...`);
 
     const registerRes = await withRetry(
       () =>
@@ -239,7 +257,7 @@ async function postToLinkedIn(imageUrl, caption, options = {}) {
           '/v2/assets?action=registerUpload',
           {
             registerUploadRequest: {
-              recipes: ['urn:li:digitalmediaRecipe:feedshare-image'],
+              recipes: [recipe],
               owner: ownerUrn,
               serviceRelationships: [
                 {
@@ -282,17 +300,17 @@ async function postToLinkedIn(imageUrl, caption, options = {}) {
 
     logger.success(`Registered asset: ${assetUrn}`);
 
-    // Download image
-    logger.info('Downloading image from URL...');
+    // Download media
+    logger.info(`Downloading ${mediaType.toLowerCase()} from URL...`);
 
-    const imgBuffer = await downloadFile(imageUrl);
-    logger.info(`Downloaded ${imgBuffer.length} bytes`);
+    const mediaBuffer = await downloadFile(mediaUrl);
+    logger.info(`Downloaded ${mediaBuffer.length} bytes`);
 
     // Upload binary
-    logger.info('Uploading image binary to LinkedIn...');
+    logger.info(`Uploading ${mediaType.toLowerCase()} binary to LinkedIn...`);
 
     const uploadStatus = await withRetry(
-      () => uploadBinary(uploadUrl, imgBuffer, LINKEDIN_ACCESS_TOKEN),
+      () => uploadBinary(uploadUrl, mediaBuffer, LINKEDIN_ACCESS_TOKEN),
       {
         attempts: 3,
         delayMs: 2000,
@@ -306,12 +324,12 @@ async function postToLinkedIn(imageUrl, caption, options = {}) {
     );
 
     if (uploadStatus < 200 || uploadStatus > 299) {
-      const msg = `postToLinkedIn: Image upload failed (status ${uploadStatus})`;
+      const msg = `postToLinkedIn: ${mediaType} upload failed (status ${uploadStatus})`;
       logger.error(msg);
       throw new Error(msg);
     }
 
-    logger.success(`Image uploaded (status ${uploadStatus})`);
+    logger.success(`${mediaType} uploaded (status ${uploadStatus})`);
 
     // Create and publish post
     logger.info('Creating and publishing LinkedIn post...');
@@ -327,7 +345,7 @@ async function postToLinkedIn(imageUrl, caption, options = {}) {
             specificContent: {
               'com.linkedin.ugc.ShareContent': {
                 shareCommentary: { text: caption },
-                shareMediaCategory: 'IMAGE',
+                shareMediaCategory: isVideo ? 'VIDEO' : 'IMAGE',
                 media: [{ status: 'READY', media: assetUrn }],
               },
             },

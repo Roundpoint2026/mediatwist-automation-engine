@@ -20,6 +20,12 @@ require('dotenv').config({ path: require('path').resolve(__dirname, '.env') });
 
 const args = process.argv.slice(2);
 
+// ─── Visual engine override via CLI ──────────────────────────────────────────
+if (args.includes('--canva-only'))    process.env.VISUAL_ENGINE = 'canva-only';
+if (args.includes('--remotion-only')) process.env.VISUAL_ENGINE = 'remotion-only';
+if (args.includes('--canva-first'))   process.env.VISUAL_ENGINE = 'canva-first';
+if (args.includes('--remotion-first'))process.env.VISUAL_ENGINE = 'remotion-first';
+
 // ─── Route to subsystem ──────────────────────────────────────────────────────
 
 async function main() {

@@ -56,7 +56,7 @@ export const BrandedCaption: React.FC<BrandedCaptionProps> = ({
   const attrLineWidth = interpolate(frame, [70, 95], [0, 60], { extrapolateRight: 'clamp' });
 
   // ── Logo ────────────────────────────────────────────────
-  const logoOpacity = interpolate(frame, [60, 85], [0, 0.9], { extrapolateRight: 'clamp' });
+  const logoOpacity = interpolate(frame, [60, 85], [0, 1], { extrapolateRight: 'clamp' });
   const logoScale = spring({ frame: frame - 60, fps, from: 0.85, to: 1, config: { damping: 200, stiffness: 120 } });
 
   // ── Brand handle ────────────────────────────────────────
@@ -146,7 +146,7 @@ export const BrandedCaption: React.FC<BrandedCaptionProps> = ({
       {attribution && (
         <div style={{
           position: 'absolute',
-          bottom: 170,
+          bottom: 210,
           left: 90,
           right: 90,
           opacity: attrOpacity,
@@ -171,24 +171,43 @@ export const BrandedCaption: React.FC<BrandedCaptionProps> = ({
         </div>
       )}
 
-      {/* Logo — bottom center */}
+      {/* Logo — bottom left, ISOLATED zone */}
       <div style={{
         position: 'absolute',
-        bottom: 55,
-        left: '50%',
-        transform: `translate(-50%, 0) scale(${Math.max(logoScale, 0)})`,
-        width: 80,
-        height: 80,
+        bottom: 25,
+        left: 30,
+        width: 140,
+        height: 140,
         opacity: logoOpacity,
+        transform: `scale(${Math.max(logoScale, 0)})`,
+        transformOrigin: 'bottom left',
       }}>
         <Img src={staticFile('logo.png')} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
       </div>
 
-      {/* Bottom bar */}
+      {/* Handle — bottom right, away from logo */}
+      <div style={{
+        position: 'absolute',
+        bottom: 50,
+        right: 50,
+        opacity: brandOpacity,
+      }}>
+        <span style={{
+          color: brandColor,
+          fontSize: 22,
+          fontWeight: 700,
+          fontFamily: 'Inter, sans-serif',
+          letterSpacing: 1,
+        }}>
+          @mediatwist
+        </span>
+      </div>
+
+      {/* Bottom bar — starts AFTER logo zone */}
       <div style={{
         position: 'absolute',
         bottom: 0,
-        left: 0,
+        left: 200,
         right: 0,
         height: 5,
         background: `linear-gradient(90deg, ${brandColor}, transparent)`,

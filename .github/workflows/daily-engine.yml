@@ -1,0 +1,152 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Mediatwist Automation Engine — GitHub Actions Scheduler
+#
+# Redundant "set it and forget it" scheduler that runs the engine
+# twice daily even if your Mac is asleep/off.
+#
+# Schedule: 9 AM + 8 PM Eastern Time (cron is in UTC)
+#   EDT (Mar-Nov): UTC-4  → 9AM=13:00 UTC, 8PM=00:00 UTC
+#   EST (Nov-Mar): UTC-5  → 9AM=14:00 UTC, 8PM=01:00 UTC
+#   We use both times to cover both seasons (GitHub deduplicates naturally)
+#
+# Required GitHub Secrets (Settings → Secrets → Actions):
+#   PAGE_ID, ACCESS_TOKEN, IG_ACCOUNT_ID
+#   LINKEDIN_ACCESS_TOKEN, LINKEDIN_ORG_ID
+#   CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET
+#   ANTHROPIC_API_KEY (optional)
+#   ALERT_EMAIL (for failure notifications)
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: Daily Engine
+
+on:
+  schedule:
+    # 9 AM Eastern (covers both EDT and EST)
+    - cron: '0 13 * * *'   # 9 AM EDT (summer)
+    - cron: '0 14 * * *'   # 9 AM EST (winter)
+    # 8 PM Eastern (covers both EDT and EST)
+    - cron: '0 0 * * *'    # 8 PM EDT (summer)
+    - cron: '0 1 * * *'    # 8 PM EST (winter)
+
+  # Allow manual trigger from GitHub UI
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (no publishing)'
+        required: false
+        default: 'false'
+        type: boolean
+
+# Prevent overlapping runs
+concurrency:
+  group: mediatwist-engine
+  cancel-in-progress: false
+
+jobs:
+  run-engine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Chromium for Remotion
+        run: npx remotion browser ensure
+
+      - name: Copy logo to public folder
+        run: |
+          mkdir -p public
+          cp assets/logo.png public/logo.png 2>/dev/null || echo "Logo already in place"
+
+      - name: Create .env from secrets
+        run: |
+          cat > .env << 'ENVEOF'
+          PAGE_ID=${{ secrets.PAGE_ID }}
+          ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN }}
+          IG_ACCOUNT_ID=${{ secrets.IG_ACCOUNT_ID }}
+          LINKEDIN_ACCESS_TOKEN=${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          LINKEDIN_ORG_ID=${{ secrets.LINKEDIN_ORG_ID }}
+          CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}
+          ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}
+          ENVEOF
+
+      - name: Determine run mode
+        id: mode
+        run: |
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            echo "flags=--dry-run" >> $GITHUB_OUTPUT
+          else
+            echo "flags=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run Mediatwist Engine
+        id: engine
+        run: |
+          node scripts/renderAndPublish.js ${{ steps.mode.outputs.flags }} 2>&1 | tee engine-output.log
+          echo "exit_code=${PIPESTATUS[0]}" >> $GITHUB_OUTPUT
+        continue-on-error: true
+
+      - name: Check results
+        run: |
+          SUCCESSES=$(grep -c '✅' engine-output.log || true)
+          FAILURES=$(grep -c '❌' engine-output.log || true)
+          echo "Successes: $SUCCESSES"
+          echo "Failures: $FAILURES"
+
+          if [ "${{ steps.engine.outputs.exit_code }}" != "0" ]; then
+            echo "::error::Engine crashed with exit code ${{ steps.engine.outputs.exit_code }}"
+            exit 1
+          fi
+
+          if [ "$FAILURES" -gt 0 ]; then
+            echo "::warning::$FAILURES platform(s) failed"
+            grep '❌' engine-output.log
+          fi
+
+      - name: Upload log artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: engine-log-${{ github.run_number }}
+          path: |
+            engine-output.log
+            logs/engine.log
+          retention-days: 30
+
+      # ── Failure notification via email ──────────────────────────────
+      - name: Send failure alert email
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.SMTP_USER }}
+          password: ${{ secrets.SMTP_PASS }}
+          subject: '[Mediatwist Engine ALERT] GitHub Actions run failed'
+          to: ${{ secrets.ALERT_EMAIL }}
+          from: Mediatwist Engine <${{ secrets.SMTP_USER }}>
+          body: |
+            Mediatwist Automation Engine FAILED on GitHub Actions.
+
+            Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            Time: ${{ github.event.schedule || 'manual trigger' }}
+            Branch: ${{ github.ref_name }}
+
+            Check the run logs for details.
+
+      # ── Also notify on success (optional — remove if too noisy) ────
+      - name: Log success
+        if: success()
+        run: echo "✅ Engine completed successfully at $(date -u '+%Y-%m-%d %H:%M UTC')"

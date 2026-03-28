@@ -1,0 +1,382 @@
+{
+  "posts": [
+    {
+      "id": "post_1774655221094_nax8m0",
+      "platform": "facebook",
+      "category": "market_insight",
+      "hook": "Your competitors are already using this. And you have no idea.",
+      "captionHash": "d334cd869b232198",
+      "compositionId": "KineticType",
+      "mediaUrl": "fallback_image",
+      "publishedAt": "2026-03-27T23:47:01.094Z"
+    },
+    {
+      "id": "post_1774655221096_x1bqv1",
+      "platform": "facebook",
+      "category": "operator_mindset",
+      "hook": "The next 18 months will separate the operators from the pretenders.",
+      "captionHash": "22102d4573e3505c",
+      "compositionId": "BrandedCaption",
+      "mediaUrl": "fallback_image",
+      "publishedAt": "2026-03-27T23:47:01.096Z"
+    },
+    {
+      "id": "post_1774655780156_ekh8sl",
+      "platform": "facebook",
+      "category": "operator_mindset",
+      "hook": "The brands winning right now aren't louder — they're sharper.",
+      "captionHash": "f3af3a0618776e2c",
+      "compositionId": "test",
+      "mediaUrl": "https://images.unsplash.com/photo-1551434678-e076c223a692?w=1080&q=80",
+      "publishedAt": "2026-03-27T23:56:20.156Z"
+    },
+    {
+      "id": "post_1774656401873_aox608",
+      "platform": "facebook",
+      "category": "test",
+      "hook": "The brands winning right now aren't louder — they're sharper.",
+      "captionHash": "2eabb6ea04270785",
+      "compositionId": "test-all-platforms",
+      "mediaUrl": "https://images.unsplash.com/photo-1551434678-e076c223a692?w=1080&q=80",
+      "publishedAt": "2026-03-28T00:06:41.873Z"
+    },
+    {
+      "id": "post_1774656413109_3ex6hf",
+      "platform": "instagram",
+      "category": "test",
+      "hook": "The brands winning right now aren't louder — they're sharper.",
+      "captionHash": "3753ca3566e0f132",
+      "compositionId": "test-all-platforms",
+      "mediaUrl": "https://images.unsplash.com/photo-1551434678-e076c223a692?w=1080&q=80",
+      "publishedAt": "2026-03-28T00:06:53.109Z"
+    },
+    {
+      "id": "post_1774656435359_xyb2k8",
+      "platform": "facebook",
+      "category": "test",
+      "hook": "The brands winning right now aren't louder — they're sharper.",
+      "captionHash": "f58e05446ab6375b",
+      "compositionId": "test-all-platforms",
+      "mediaUrl": "https://images.unsplash.com/photo-1551434678-e076c223a692?w=1080&q=80",
+      "publishedAt": "2026-03-28T00:07:15.359Z"
+    },
+    {
+      "id": "post_1774656446367_pzi4o5",
+      "platform": "instagram",
+      "category": "test",
+      "hook": "The brands winning right now aren't louder — they're sharper.",
+      "captionHash": "641c56a5ec74baf0",
+      "compositionId": "test-all-platforms",
+      "mediaUrl": "https://images.unsplash.com/photo-1551434678-e076c223a692?w=1080&q=80",
+      "publishedAt": "2026-03-28T00:07:26.367Z"
+    },
+    {
+      "id": "post_1774656656245_8p6v5q",
+      "platform": "linkedin",
+      "category": "test",
+      "hook": "The brands winning right now aren't louder — they're sharper.",
+      "captionHash": "e0465d5570b87b63",
+      "compositionId": "test-all-platforms",
+      "mediaUrl": "https://images.unsplash.com/photo-1551434678-e076c223a692?w=1080&q=80",
+      "publishedAt": "2026-03-28T00:10:56.245Z"
+    },
+    {
+      "id": "post_1774657026606_4igfrv",
+      "platform": "facebook",
+      "category": "Industry Insight",
+      "hook": "The marketing metric everyone's chasing is completely broken. Here's what actually matters.",
+      "captionHash": "820b8305a61c31b6",
+      "compositionId": "KineticType",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774657015/mediatwist/2026/03/28/feed-1774657009709.mp4",
+      "publishedAt": "2026-03-28T00:17:06.606Z"
+    },
+    {
+      "id": "post_1774657069484_pivkym",
+      "platform": "instagram",
+      "category": "Industry Insight",
+      "hook": "The marketing metric everyone's chasing is completely broken. Here's what actually matters.",
+      "captionHash": "1c027fc8fde0bab9",
+      "compositionId": "KineticType",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774657015/mediatwist/2026/03/28/feed-1774657009709.mp4",
+      "publishedAt": "2026-03-28T00:17:49.484Z"
+    },
+    {
+      "id": "post_1774657071621_j8ofbw",
+      "platform": "linkedin",
+      "category": "Industry Insight",
+      "hook": "The marketing metric everyone's chasing is completely broken. Here's what actually matters.",
+      "captionHash": "02d8a32e38372b4e",
+      "compositionId": "KineticType",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/image/upload/v1774657018/mediatwist/2026/03/28/feed-1774657009709-thumb.png",
+      "publishedAt": "2026-03-28T00:17:51.621Z"
+    },
+    {
+      "id": "post_1774657674195_a5d6wz",
+      "platform": "facebook",
+      "category": "Contrarian Marketing Take",
+      "hook": "The trending marketing advice will cost you millions. Here's why.",
+      "captionHash": "8f2524160cdb5f62",
+      "compositionId": "KineticType",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774657597/mediatwist/2026/03/28/feed-1774657590478.mp4",
+      "publishedAt": "2026-03-28T00:27:54.195Z"
+    },
+    {
+      "id": "post_1774657709547_3zu220",
+      "platform": "instagram",
+      "category": "Contrarian Marketing Take",
+      "hook": "The trending marketing advice will cost you millions. Here's why.",
+      "captionHash": "6fcda806dbed50cb",
+      "compositionId": "KineticType",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774657597/mediatwist/2026/03/28/feed-1774657590478.mp4",
+      "publishedAt": "2026-03-28T00:28:29.547Z"
+    },
+    {
+      "id": "post_1774657711799_rujaqz",
+      "platform": "linkedin",
+      "category": "Contrarian Marketing Take",
+      "hook": "The trending marketing advice will cost you millions. Here's why.",
+      "captionHash": "83f57bded306fc7f",
+      "compositionId": "KineticType",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/image/upload/v1774657599/mediatwist/2026/03/28/feed-1774657590478-thumb.png",
+      "publishedAt": "2026-03-28T00:28:31.799Z"
+    },
+    {
+      "id": "post_1774657912819_ddq3cs",
+      "platform": "facebook",
+      "category": "Case Study Breakdown",
+      "hook": "Most companies make this move at 100M ARR. They did it at 2M.",
+      "captionHash": "8fae505bdb754c93",
+      "compositionId": "DataDashboard",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774657902/mediatwist/2026/03/28/feed-1774657895286.mp4",
+      "publishedAt": "2026-03-28T00:31:52.819Z"
+    },
+    {
+      "id": "post_1774657978818_uglx7b",
+      "platform": "instagram",
+      "category": "Case Study Breakdown",
+      "hook": "Most companies make this move at 100M ARR. They did it at 2M.",
+      "captionHash": "c3d66fd0366664a4",
+      "compositionId": "DataDashboard",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774657902/mediatwist/2026/03/28/feed-1774657895286.mp4",
+      "publishedAt": "2026-03-28T00:32:58.818Z"
+    },
+    {
+      "id": "post_1774657980917_gevswf",
+      "platform": "linkedin",
+      "category": "Case Study Breakdown",
+      "hook": "Most companies make this move at 100M ARR. They did it at 2M.",
+      "captionHash": "c68ffd324865cb80",
+      "compositionId": "DataDashboard",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/image/upload/v1774657904/mediatwist/2026/03/28/feed-1774657895286-thumb.png",
+      "publishedAt": "2026-03-28T00:33:00.917Z"
+    },
+    {
+      "id": "post_1774658636036_h843y4",
+      "platform": "facebook",
+      "category": "Founder/Operator Mindset",
+      "hook": "Your growth ceiling is set by your positioning clarity. Period.",
+      "captionHash": "2c94bc14e8acb671",
+      "compositionId": "BrandedCaption",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774658621/mediatwist/2026/03/28/feed-1774658616103.mp4",
+      "publishedAt": "2026-03-28T00:43:56.037Z"
+    },
+    {
+      "id": "post_1774658667188_o47ihc",
+      "platform": "instagram",
+      "category": "Founder/Operator Mindset",
+      "hook": "Your growth ceiling is set by your positioning clarity. Period.",
+      "captionHash": "12b59dffd82f9903",
+      "compositionId": "BrandedCaption",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774658621/mediatwist/2026/03/28/feed-1774658616103.mp4",
+      "publishedAt": "2026-03-28T00:44:27.188Z"
+    },
+    {
+      "id": "post_1774658881949_cxzvo5",
+      "platform": "linkedin",
+      "category": "Founder/Operator Mindset",
+      "hook": "Your growth ceiling is set by your positioning clarity. Period.",
+      "captionHash": "52691d6ca2261fab",
+      "compositionId": "BrandedCaption",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774658621/mediatwist/2026/03/28/feed-1774658616103.mp4",
+      "publishedAt": "2026-03-28T00:48:01.949Z"
+    },
+    {
+      "id": "post_1774659290891_pv0e8a",
+      "platform": "facebook",
+      "category": "Social Media Myth Busting",
+      "hook": "You're measuring the wrong thing, so you're optimizing for the wrong thing.",
+      "captionHash": "792cd90882596e80",
+      "compositionId": "KineticType",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774659280/mediatwist/2026/03/28/feed-1774659273306.mp4",
+      "publishedAt": "2026-03-28T00:54:50.891Z"
+    },
+    {
+      "id": "post_1774659327588_fk09x5",
+      "platform": "instagram",
+      "category": "Social Media Myth Busting",
+      "hook": "You're measuring the wrong thing, so you're optimizing for the wrong thing.",
+      "captionHash": "b63520bf55fe9e89",
+      "compositionId": "KineticType",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774659280/mediatwist/2026/03/28/feed-1774659273306.mp4",
+      "publishedAt": "2026-03-28T00:55:27.588Z"
+    },
+    {
+      "id": "post_1774659542284_7hbluz",
+      "platform": "linkedin",
+      "category": "Social Media Myth Busting",
+      "hook": "You're measuring the wrong thing, so you're optimizing for the wrong thing.",
+      "captionHash": "bed58a13cebbae91",
+      "compositionId": "KineticType",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774659280/mediatwist/2026/03/28/feed-1774659273306.mp4",
+      "publishedAt": "2026-03-28T00:59:02.284Z"
+    }
+  ],
+  "usedHooks": [
+    "Your competitors are already using this. And you have no idea.",
+    "The next 18 months will separate the operators from the pretenders.",
+    "The brands winning right now aren't louder — they're sharper.",
+    "The marketing metric everyone's chasing is completely broken. Here's what actually matters.",
+    "The trending marketing advice will cost you millions. Here's why.",
+    "Most companies make this move at 100M ARR. They did it at 2M.",
+    "Your growth ceiling is set by your positioning clarity. Period.",
+    "You're measuring the wrong thing, so you're optimizing for the wrong thing."
+  ],
+  "usedCategories": [
+    {
+      "category": "market_insight",
+      "usedAt": "2026-03-27T23:47:01.094Z"
+    },
+    {
+      "category": "operator_mindset",
+      "usedAt": "2026-03-27T23:47:01.096Z"
+    },
+    {
+      "category": "operator_mindset",
+      "usedAt": "2026-03-27T23:56:20.156Z"
+    },
+    {
+      "category": "test",
+      "usedAt": "2026-03-28T00:06:41.873Z"
+    },
+    {
+      "category": "test",
+      "usedAt": "2026-03-28T00:06:53.109Z"
+    },
+    {
+      "category": "test",
+      "usedAt": "2026-03-28T00:07:15.359Z"
+    },
+    {
+      "category": "test",
+      "usedAt": "2026-03-28T00:07:26.367Z"
+    },
+    {
+      "category": "test",
+      "usedAt": "2026-03-28T00:10:56.245Z"
+    },
+    {
+      "category": "Industry Insight",
+      "usedAt": "2026-03-28T00:17:06.606Z"
+    },
+    {
+      "category": "Industry Insight",
+      "usedAt": "2026-03-28T00:17:49.484Z"
+    },
+    {
+      "category": "Industry Insight",
+      "usedAt": "2026-03-28T00:17:51.621Z"
+    },
+    {
+      "category": "Contrarian Marketing Take",
+      "usedAt": "2026-03-28T00:27:54.195Z"
+    },
+    {
+      "category": "Contrarian Marketing Take",
+      "usedAt": "2026-03-28T00:28:29.547Z"
+    },
+    {
+      "category": "Contrarian Marketing Take",
+      "usedAt": "2026-03-28T00:28:31.799Z"
+    },
+    {
+      "category": "Case Study Breakdown",
+      "usedAt": "2026-03-28T00:31:52.819Z"
+    },
+    {
+      "category": "Case Study Breakdown",
+      "usedAt": "2026-03-28T00:32:58.818Z"
+    },
+    {
+      "category": "Case Study Breakdown",
+      "usedAt": "2026-03-28T00:33:00.917Z"
+    },
+    {
+      "category": "Founder/Operator Mindset",
+      "usedAt": "2026-03-28T00:43:56.037Z"
+    },
+    {
+      "category": "Founder/Operator Mindset",
+      "usedAt": "2026-03-28T00:44:27.188Z"
+    },
+    {
+      "category": "Founder/Operator Mindset",
+      "usedAt": "2026-03-28T00:48:01.949Z"
+    },
+    {
+      "category": "Social Media Myth Busting",
+      "usedAt": "2026-03-28T00:54:50.891Z"
+    },
+    {
+      "category": "Social Media Myth Busting",
+      "usedAt": "2026-03-28T00:55:27.588Z"
+    },
+    {
+      "category": "Social Media Myth Busting",
+      "usedAt": "2026-03-28T00:59:02.284Z"
+    }
+  ],
+  "contentHashes": [
+    "d334cd869b232198",
+    "22102d4573e3505c",
+    "f3af3a0618776e2c",
+    "2eabb6ea04270785",
+    "3753ca3566e0f132",
+    "f58e05446ab6375b",
+    "641c56a5ec74baf0",
+    "e0465d5570b87b63",
+    "820b8305a61c31b6",
+    "1c027fc8fde0bab9",
+    "02d8a32e38372b4e",
+    "8f2524160cdb5f62",
+    "6fcda806dbed50cb",
+    "83f57bded306fc7f",
+    "8fae505bdb754c93",
+    "c3d66fd0366664a4",
+    "c68ffd324865cb80",
+    "2c94bc14e8acb671",
+    "12b59dffd82f9903",
+    "52691d6ca2261fab",
+    "792cd90882596e80",
+    "b63520bf55fe9e89",
+    "bed58a13cebbae91"
+  ],
+  "stats": {
+    "totalPosts": 23,
+    "byPlatform": {
+      "facebook": 10,
+      "instagram": 7,
+      "linkedin": 6
+    },
+    "byCategory": {
+      "market_insight": 1,
+      "operator_mindset": 2,
+      "test": 5,
+      "Industry Insight": 3,
+      "Contrarian Marketing Take": 3,
+      "Case Study Breakdown": 3,
+      "Founder/Operator Mindset": 3,
+      "Social Media Myth Busting": 3
+    },
+    "lastRunAt": "2026-03-28T00:59:02.284Z"
+  }
+}

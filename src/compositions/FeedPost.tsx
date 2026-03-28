@@ -5,6 +5,8 @@ import {
   useVideoConfig,
   interpolate,
   spring,
+  Img,
+  staticFile,
 } from 'remotion';
 import { MEDIATWIST_COLORS } from '../lib/colors';
 
@@ -21,57 +23,110 @@ export interface FeedPostProps {
 
 /**
  * FeedPost — 1080×1080 square composition
- * Best for: Facebook & Instagram feed posts
- * Accepts captionText so 3 variations can be rendered from a single script
+ * Clean, professional feed post with radar grid background.
+ * Simple fade + slide animations. Text always readable.
  */
 export const FeedPost: React.FC<FeedPostProps> = ({
   captionText,
   headline = 'Mediatwist',
   subText,
-  brandColor = MEDIATWIST_COLORS.primary,
+  brandColor = MEDIATWIST_COLORS.accent,
 }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { fps, durationInFrames } = useVideoConfig();
 
-  // Background fade-in
-  const bgOpacity = interpolate(frame, [0, 10], [0, 1], { extrapolateRight: 'clamp' });
+  // ── Background ──────────────────────────────────────────
+  const bgOpacity = interpolate(frame, [0, 12], [0, 1], { extrapolateRight: 'clamp' });
 
-  // Accent bar grows down
-  const barHeight = interpolate(frame, [5, 35], [0, 100], { extrapolateRight: 'clamp' });
+  // ── Radar pulse ─────────────────────────────────────────
+  const radarPhase = frame % 100;
+  const radarR = interpolate(radarPhase, [0, 100], [30, 480], { extrapolateRight: 'clamp' });
+  const radarO = interpolate(radarPhase, [0, 100], [0.25, 0], { extrapolateRight: 'clamp' });
 
-  // Headline springs in from slightly small
-  const headlineScale = spring({
-    frame,
-    fps,
-    from: 0.88,
-    to: 1,
-    config: { damping: 200, stiffness: 120 },
-  });
-  const headlineOpacity = interpolate(frame, [5, 28], [0, 1], { extrapolateRight: 'clamp' });
+  // ── Horizontal scan line ────────────────────────────────
+  const scanY = interpolate(frame, [15, 120], [0, 1080], { extrapolateRight: 'clamp' });
+  const scanOpacity = interpolate(frame, [15, 30, 90, 120], [0, 0.5, 0.3, 0], { extrapolateRight: 'clamp' });
 
-  // Divider line sweeps right
-  const dividerWidth = interpolate(frame, [30, 60], [0, 920], { extrapolateRight: 'clamp' });
+  // ── Accent bar grows down from top ──────────────────────
+  const barHeight = interpolate(frame, [5, 50], [0, 500], { extrapolateRight: 'clamp' });
 
-  // Caption text rises up
-  const captionOpacity = interpolate(frame, [40, 70], [0, 1], { extrapolateRight: 'clamp' });
-  const captionY = interpolate(frame, [40, 70], [30, 0], { extrapolateRight: 'clamp' });
+  // ── Headline ────────────────────────────────────────────
+  const headlineOpacity = interpolate(frame, [10, 35], [0, 1], { extrapolateRight: 'clamp' });
+  const headlineY = interpolate(frame, [10, 35], [20, 0], { extrapolateRight: 'clamp' });
 
-  // Sub text follows
-  const subOpacity = interpolate(frame, [65, 90], [0, 1], { extrapolateRight: 'clamp' });
-  const subY = interpolate(frame, [65, 90], [20, 0], { extrapolateRight: 'clamp' });
+  // ── Divider line sweeps right ───────────────────────────
+  const dividerWidth = interpolate(frame, [35, 65], [0, 920], { extrapolateRight: 'clamp' });
 
-  // Brand tag fades in last
-  const brandOpacity = interpolate(frame, [80, 105], [0, 1], { extrapolateRight: 'clamp' });
+  // ── Caption text ────────────────────────────────────────
+  const captionOpacity = interpolate(frame, [45, 75], [0, 1], { extrapolateRight: 'clamp' });
+  const captionY = interpolate(frame, [45, 75], [25, 0], { extrapolateRight: 'clamp' });
+
+  // ── Sub text ────────────────────────────────────────────
+  const subOpacity = interpolate(frame, [75, 100], [0, 1], { extrapolateRight: 'clamp' });
+  const subY = interpolate(frame, [75, 100], [15, 0], { extrapolateRight: 'clamp' });
+
+  // ── Logo ────────────────────────────────────────────────
+  const logoOpacity = interpolate(frame, [5, 25], [0, 0.9], { extrapolateRight: 'clamp' });
+  const logoScale = spring({ frame: frame - 5, fps, from: 0.85, to: 1, config: { damping: 200, stiffness: 120 } });
+
+  // ── Brand handle ────────────────────────────────────────
+  const brandOpacity = interpolate(frame, [90, 115], [0, 1], { extrapolateRight: 'clamp' });
 
   return (
     <AbsoluteFill style={{ backgroundColor: MEDIATWIST_COLORS.dark, opacity: bgOpacity }}>
 
-      {/* Accent bar */}
+      {/* Radar grid background */}
+      <svg
+        style={{ position: 'absolute', width: '100%', height: '100%', pointerEvents: 'none' }}
+        viewBox="0 0 1080 1080"
+      >
+        {/* Static grid */}
+        {[200, 400, 600, 800].map(y => (
+          <line key={`h-${y}`} x1="0" y1={y} x2="1080" y2={y} stroke={brandColor} strokeWidth="1" opacity="0.05" />
+        ))}
+        {[200, 400, 600, 800].map(x => (
+          <line key={`v-${x}`} x1={x} y1="0" x2={x} y2="1080" stroke={brandColor} strokeWidth="1" opacity="0.05" />
+        ))}
+        {/* Concentric rings */}
+        {[150, 300, 450].map(r => (
+          <circle key={r} cx="540" cy="540" r={r} fill="none" stroke={brandColor} strokeWidth="1" opacity="0.05" />
+        ))}
+        {/* Animated pulse */}
+        <circle cx="540" cy="540" r={radarR} fill="none" stroke={brandColor} strokeWidth="2" opacity={radarO} />
+      </svg>
+
+      {/* Horizontal scan line */}
+      <div style={{
+        position: 'absolute',
+        top: scanY,
+        left: 0,
+        right: 0,
+        height: 2,
+        backgroundColor: brandColor,
+        opacity: scanOpacity,
+        boxShadow: `0 0 20px ${brandColor}66`,
+      }} />
+
+      {/* Logo — top right */}
+      <div style={{
+        position: 'absolute',
+        top: 40,
+        right: 40,
+        width: 110,
+        height: 110,
+        opacity: logoOpacity,
+        transform: `scale(${Math.max(logoScale, 0)})`,
+        transformOrigin: 'top right',
+      }}>
+        <Img src={staticFile('logo.png')} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+      </div>
+
+      {/* Left accent bar */}
       <div style={{
         position: 'absolute',
         top: 80,
-        left: 80,
-        width: 6,
+        left: 70,
+        width: 5,
         height: barHeight,
         backgroundColor: brandColor,
         borderRadius: 3,
@@ -81,15 +136,14 @@ export const FeedPost: React.FC<FeedPostProps> = ({
       <div style={{
         position: 'absolute',
         top: 80,
-        left: 114,
+        left: 100,
         right: 80,
-        transform: `scale(${headlineScale})`,
-        transformOrigin: 'left center',
         opacity: headlineOpacity,
+        transform: `translateY(${headlineY}px)`,
       }}>
         <h1 style={{
           color: MEDIATWIST_COLORS.text,
-          fontSize: 58,
+          fontSize: 54,
           fontWeight: 800,
           lineHeight: 1.15,
           margin: 0,
@@ -103,26 +157,26 @@ export const FeedPost: React.FC<FeedPostProps> = ({
       {/* Divider */}
       <div style={{
         position: 'absolute',
-        top: 215,
-        left: 80,
+        top: 200,
+        left: 70,
         width: dividerWidth,
         height: 2,
         backgroundColor: brandColor,
-        opacity: 0.35,
+        opacity: 0.3,
       }} />
 
       {/* Caption */}
       <div style={{
         position: 'absolute',
-        top: 250,
-        left: 80,
-        right: 80,
+        top: 230,
+        left: 70,
+        right: 70,
         opacity: captionOpacity,
         transform: `translateY(${captionY}px)`,
       }}>
         <p style={{
           color: MEDIATWIST_COLORS.text,
-          fontSize: 44,
+          fontSize: captionText.length > 120 ? 38 : 44,
           fontWeight: 500,
           lineHeight: 1.5,
           margin: 0,
@@ -136,42 +190,41 @@ export const FeedPost: React.FC<FeedPostProps> = ({
       {subText && (
         <div style={{
           position: 'absolute',
-          bottom: 150,
-          left: 80,
-          right: 80,
+          bottom: 120,
+          left: 70,
+          right: 70,
           opacity: subOpacity,
           transform: `translateY(${subY}px)`,
         }}>
           <p style={{
             color: MEDIATWIST_COLORS.subtext,
-            fontSize: 32,
+            fontSize: 28,
             fontWeight: 400,
-            lineHeight: 1.55,
+            lineHeight: 1.5,
             margin: 0,
             fontFamily: 'Inter, sans-serif',
+            fontStyle: 'italic',
           }}>
             {subText}
           </p>
         </div>
       )}
 
-      {/* Bottom brand bar */}
+      {/* Bottom brand bar + handle */}
       <div style={{
         position: 'absolute',
         bottom: 0,
         left: 0,
         right: 0,
-        height: 8,
-        background: `linear-gradient(90deg, ${brandColor}, ${MEDIATWIST_COLORS.accent})`,
+        height: 5,
+        background: `linear-gradient(90deg, ${brandColor}, transparent)`,
         opacity: brandOpacity,
       }} />
-
-      {/* Brand handle */}
       <div style={{
         position: 'absolute',
-        bottom: 30,
-        left: 80,
-        right: 80,
+        bottom: 25,
+        left: 70,
+        right: 70,
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -179,25 +232,21 @@ export const FeedPost: React.FC<FeedPostProps> = ({
       }}>
         <span style={{
           color: brandColor,
-          fontSize: 26,
+          fontSize: 24,
           fontWeight: 700,
           fontFamily: 'Inter, sans-serif',
           letterSpacing: 0.5,
         }}>
           @mediatwist
         </span>
-        <div style={{
-          display: 'flex',
-          gap: 8,
-          alignItems: 'center',
-        }}>
+        <div style={{ display: 'flex', gap: 6 }}>
           {[0, 1, 2].map(i => (
             <div key={i} style={{
-              width: i === 1 ? 10 : 6,
-              height: i === 1 ? 10 : 6,
+              width: i === 1 ? 8 : 5,
+              height: i === 1 ? 8 : 5,
               borderRadius: '50%',
               backgroundColor: brandColor,
-              opacity: i === 1 ? 1 : 0.5,
+              opacity: i === 1 ? 1 : 0.4,
             }} />
           ))}
         </div>

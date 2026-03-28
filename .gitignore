@@ -2,5 +2,9 @@ node_modules/
 out/
 .env
 .env.post
+.smtp-config
 dist/
 *.log
+logs/
+outputs/
+engine-output.log

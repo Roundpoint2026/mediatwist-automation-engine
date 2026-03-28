@@ -1,14 +1,15 @@
 /**
- * Mediatwist brand color palette
+ * The Mediatwist Group brand color palette
  * Use these consistently across all video compositions
  */
 export const MEDIATWIST_COLORS = {
-  primary:  '#6C63FF',   // purple — main brand
-  accent:   '#FF6B6B',   // red-pink — hooks & emphasis
-  dark:     '#0f0f1a',   // near-black background
-  darkAlt:  '#13131f',   // slightly lighter bg for contrast
-  text:     '#ffffff',
-  subtext:  '#aaaaaa',
-  muted:    '#555577',
-  success:  '#4ECDC4',   // teal — stats & wins
+  primary:   '#FFD600',   // yellow — main brand accent
+  secondary: '#000000',   // black
+  dark:      '#0A0A0A',   // near-black background
+  darkAlt:   '#141414',   // slightly lighter bg for contrast
+  text:      '#FFFFFF',
+  subtext:   '#CCCCCC',
+  muted:     '#666666',
+  accent:    '#FFD600',   // yellow accent
+  warning:   '#FF4444',   // for contrast pops
 } as const;

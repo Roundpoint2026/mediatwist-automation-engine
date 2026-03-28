@@ -1,0 +1,17 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# SMTP Configuration for Mediatwist Engine Failure Alerts
+#
+# Copy this file to .smtp-config and fill in your credentials:
+#   cp .smtp-config.example .smtp-config
+#
+# For Gmail, you need an App Password (not your regular password):
+#   1. Go to https://myaccount.google.com/apppasswords
+#   2. Create an app password for "Mail" on "Mac"
+#   3. Paste the 16-character password below
+# ─────────────────────────────────────────────────────────────────────────────
+
+export SMTP_HOST="smtp.gmail.com"
+export SMTP_PORT="587"
+export SMTP_USER="chris@atriummedia.com"
+export SMTP_PASS="your-gmail-app-password-here"
+export SMTP_FROM="chris@atriummedia.com"

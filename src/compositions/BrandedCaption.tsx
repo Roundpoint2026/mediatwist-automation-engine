@@ -5,13 +5,15 @@ import {
   useVideoConfig,
   interpolate,
   spring,
+  Img,
+  staticFile,
 } from 'remotion';
 import { MEDIATWIST_COLORS } from '../lib/colors';
 
 export interface BrandedCaptionProps {
-  /** The caption or quote to display — this is the star of the show */
+  /** The caption or quote to display */
   captionText: string;
-  /** Small attribution or author line below the caption */
+  /** Attribution line below the caption */
   attribution?: string;
   /** Override brand accent color */
   brandColor?: string;
@@ -19,58 +21,73 @@ export interface BrandedCaptionProps {
 
 /**
  * BrandedCaption — 1080×1080 square composition
- * Minimal, caption-forward design — great for quotes, stats, and bold statements
- * Accepts captionText so 3 variations can be rendered from a single script
+ * Minimal, quote-forward design with radar grid background.
+ * Clean fade-in with corner accents. Text always fully readable.
  */
 export const BrandedCaption: React.FC<BrandedCaptionProps> = ({
   captionText,
-  attribution,
+  attribution = '— The Mediatwist Group',
   brandColor = MEDIATWIST_COLORS.accent,
 }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { fps, durationInFrames } = useVideoConfig();
 
-  // Background fade in
-  const bgOpacity = interpolate(frame, [0, 8], [0, 1], { extrapolateRight: 'clamp' });
+  // ── Background ──────────────────────────────────────────
+  const bgOpacity = interpolate(frame, [0, 10], [0, 1], { extrapolateRight: 'clamp' });
 
-  // Large quotation mark springs in
-  const quoteScale = spring({
-    frame,
-    fps,
-    from: 0,
-    to: 1,
-    config: { damping: 120, stiffness: 80, mass: 0.8 },
-  });
+  // ── Radar pulse ─────────────────────────────────────────
+  const radarPhase = frame % 80;
+  const radarR = interpolate(radarPhase, [0, 80], [30, 400], { extrapolateRight: 'clamp' });
+  const radarO = interpolate(radarPhase, [0, 80], [0.2, 0], { extrapolateRight: 'clamp' });
 
-  // Caption text character-by-word reveal (word-level via opacity)
-  const captionOpacity = interpolate(frame, [20, 55], [0, 1], { extrapolateRight: 'clamp' });
-  const captionY = interpolate(frame, [20, 55], [40, 0], { extrapolateRight: 'clamp' });
+  // ── Corner accents grow in ──────────────────────────────
+  const cornerSize = interpolate(frame, [8, 40], [0, 100], { extrapolateRight: 'clamp' });
 
-  // Attribution
-  const attrOpacity = interpolate(frame, [65, 85], [0, 1], { extrapolateRight: 'clamp' });
+  // ── Large quotation mark ────────────────────────────────
+  const quoteOpacity = interpolate(frame, [5, 30], [0, 0.12], { extrapolateRight: 'clamp' });
+  const quoteScale = spring({ frame, fps, from: 0.5, to: 1, config: { damping: 150, stiffness: 80 } });
 
-  // Corner accent squares animate in
-  const cornerScale = interpolate(frame, [10, 40], [0, 1], { extrapolateRight: 'clamp' });
+  // ── Caption text ────────────────────────────────────────
+  const captionOpacity = interpolate(frame, [25, 60], [0, 1], { extrapolateRight: 'clamp' });
+  const captionY = interpolate(frame, [25, 60], [30, 0], { extrapolateRight: 'clamp' });
 
-  // Brand handle
-  const brandOpacity = interpolate(frame, [75, 100], [0, 1], { extrapolateRight: 'clamp' });
+  // ── Attribution ─────────────────────────────────────────
+  const attrOpacity = interpolate(frame, [70, 95], [0, 1], { extrapolateRight: 'clamp' });
+  const attrLineWidth = interpolate(frame, [70, 95], [0, 60], { extrapolateRight: 'clamp' });
+
+  // ── Logo ────────────────────────────────────────────────
+  const logoOpacity = interpolate(frame, [60, 85], [0, 0.9], { extrapolateRight: 'clamp' });
+  const logoScale = spring({ frame: frame - 60, fps, from: 0.85, to: 1, config: { damping: 200, stiffness: 120 } });
+
+  // ── Brand handle ────────────────────────────────────────
+  const brandOpacity = interpolate(frame, [durationInFrames - 60, durationInFrames - 30], [0, 1], { extrapolateRight: 'clamp' });
 
   return (
-    <AbsoluteFill style={{
-      backgroundColor: MEDIATWIST_COLORS.dark,
-      opacity: bgOpacity,
-    }}>
+    <AbsoluteFill style={{ backgroundColor: MEDIATWIST_COLORS.dark, opacity: bgOpacity }}>
+
+      {/* Radar grid background */}
+      <svg
+        style={{ position: 'absolute', width: '100%', height: '100%', pointerEvents: 'none' }}
+        viewBox="0 0 1080 1080"
+      >
+        {[180, 360, 540].map(r => (
+          <circle key={r} cx="540" cy="540" r={r} fill="none" stroke={brandColor} strokeWidth="1" opacity="0.04" />
+        ))}
+        <line x1="540" y1="100" x2="540" y2="980" stroke={brandColor} strokeWidth="1" opacity="0.04" />
+        <line x1="100" y1="540" x2="980" y2="540" stroke={brandColor} strokeWidth="1" opacity="0.04" />
+        <circle cx="540" cy="540" r={radarR} fill="none" stroke={brandColor} strokeWidth="1.5" opacity={radarO} />
+      </svg>
 
       {/* Corner accent — top left */}
       <div style={{
         position: 'absolute',
         top: 0,
         left: 0,
-        width: 120 * cornerScale,
-        height: 120 * cornerScale,
-        borderTop: `6px solid ${brandColor}`,
-        borderLeft: `6px solid ${brandColor}`,
-        opacity: 0.6,
+        width: cornerSize,
+        height: cornerSize,
+        borderTop: `4px solid ${brandColor}`,
+        borderLeft: `4px solid ${brandColor}`,
+        opacity: 0.5,
       }} />
 
       {/* Corner accent — bottom right */}
@@ -78,43 +95,43 @@ export const BrandedCaption: React.FC<BrandedCaptionProps> = ({
         position: 'absolute',
         bottom: 0,
         right: 0,
-        width: 120 * cornerScale,
-        height: 120 * cornerScale,
-        borderBottom: `6px solid ${brandColor}`,
-        borderRight: `6px solid ${brandColor}`,
-        opacity: 0.6,
+        width: cornerSize,
+        height: cornerSize,
+        borderBottom: `4px solid ${brandColor}`,
+        borderRight: `4px solid ${brandColor}`,
+        opacity: 0.5,
       }} />
 
       {/* Large quotation mark */}
       <div style={{
         position: 'absolute',
-        top: 80,
-        left: 80,
-        transform: `scale(${quoteScale})`,
+        top: 60,
+        left: 70,
+        transform: `scale(${Math.max(quoteScale, 0)})`,
         transformOrigin: 'top left',
         color: brandColor,
-        fontSize: 200,
+        fontSize: 180,
         lineHeight: 1,
         fontFamily: 'Georgia, serif',
         fontWeight: 900,
-        opacity: 0.2,
+        opacity: quoteOpacity,
         userSelect: 'none',
       }}>
-        "
+        {'\u201C'}
       </div>
 
-      {/* Caption text — center of canvas */}
+      {/* Caption text — centered area */}
       <div style={{
         position: 'absolute',
-        top: 180,
-        left: 100,
-        right: 100,
+        top: 200,
+        left: 90,
+        right: 90,
         opacity: captionOpacity,
         transform: `translateY(${captionY}px)`,
       }}>
         <p style={{
           color: MEDIATWIST_COLORS.text,
-          fontSize: captionText.length > 80 ? 40 : 50,
+          fontSize: captionText.length > 100 ? 38 : captionText.length > 60 ? 44 : 50,
           fontWeight: 600,
           lineHeight: 1.5,
           margin: 0,
@@ -129,21 +146,21 @@ export const BrandedCaption: React.FC<BrandedCaptionProps> = ({
       {attribution && (
         <div style={{
           position: 'absolute',
-          bottom: 160,
-          left: 100,
-          right: 100,
+          bottom: 170,
+          left: 90,
+          right: 90,
           opacity: attrOpacity,
         }}>
           <div style={{
-            width: 60,
+            width: attrLineWidth,
             height: 3,
             backgroundColor: brandColor,
-            marginBottom: 16,
+            marginBottom: 14,
             borderRadius: 2,
           }} />
           <p style={{
             color: MEDIATWIST_COLORS.subtext,
-            fontSize: 30,
+            fontSize: 28,
             fontWeight: 500,
             fontFamily: 'Inter, sans-serif',
             margin: 0,
@@ -154,27 +171,29 @@ export const BrandedCaption: React.FC<BrandedCaptionProps> = ({
         </div>
       )}
 
-      {/* Brand handle */}
+      {/* Logo — bottom center */}
       <div style={{
         position: 'absolute',
-        bottom: 50,
+        bottom: 55,
+        left: '50%',
+        transform: `translate(-50%, 0) scale(${Math.max(logoScale, 0)})`,
+        width: 80,
+        height: 80,
+        opacity: logoOpacity,
+      }}>
+        <Img src={staticFile('logo.png')} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+      </div>
+
+      {/* Bottom bar */}
+      <div style={{
+        position: 'absolute',
+        bottom: 0,
         left: 0,
         right: 0,
-        display: 'flex',
-        justifyContent: 'center',
+        height: 5,
+        background: `linear-gradient(90deg, ${brandColor}, transparent)`,
         opacity: brandOpacity,
-      }}>
-        <span style={{
-          color: brandColor,
-          fontSize: 26,
-          fontWeight: 700,
-          fontFamily: 'Inter, sans-serif',
-          letterSpacing: 2,
-          textTransform: 'uppercase',
-        }}>
-          @mediatwist
-        </span>
-      </div>
+      }} />
 
     </AbsoluteFill>
   );

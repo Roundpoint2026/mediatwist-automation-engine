@@ -115,34 +115,55 @@ const FALLBACK_BACKGROUNDS = [
 
 /**
  * Pick a background photo URL for a given category.
- * Priority: local photos (public/backgrounds/) → category Unsplash URLs → master fallback pool.
- * GUARANTEED: Always returns a valid URL. NEVER returns null.
+ *
+ * WEIGHTED PRIORITY (80/20 split):
+ *   ~80% of posts: Custom backgrounds (local photos from public/backgrounds/,
+ *                  which includes Canva exports synced via scripts/syncCanvaBackgrounds.js)
+ *   ~20% of posts: Unsplash URLs (category-specific) for visual variety
+ *
+ * This means roughly 4 out of 5 posts use the curated Mediatwist Canva backgrounds,
+ * and every ~5th post gets a different look from Unsplash.
+ *
+ * GUARANTEED: Always returns a valid URL or staticFile path. NEVER returns null.
  */
 function pickBackgroundPhoto(category) {
-  const urls = BACKGROUND_PHOTOS[category] || [];
+  const unsplashUrls = BACKGROUND_PHOTOS[category] || [];
 
-  // Check for local photos in public/backgrounds/
+  // Check for local/Canva-synced photos in public/backgrounds/
   const bgDir = path.resolve(__dirname, '../public/backgrounds');
   let localPhotos = [];
   try {
     if (fs.existsSync(bgDir)) {
       localPhotos = fs.readdirSync(bgDir)
         .filter(f => /\.(jpg|jpeg|png|webp)$/i.test(f))
-        .map(f => `backgrounds/${f}`); // staticFile path format
+        .map(f => `backgrounds/${f}`); // staticFile path format for Remotion
     }
   } catch (_) {}
 
-  // Priority 1: Local photos if any exist (user's own photos get top billing)
+  // ── 80/20 Weighted Selection ──────────────────────────────────────────────
+  const roll = Math.random(); // 0.0 – 1.0
+
+  // If we have local/Canva backgrounds available, use the 80/20 split
   if (localPhotos.length > 0) {
-    return localPhotos[Math.floor(Math.random() * localPhotos.length)];
+    if (roll < 0.80) {
+      // 80% — Custom backgrounds (Canva exports + any user photos)
+      return localPhotos[Math.floor(Math.random() * localPhotos.length)];
+    } else {
+      // 20% — Unsplash for visual variety
+      if (unsplashUrls.length > 0) {
+        return unsplashUrls[Math.floor(Math.random() * unsplashUrls.length)];
+      }
+      // If no Unsplash URLs for this category, still use local
+      return localPhotos[Math.floor(Math.random() * localPhotos.length)];
+    }
   }
 
-  // Priority 2: Category-specific Unsplash URLs
-  if (urls.length > 0) {
-    return urls[Math.floor(Math.random() * urls.length)];
+  // No local photos available — fall back to Unsplash URLs
+  if (unsplashUrls.length > 0) {
+    return unsplashUrls[Math.floor(Math.random() * unsplashUrls.length)];
   }
 
-  // Priority 3: MASTER FALLBACK — never return null, always a real photo
+  // MASTER FALLBACK — never return null, always a real photo
   return FALLBACK_BACKGROUNDS[Math.floor(Math.random() * FALLBACK_BACKGROUNDS.length)];
 }
 

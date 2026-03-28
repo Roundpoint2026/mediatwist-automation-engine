@@ -1,32 +1,34 @@
 # ─────────────────────────────────────────────────────────────────────────────
 # Mediatwist Automation Engine — GitHub Actions Scheduler
 #
-# Redundant "set it and forget it" scheduler that runs the engine
-# twice daily even if your Mac is asleep/off.
+# Runs the engine twice daily even if your Mac is asleep/off.
 #
-# Schedule: 9 AM + 8 PM Eastern Time (cron is in UTC)
-#   EDT (Mar-Nov): UTC-4  → 9AM=13:00 UTC, 8PM=00:00 UTC
-#   EST (Nov-Mar): UTC-5  → 9AM=14:00 UTC, 8PM=01:00 UTC
+# Schedule: 8:30 AM + 8:00 PM Eastern Time (cron is in UTC)
+#   EDT (Mar-Nov): UTC-4  → 8:30AM=12:30 UTC, 8PM=00:00 UTC
+#   EST (Nov-Mar): UTC-5  → 8:30AM=13:30 UTC, 8PM=01:00 UTC
 #   We use both times to cover both seasons (GitHub deduplicates naturally)
 #
 # Required GitHub Secrets (Settings → Secrets → Actions):
 #   PAGE_ID, ACCESS_TOKEN, IG_ACCOUNT_ID
+#   FB_APP_ID, FB_APP_SECRET
 #   LINKEDIN_ACCESS_TOKEN, LINKEDIN_ORG_ID
 #   CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET
+#   CANVA_ACCESS_TOKEN, CANVA_REFRESH_TOKEN
+#   CANVA_CLIENT_ID, CANVA_CLIENT_SECRET, CANVA_BRAND_KIT_ID
 #   ANTHROPIC_API_KEY (optional)
-#   ALERT_EMAIL (for failure notifications)
+#   SMTP_USER, SMTP_PASS, ALERT_EMAIL (for failure notifications)
 # ─────────────────────────────────────────────────────────────────────────────
 
 name: Daily Engine
 
 on:
   schedule:
-    # 9 AM Eastern (covers both EDT and EST)
-    - cron: '0 13 * * *'   # 9 AM EDT (summer)
-    - cron: '0 14 * * *'   # 9 AM EST (winter)
-    # 8 PM Eastern (covers both EDT and EST)
-    - cron: '0 0 * * *'    # 8 PM EDT (summer)
-    - cron: '0 1 * * *'    # 8 PM EST (winter)
+    # 8:30 AM Eastern (covers both EDT and EST)
+    - cron: '30 12 * * *'   # 8:30 AM EDT (summer)
+    - cron: '30 13 * * *'   # 8:30 AM EST (winter)
+    # 8:00 PM Eastern (covers both EDT and EST)
+    - cron: '0 0 * * *'     # 8:00 PM EDT (summer)
+    - cron: '0 1 * * *'     # 8:00 PM EST (winter)
 
   # Allow manual trigger from GitHub UI
   workflow_dispatch:
@@ -70,17 +72,34 @@ jobs:
 
       - name: Create .env from secrets
         run: |
-          cat > .env << 'ENVEOF'
+          cat > .env <<EOF
           PAGE_ID=${{ secrets.PAGE_ID }}
           ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN }}
+          FB_APP_ID=${{ secrets.FB_APP_ID }}
+          FB_APP_SECRET=${{ secrets.FB_APP_SECRET }}
           IG_ACCOUNT_ID=${{ secrets.IG_ACCOUNT_ID }}
           LINKEDIN_ACCESS_TOKEN=${{ secrets.LINKEDIN_ACCESS_TOKEN }}
           LINKEDIN_ORG_ID=${{ secrets.LINKEDIN_ORG_ID }}
           CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}
           CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}
           CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}
+          CANVA_ACCESS_TOKEN=${{ secrets.CANVA_ACCESS_TOKEN }}
+          CANVA_REFRESH_TOKEN=${{ secrets.CANVA_REFRESH_TOKEN }}
+          CANVA_CLIENT_ID=${{ secrets.CANVA_CLIENT_ID }}
+          CANVA_CLIENT_SECRET=${{ secrets.CANVA_CLIENT_SECRET }}
+          CANVA_BRAND_KIT_ID=${{ secrets.CANVA_BRAND_KIT_ID }}
           ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}
-          ENVEOF
+          VISUAL_ENGINE=remotion-first
+          TZ=America/New_York
+          EOF
+
+      - name: Sync Canva backgrounds
+        run: |
+          echo "Syncing Canva backgrounds to public/backgrounds/..."
+          node scripts/syncCanvaBackgrounds.js --quick 2>&1 || echo "⚠️ Canva sync failed — will use Unsplash fallbacks"
+          BG_COUNT=$(ls -1 public/backgrounds/*.png public/backgrounds/*.jpg public/backgrounds/*.jpeg public/backgrounds/*.webp 2>/dev/null | wc -l || echo "0")
+          echo "📁 Local backgrounds available: $BG_COUNT"
+        continue-on-error: true
 
       - name: Determine run mode
         id: mode
@@ -94,7 +113,7 @@ jobs:
       - name: Run Mediatwist Engine
         id: engine
         run: |
-          node scripts/renderAndPublish.js ${{ steps.mode.outputs.flags }} 2>&1 | tee engine-output.log
+          node index.js ${{ steps.mode.outputs.flags }} 2>&1 | tee engine-output.log
           echo "exit_code=${PIPESTATUS[0]}" >> $GITHUB_OUTPUT
         continue-on-error: true
 
@@ -146,7 +165,6 @@ jobs:
 
             Check the run logs for details.
 
-      # ── Also notify on success (optional — remove if too noisy) ────
       - name: Log success
         if: success()
         run: echo "✅ Engine completed successfully at $(date -u '+%Y-%m-%d %H:%M UTC')"

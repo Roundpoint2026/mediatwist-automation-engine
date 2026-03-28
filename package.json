@@ -24,7 +24,9 @@
     "render:reels": "npx remotion render src/index.ts ReelsPost outputs/reels-post.mp4 --codec h264",
     "render:caption": "npx remotion render src/index.ts BrandedCaption outputs/caption-post.mp4 --codec h264",
     "render:dashboard": "npx remotion render src/index.ts DataDashboard outputs/dashboard-post.mp4 --codec h264",
-    "render:kinetic": "npx remotion render src/index.ts KineticType outputs/kinetic-post.mp4 --codec h264"
+    "render:kinetic": "npx remotion render src/index.ts KineticType outputs/kinetic-post.mp4 --codec h264",
+    "sync:backgrounds": "node scripts/syncCanvaBackgrounds.js",
+    "sync:backgrounds:quick": "node scripts/syncCanvaBackgrounds.js --quick"
   },
   "dependencies": {
     "remotion": "4.0.340",

@@ -8,3 +8,10 @@ dist/
 logs/
 outputs/
 engine-output.log
+
+# Canva background sync (downloaded at runtime, not committed)
+public/backgrounds/*.png
+public/backgrounds/*.jpg
+public/backgrounds/*.jpeg
+public/backgrounds/*.webp
+public/backgrounds/.manifest.json

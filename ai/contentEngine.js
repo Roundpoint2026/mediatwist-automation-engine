@@ -15,57 +15,108 @@ const BACKGROUND_PHOTOS = {
     'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1080&q=80',  // Earth from space — tech/global
     'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1080&q=80',  // Matrix code rain
     'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1080&q=80',  // Circuit board macro
+    'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1080&q=80',     // Cybersecurity/network
+    'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=1080&q=80',  // Abstract tech lines
+    'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=1080&q=80',  // Blockchain/digital
   ],
   'Contrarian Marketing Take': [
     'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1080&q=80',  // Person thinking
     'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1080&q=80',     // Conference room
     'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1080&q=80',     // Team brainstorming
+    'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=1080&q=80',  // Heated discussion
+    'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1080&q=80',  // Whiteboard session
+    'https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=1080&q=80',  // Debate/strategy
   ],
   'Case Study Breakdown': [
     'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1080&q=80',  // Dashboard/analytics
     'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1080&q=80',     // Data charts
     'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=1080&q=80',     // Business meeting
+    'https://images.unsplash.com/photo-1590650153855-d9e808231d41?w=1080&q=80',  // Data visualization
+    'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1080&q=80',     // Business charts on screen
+    'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1080&q=80',     // Startup war room
   ],
   'Founder/Operator Mindset': [
     'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1080&q=80',  // Laptop workspace
     'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1080&q=80',  // Office desk
     'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1080&q=80',  // Modern office
+    'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1080&q=80',  // Team in action
+    'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1080&q=80',  // Open office vibe
+    'https://images.unsplash.com/photo-1556745757-8d76bdb6984b?w=1080&q=80',     // Entrepreneur hustle
   ],
   'Social Media Myth Busting': [
     'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1080&q=80',  // Social media apps
     'https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=1080&q=80',  // Phone with social
     'https://images.unsplash.com/photo-1563986768494-4dee2763ff3f?w=1080&q=80',  // Neon social icons
+    'https://images.unsplash.com/photo-1611605698335-8b1569810432?w=1080&q=80',  // Social media on phone
+    'https://images.unsplash.com/photo-1562577309-4932fdd64cd1?w=1080&q=80',     // Like/share icons
+    'https://images.unsplash.com/photo-1585247226801-bc613c441316?w=1080&q=80',  // Digital marketing
   ],
   'AI & Marketing Strategy': [
     'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1080&q=80',  // AI abstract
     'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1080&q=80',  // Robot/AI
     'https://images.unsplash.com/photo-1555255707-c07966088b7b?w=1080&q=80',     // Neural network
+    'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=1080&q=80',  // Robot face
+    'https://images.unsplash.com/photo-1676299081847-824916de030a?w=1080&q=80',  // AI hologram
+    'https://images.unsplash.com/photo-1535378917042-10a22c95931a?w=1080&q=80',  // Futuristic tech
   ],
   'Growth Hacking': [
     'https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=1080&q=80',     // Rocket launch
     'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1080&q=80',  // Growth chart
     'https://images.unsplash.com/photo-1551434678-e076c223a692?w=1080&q=80',     // Team collaboration
+    'https://images.unsplash.com/photo-1533750349088-cd871a92f312?w=1080&q=80',  // Speed/motion blur
+    'https://images.unsplash.com/photo-1444653614773-995cb1ef9efa?w=1080&q=80',  // Climbing/summit
+    'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1080&q=80',  // Code on laptop
   ],
   'Brand Authority': [
     'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1080&q=80',  // Skyscraper/corporate
     'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=1080&q=80',  // Luxury office
     'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1080&q=80',  // Business suit
+    'https://images.unsplash.com/photo-1464938050520-ef2571b0b89c?w=1080&q=80',  // City skyline night
+    'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1080&q=80',  // City aerial view
+    'https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=1080&q=80',     // Corporate building
   ],
   'Paid Media Intelligence': [
     'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1080&q=80',     // Analytics dashboard
     'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1080&q=80',  // Data screen
     'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=1080&q=80',  // Multiple screens
+    'https://images.unsplash.com/photo-1543286386-713bdd548da4?w=1080&q=80',     // Financial charts
+    'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1080&q=80',  // Trading screens
+    'https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?w=1080&q=80',  // Data center
   ],
   'Content Strategy': [
     'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1080&q=80',  // Laptop with coffee
     'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=1080&q=80',  // Writing/notebook
     'https://images.unsplash.com/photo-1542435503-956c469947f6?w=1080&q=80',     // Creative workspace
+    'https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=1080&q=80',  // Content creation desk
+    'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1080&q=80',  // Laptop overhead
+    'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1080&q=80',  // Pen and paper
   ],
 };
 
 /**
+ * MASTER fallback backgrounds — high-impact, visually diverse photos.
+ * Used when category-specific URLs AND local photos are unavailable.
+ * CRITICAL: A background photo must ALWAYS be returned. Never allow plain black.
+ */
+const FALLBACK_BACKGROUNDS = [
+  'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1080&q=80',  // Earth from space
+  'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1080&q=80',  // Matrix code rain
+  'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1080&q=80',  // Skyscraper
+  'https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=1080&q=80',     // Rocket launch
+  'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1080&q=80',     // Conference room
+  'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1080&q=80',  // AI abstract
+  'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=1080&q=80',  // Multiple screens
+  'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1080&q=80',  // Modern office
+  'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1080&q=80',  // Laptop workspace
+  'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1080&q=80',  // Business suit
+  'https://images.unsplash.com/photo-1563986768494-4dee2763ff3f?w=1080&q=80',  // Neon social icons
+  'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1080&q=80',  // Robot/AI
+];
+
+/**
  * Pick a background photo URL for a given category.
- * First checks for local photos in public/backgrounds/, then falls back to Unsplash URLs.
+ * Priority: local photos (public/backgrounds/) → category Unsplash URLs → master fallback pool.
+ * GUARANTEED: Always returns a valid URL. NEVER returns null.
  */
 function pickBackgroundPhoto(category) {
   const urls = BACKGROUND_PHOTOS[category] || [];
@@ -81,12 +132,18 @@ function pickBackgroundPhoto(category) {
     }
   } catch (_) {}
 
-  // Combine: local photos (as staticFile paths) + remote URLs
-  const allOptions = [...localPhotos, ...urls];
+  // Priority 1: Local photos if any exist (user's own photos get top billing)
+  if (localPhotos.length > 0) {
+    return localPhotos[Math.floor(Math.random() * localPhotos.length)];
+  }
 
-  if (allOptions.length === 0) return null;
+  // Priority 2: Category-specific Unsplash URLs
+  if (urls.length > 0) {
+    return urls[Math.floor(Math.random() * urls.length)];
+  }
 
-  return allOptions[Math.floor(Math.random() * allOptions.length)];
+  // Priority 3: MASTER FALLBACK — never return null, always a real photo
+  return FALLBACK_BACKGROUNDS[Math.floor(Math.random() * FALLBACK_BACKGROUNDS.length)];
 }
 
 /**

@@ -66,10 +66,9 @@ function log(emoji, msg) { console.log(`  ${emoji} ${msg}`); }
 // backgroundImageUrl is an optional photo URL/staticFile path for composition backgrounds
 function mapToComposition(category, compositionHint, hook, body, backgroundImageUrl) {
   const result = _mapToCompositionInner(category, compositionHint, hook, body);
-  // Inject backgroundImageUrl into every composition's props
-  if (backgroundImageUrl) {
-    result.props.backgroundImageUrl = backgroundImageUrl;
-  }
+  // ALWAYS inject backgroundImageUrl — a photo background is REQUIRED for every post.
+  // The content engine guarantees this is never null, but double-check just in case.
+  result.props.backgroundImageUrl = backgroundImageUrl || FALLBACK_IMAGE;
   return result;
 }
 
@@ -534,7 +533,8 @@ async function postToLinkedIn(caption, mediaUrl, localVideoPath) {
 
   // ── Step 2: Map to Remotion Composition ──────────────────────────────────
   console.log('\n ── STEP 2: REMOTION VIDEO RENDERING ────────────────────────');
-  const bgUrl = visual_direction?.backgroundImageUrl || null;
+  // Background is REQUIRED — content engine guarantees one, but fallback just in case
+  const bgUrl = visual_direction?.backgroundImageUrl || FALLBACK_IMAGE;
   const { compositionId, props } = mapToComposition(
     metadata.category,
     facebook.compositionHint,
@@ -542,7 +542,7 @@ async function postToLinkedIn(caption, mediaUrl, localVideoPath) {
     facebook.body,
     bgUrl
   );
-  if (bgUrl) log('🖼️', `Background photo: ${bgUrl.substring(0, 80)}...`);
+  log('🖼️', `Background photo: ${bgUrl.substring(0, 80)}...`);
   log('🎬', `Composition: ${compositionId}`);
   log('📐', 'Format: 1080×1080 (feed)');
 

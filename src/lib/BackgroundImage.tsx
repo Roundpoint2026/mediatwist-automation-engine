@@ -45,7 +45,8 @@ export interface BackgroundImageProps {
  * - Ken Burns slow zoom animation
  * - Optional blur for depth
  *
- * Falls back to nothing if no `src` is provided (composition keeps its default bg).
+ * If no `src` is provided, renders a rich gradient fallback instead of plain black.
+ * A post should NEVER have a plain black background.
  */
 export const BackgroundImage: React.FC<BackgroundImageProps> = ({
   src,
@@ -58,7 +59,24 @@ export const BackgroundImage: React.FC<BackgroundImageProps> = ({
 }) => {
   const frame = useCurrentFrame();
 
-  if (!src) return null;
+  // If no src, render a rich gradient fallback — never plain black
+  if (!src) {
+    const gradientShift = interpolate(frame, [0, 300], [0, 30], { extrapolateRight: 'clamp' });
+    return (
+      <AbsoluteFill
+        style={{
+          background: `linear-gradient(${135 + gradientShift}deg, #0A0A0A 0%, #1a1a2e 30%, #16213e 50%, #0f3460 70%, #0A0A0A 100%)`,
+        }}
+      >
+        {/* Yellow accent glow */}
+        <AbsoluteFill
+          style={{
+            background: `radial-gradient(ellipse at 70% 30%, ${MEDIATWIST_COLORS.accent}22 0%, transparent 60%)`,
+          }}
+        />
+      </AbsoluteFill>
+    );
+  }
 
   // Ken Burns: slow zoom in over full duration
   const duration = zoomDuration || 300; // fallback 10s @ 30fps

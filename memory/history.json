@@ -229,6 +229,66 @@
       "compositionId": "KineticType",
       "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774659280/mediatwist/2026/03/28/feed-1774659273306.mp4",
       "publishedAt": "2026-03-28T00:59:02.284Z"
+    },
+    {
+      "id": "post_1774663190476_su412e",
+      "platform": "linkedin",
+      "category": "AI & Marketing Strategy",
+      "hook": "Your competitors are already using this. You're not.",
+      "captionHash": "49273bfec658e905",
+      "compositionId": "KineticType",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774662974/mediatwist/2026/03/28/feed-1774662967823.mp4",
+      "publishedAt": "2026-03-28T01:59:50.476Z"
+    },
+    {
+      "id": "post_1774663751468_jifjj6",
+      "platform": "instagram",
+      "category": "Growth Hacking",
+      "hook": "Your existing customers are your biggest untapped channel.",
+      "captionHash": "a3e387d25bb5f8bf",
+      "compositionId": "FeedPost",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774663712/mediatwist/2026/03/28/feed-1774663705833.mp4",
+      "publishedAt": "2026-03-28T02:09:11.468Z"
+    },
+    {
+      "id": "post_1774663966429_t8b9oe",
+      "platform": "linkedin",
+      "category": "Growth Hacking",
+      "hook": "Your existing customers are your biggest untapped channel.",
+      "captionHash": "7e7c427b8b9e1ebe",
+      "compositionId": "FeedPost",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774663712/mediatwist/2026/03/28/feed-1774663705833.mp4",
+      "publishedAt": "2026-03-28T02:12:46.429Z"
+    },
+    {
+      "id": "post_1774666342176_9m1289",
+      "platform": "facebook",
+      "category": "Brand Authority",
+      "hook": "The companies charging 3x more aren't better—they're just clearer.",
+      "captionHash": "e2f62003d2adfb44",
+      "compositionId": "BrandedCaption",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774666332/mediatwist/2026/03/28/feed-1774666326683.mp4",
+      "publishedAt": "2026-03-28T02:52:22.176Z"
+    },
+    {
+      "id": "post_1774666380320_bttdyn",
+      "platform": "instagram",
+      "category": "Brand Authority",
+      "hook": "The companies charging 3x more aren't better—they're just clearer.",
+      "captionHash": "f507922d8333dd00",
+      "compositionId": "BrandedCaption",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774666332/mediatwist/2026/03/28/feed-1774666326683.mp4",
+      "publishedAt": "2026-03-28T02:53:00.320Z"
+    },
+    {
+      "id": "post_1774666594321_64b32r",
+      "platform": "linkedin",
+      "category": "Brand Authority",
+      "hook": "The companies charging 3x more aren't better—they're just clearer.",
+      "captionHash": "fd06013c6daff95b",
+      "compositionId": "BrandedCaption",
+      "mediaUrl": "https://res.cloudinary.com/dpdxd3d4x/video/upload/v1774666332/mediatwist/2026/03/28/feed-1774666326683.mp4",
+      "publishedAt": "2026-03-28T02:56:34.321Z"
     }
   ],
   "usedHooks": [
@@ -239,7 +299,10 @@
     "The trending marketing advice will cost you millions. Here's why.",
     "Most companies make this move at 100M ARR. They did it at 2M.",
     "Your growth ceiling is set by your positioning clarity. Period.",
-    "You're measuring the wrong thing, so you're optimizing for the wrong thing."
+    "You're measuring the wrong thing, so you're optimizing for the wrong thing.",
+    "Your competitors are already using this. You're not.",
+    "Your existing customers are your biggest untapped channel.",
+    "The companies charging 3x more aren't better—they're just clearer."
   ],
   "usedCategories": [
     {
@@ -333,6 +396,30 @@
     {
       "category": "Social Media Myth Busting",
       "usedAt": "2026-03-28T00:59:02.284Z"
+    },
+    {
+      "category": "AI & Marketing Strategy",
+      "usedAt": "2026-03-28T01:59:50.476Z"
+    },
+    {
+      "category": "Growth Hacking",
+      "usedAt": "2026-03-28T02:09:11.468Z"
+    },
+    {
+      "category": "Growth Hacking",
+      "usedAt": "2026-03-28T02:12:46.429Z"
+    },
+    {
+      "category": "Brand Authority",
+      "usedAt": "2026-03-28T02:52:22.176Z"
+    },
+    {
+      "category": "Brand Authority",
+      "usedAt": "2026-03-28T02:53:00.320Z"
+    },
+    {
+      "category": "Brand Authority",
+      "usedAt": "2026-03-28T02:56:34.321Z"
     }
   ],
   "contentHashes": [
@@ -358,14 +445,20 @@
     "52691d6ca2261fab",
     "792cd90882596e80",
     "b63520bf55fe9e89",
-    "bed58a13cebbae91"
+    "bed58a13cebbae91",
+    "49273bfec658e905",
+    "a3e387d25bb5f8bf",
+    "7e7c427b8b9e1ebe",
+    "e2f62003d2adfb44",
+    "f507922d8333dd00",
+    "fd06013c6daff95b"
   ],
   "stats": {
-    "totalPosts": 23,
+    "totalPosts": 29,
     "byPlatform": {
-      "facebook": 10,
-      "instagram": 7,
-      "linkedin": 6
+      "facebook": 11,
+      "instagram": 9,
+      "linkedin": 9
     },
     "byCategory": {
       "market_insight": 1,
@@ -375,8 +468,11 @@
       "Contrarian Marketing Take": 3,
       "Case Study Breakdown": 3,
       "Founder/Operator Mindset": 3,
-      "Social Media Myth Busting": 3
+      "Social Media Myth Busting": 3,
+      "AI & Marketing Strategy": 1,
+      "Growth Hacking": 2,
+      "Brand Authority": 3
     },
-    "lastRunAt": "2026-03-28T00:59:02.284Z"
+    "lastRunAt": "2026-03-28T02:56:34.321Z"
   }
 }

@@ -5,6 +5,9 @@ import { ReelsPost, ReelsPostProps } from './compositions/ReelsPost';
 import { BrandedCaption, BrandedCaptionProps } from './compositions/BrandedCaption';
 import { DataDashboard, DataDashboardProps } from './compositions/DataDashboard';
 import { KineticType, KineticTypeProps } from './compositions/KineticType';
+import { BoldStatement, BoldStatementProps } from './compositions/BoldStatement';
+import { SplitLayout, SplitLayoutProps } from './compositions/SplitLayout';
+import { GlowCard, GlowCardProps } from './compositions/GlowCard';
 import { MEDIATWIST_COLORS } from './lib/colors';
 
 /**
@@ -16,17 +19,12 @@ import { MEDIATWIST_COLORS } from './lib/colors';
  *   BrandedCaption  — 1080×1080, 8s  — Quote/caption-forward posts
  *   DataDashboard   — 1080×1080, 12s — Case studies, metrics, data viz
  *   KineticType     — 1080×1080, 10s — Kinetic typography, motion graphics
+ *   BoldStatement   — 1080×1080, 10s — Giant full-bleed typography, geometric accents
+ *   SplitLayout     — 1080×1080, 10s — Split panel: yellow left + dark text right
+ *   GlowCard        — 1080×1080, 10s — Neon glow card with particles & illustrations
  *
  * All compositions accept `captionText: string` as a required prop,
  * so the render script can generate variations automatically.
- *
- * Render commands:
- *   npx remotion render src/index.ts FeedPost out/feed.mp4 --props='{"captionText":"..."}'
- *   npx remotion render src/index.ts ReelsPost out/reels.mp4 --props='{"captionText":"..."}'
- *   npx remotion render src/index.ts BrandedCaption out/caption.mp4 --props='{"captionText":"..."}'
- *   npx remotion render src/index.ts DataDashboard out/dashboard.mp4 --props='{"headline":"...","stats":[...]}'
- *   npx remotion render src/index.ts KineticType out/kinetic.mp4 --props='{"captionText":"..."}'
- *   node scripts/renderVariations.js   ← renders variations + uploads to Cloudinary
  */
 export const RemotionRoot: React.FC = () => {
   return (
@@ -110,6 +108,52 @@ export const RemotionRoot: React.FC = () => {
         height={1080}
         defaultProps={{
           captionText: 'Bold text with dynamic motion. Every word matters.',
+          brandColor: MEDIATWIST_COLORS.accent,
+        }}
+      />
+
+      {/* ─── Bold Statement — 1080×1080, 10 seconds ──────────────────────── */}
+      <Composition<BoldStatementProps>
+        id="BoldStatement"
+        component={BoldStatement}
+        durationInFrames={300}
+        fps={30}
+        width={1080}
+        height={1080}
+        defaultProps={{
+          captionText: 'Your audience doesn\'t need more content. They need better positioning.',
+          tagline: 'THE MEDIATWIST GROUP',
+          brandColor: MEDIATWIST_COLORS.accent,
+        }}
+      />
+
+      {/* ─── Split Layout — 1080×1080, 10 seconds ────────────────────────── */}
+      <Composition<SplitLayoutProps>
+        id="SplitLayout"
+        component={SplitLayout}
+        durationInFrames={300}
+        fps={30}
+        width={1080}
+        height={1080}
+        defaultProps={{
+          captionText: 'The brands that win aren\'t the loudest. They\'re the most precise.',
+          headline: 'INSIGHT',
+          tagline: 'THE MEDIATWIST GROUP',
+          brandColor: MEDIATWIST_COLORS.accent,
+        }}
+      />
+
+      {/* ─── Glow Card — 1080×1080, 10 seconds ──────────────────────────── */}
+      <Composition<GlowCardProps>
+        id="GlowCard"
+        component={GlowCard}
+        durationInFrames={300}
+        fps={30}
+        width={1080}
+        height={1080}
+        defaultProps={{
+          captionText: 'AI won\'t replace your marketing team. But a team using AI will replace yours.',
+          tagline: 'MEDIATWIST INSIGHT',
           brandColor: MEDIATWIST_COLORS.accent,
         }}
       />

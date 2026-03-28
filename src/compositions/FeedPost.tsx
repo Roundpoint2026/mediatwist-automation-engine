@@ -143,9 +143,9 @@ export const FeedPost: React.FC<FeedPostProps> = ({
       }}>
         <h1 style={{
           color: MEDIATWIST_COLORS.text,
-          fontSize: 54,
-          fontWeight: 800,
-          lineHeight: 1.15,
+          fontSize: 68,
+          fontWeight: 900,
+          lineHeight: 1.1,
           margin: 0,
           fontFamily: 'Inter, sans-serif',
           letterSpacing: -0.5,
@@ -176,9 +176,9 @@ export const FeedPost: React.FC<FeedPostProps> = ({
       }}>
         <p style={{
           color: MEDIATWIST_COLORS.text,
-          fontSize: captionText.length > 120 ? 38 : 44,
-          fontWeight: 500,
-          lineHeight: 1.5,
+          fontSize: captionText.length > 120 ? 46 : captionText.length > 80 ? 54 : 62,
+          fontWeight: 600,
+          lineHeight: 1.35,
           margin: 0,
           fontFamily: 'Inter, sans-serif',
         }}>

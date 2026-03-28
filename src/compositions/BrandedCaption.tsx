@@ -131,9 +131,9 @@ export const BrandedCaption: React.FC<BrandedCaptionProps> = ({
       }}>
         <p style={{
           color: MEDIATWIST_COLORS.text,
-          fontSize: captionText.length > 100 ? 38 : captionText.length > 60 ? 44 : 50,
-          fontWeight: 600,
-          lineHeight: 1.5,
+          fontSize: captionText.length > 100 ? 48 : captionText.length > 60 ? 58 : 68,
+          fontWeight: 700,
+          lineHeight: 1.3,
           margin: 0,
           fontFamily: 'Inter, sans-serif',
           textAlign: 'left',

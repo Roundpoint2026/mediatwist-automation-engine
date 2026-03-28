@@ -154,9 +154,9 @@ export const KineticType: React.FC<KineticTypeProps> = ({
               key={i}
               style={{
                 color: MEDIATWIST_COLORS.text,
-                fontSize: lines.length > 3 ? 40 : 48,
-                fontWeight: 600,
-                lineHeight: 1.45,
+                fontSize: lines.length > 3 ? 50 : 62,
+                fontWeight: 700,
+                lineHeight: 1.3,
                 margin: 0,
                 fontFamily: 'Inter, sans-serif',
                 opacity,

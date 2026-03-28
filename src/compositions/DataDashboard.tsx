@@ -141,8 +141,8 @@ export const DataDashboard: React.FC<DataDashboardProps> = ({
       }}>
         <h1 style={{
           color: MEDIATWIST_COLORS.text,
-          fontSize: 44,
-          fontWeight: 800,
+          fontSize: 56,
+          fontWeight: 900,
           lineHeight: 1.2,
           margin: 0,
           fontFamily: 'Inter, sans-serif',
@@ -217,8 +217,8 @@ export const DataDashboard: React.FC<DataDashboardProps> = ({
                 {/* Value */}
                 <p style={{
                   color: brandColor,
-                  fontSize: 42,
-                  fontWeight: 800,
+                  fontSize: 52,
+                  fontWeight: 900,
                   margin: '0 0 18px 0',
                   fontFamily: 'Inter, sans-serif',
                   lineHeight: 1,

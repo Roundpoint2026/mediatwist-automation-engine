@@ -62,6 +62,7 @@ function log(emoji, msg) { console.log(`  ${emoji} ${msg}`); }
 
 // ─── Composition Mapping ─────────────────────────────────────────────────────
 // Maps content engine compositionHints → Remotion composition IDs + props
+// Now with 8 compositions for maximum visual variety
 function mapToComposition(category, compositionHint, hook, body) {
   // Short hook for video overlay (first sentence or first 80 chars)
   const shortHook = hook.length > 100 ? hook.split('.')[0] + '.' : hook;
@@ -78,8 +79,42 @@ function mapToComposition(category, compositionHint, hook, body) {
     };
   }
 
-  // Quote/caption-forward categories get BrandedCaption
-  if (['philosophical-typography', 'elegant-minimal', 'narrative-flow'].includes(compositionHint)) {
+  // Bold contrarian takes → BoldStatement (giant full-bleed typography)
+  if (['bold-text-motion'].includes(compositionHint)) {
+    return {
+      compositionId: 'BoldStatement',
+      props: {
+        captionText: shortHook,
+        tagline: category.toUpperCase(),
+      },
+    };
+  }
+
+  // AI & futuristic topics → GlowCard (neon glow, particles, tech feel)
+  if (['futuristic-glitch'].includes(compositionHint)) {
+    return {
+      compositionId: 'GlowCard',
+      props: {
+        captionText: shortHook,
+        tagline: category.toUpperCase(),
+      },
+    };
+  }
+
+  // Social media myth busting → SplitLayout (editorial magazine split)
+  if (['animated-stat-reveal'].includes(compositionHint)) {
+    return {
+      compositionId: 'SplitLayout',
+      props: {
+        captionText: shortHook,
+        headline: category.length > 20 ? category.split(' ').slice(0, 3).join(' ') : category,
+        tagline: 'THE MEDIATWIST GROUP',
+      },
+    };
+  }
+
+  // Quote/philosophical → BrandedCaption (quote-forward minimal)
+  if (['philosophical-typography', 'elegant-minimal'].includes(compositionHint)) {
     return {
       compositionId: 'BrandedCaption',
       props: {
@@ -89,8 +124,8 @@ function mapToComposition(category, compositionHint, hook, body) {
     };
   }
 
-  // Kinetic/motion text categories get KineticType
-  if (['kinetic-typography', 'bold-text-motion', 'futuristic-glitch', 'animated-stat-reveal'].includes(compositionHint)) {
+  // Kinetic typography stays as KineticType
+  if (['kinetic-typography'].includes(compositionHint)) {
     return {
       compositionId: 'KineticType',
       props: {
@@ -99,19 +134,52 @@ function mapToComposition(category, compositionHint, hook, body) {
     };
   }
 
-  // Growth/curve categories get FeedPost with custom headline
-  if (['exponential-curve'].includes(compositionHint)) {
+  // Narrative/content strategy → SplitLayout
+  if (['narrative-flow'].includes(compositionHint)) {
     return {
-      compositionId: 'FeedPost',
+      compositionId: 'SplitLayout',
       props: {
         captionText: shortHook,
-        headline: category,
-        subText: '— The Mediatwist Group',
+        headline: 'STRATEGY',
+        tagline: 'THE MEDIATWIST GROUP',
       },
     };
   }
 
-  // Default: FeedPost
+  // Growth/curve categories → BoldStatement with custom tagline
+  if (['exponential-curve'].includes(compositionHint)) {
+    return {
+      compositionId: 'BoldStatement',
+      props: {
+        captionText: shortHook,
+        tagline: category.toUpperCase(),
+      },
+    };
+  }
+
+  // Default: cycle between FeedPost, BoldStatement, and GlowCard for variety
+  const defaults = ['FeedPost', 'BoldStatement', 'GlowCard'];
+  const pick = defaults[Math.floor(Math.random() * defaults.length)];
+
+  if (pick === 'BoldStatement') {
+    return {
+      compositionId: 'BoldStatement',
+      props: {
+        captionText: shortHook,
+        tagline: category.toUpperCase(),
+      },
+    };
+  }
+  if (pick === 'GlowCard') {
+    return {
+      compositionId: 'GlowCard',
+      props: {
+        captionText: shortHook,
+        tagline: category.toUpperCase(),
+      },
+    };
+  }
+
   return {
     compositionId: 'FeedPost',
     props: {

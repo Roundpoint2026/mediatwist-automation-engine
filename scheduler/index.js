@@ -200,6 +200,7 @@ async function executeEngine(options = {}) {
         subText:     content.facebook.body.split('\n')[0],
         ctaText:     content.facebook.cta,
         brandColor:  config.brand.colors.primary,
+        backgroundImageUrl: content.visual_direction.backgroundImageUrl,
       };
 
       const bundleLocation = await bundle({ entryPoint, webpackOverride: c => c });

@@ -59,19 +59,19 @@ export const BackgroundImage: React.FC<BackgroundImageProps> = ({
 }) => {
   const frame = useCurrentFrame();
 
-  // If no src, render a rich gradient fallback — never plain black
+  // If no src, render an on-brand gradient fallback — black/yellow palette, never blue
   if (!src) {
     const gradientShift = interpolate(frame, [0, 300], [0, 30], { extrapolateRight: 'clamp' });
     return (
       <AbsoluteFill
         style={{
-          background: `linear-gradient(${135 + gradientShift}deg, #0A0A0A 0%, #1a1a2e 30%, #16213e 50%, #0f3460 70%, #0A0A0A 100%)`,
+          background: `linear-gradient(${135 + gradientShift}deg, #0A0A0A 0%, #1a1a0a 30%, #1c1a00 50%, #2a2400 70%, #0A0A0A 100%)`,
         }}
       >
-        {/* Yellow accent glow */}
+        {/* Yellow accent glow — stronger for brand presence */}
         <AbsoluteFill
           style={{
-            background: `radial-gradient(ellipse at 70% 30%, ${MEDIATWIST_COLORS.accent}22 0%, transparent 60%)`,
+            background: `radial-gradient(ellipse at 70% 30%, ${MEDIATWIST_COLORS.accent}33 0%, transparent 55%)`,
           }}
         />
       </AbsoluteFill>

@@ -649,6 +649,17 @@ async function generateDailyContent() {
     console.warn(`Forced unique content via date salt after ${maxAttempts} attempts`);
   }
 
+  // Select post type for this run
+  const postType = selectPostType();
+  console.log(`     Post type selected: ${postType}`);
+
+  // Generate carousel slides if this is a carousel post
+  let carouselData = null;
+  if (postType === 'carousel') {
+    carouselData = generateCarouselSlides(selectedCategory, contentToUse.hook);
+    console.log(`     Carousel style: ${carouselData.carouselStyle} (${carouselData.slides.length} slides)`);
+  }
+
   // Generate platform-specific versions
   const baseContent = {
     category: selectedCategory,
@@ -658,6 +669,8 @@ async function generateDailyContent() {
   };
 
   const result = {
+    postType,
+    carouselData,
     facebook: generatePlatformContent(baseContent, 'facebook'),
     instagram: generatePlatformContent(baseContent, 'instagram'),
     linkedin: generatePlatformContent(baseContent, 'linkedin'),
@@ -666,6 +679,7 @@ async function generateDailyContent() {
       brand: 'The Mediatwist Group',
       handle: '@mediatwist',
       colors: ['Black', 'Yellow'],
+      postType,
       timestamp: new Date().toISOString()
     },
     visual_direction: {
@@ -743,10 +757,235 @@ function getAvailableCategories() {
   return Object.keys(CONTENT_LIBRARY);
 }
 
+// ── Post Type Selection ──────────────────────────────────────────────────────
+// Weighted random selection with memory-aware rotation to keep the IG grid diverse.
+
+/**
+ * Select the next post type using weighted random selection + recent history awareness.
+ * Avoids repeating the same post type back-to-back.
+ *
+ * @returns {string} 'video' | 'static_image' | 'carousel' | 'illustration'
+ */
+function selectPostType() {
+  const ptConfig = config.postTypes || {};
+  const weights = ptConfig.weights || {
+    video: 0.30, static_image: 0.30, carousel: 0.25, illustration: 0.15,
+  };
+
+  // Check what was posted recently to avoid repeats
+  let recentPostTypes = [];
+  try {
+    const recentPosts = getRecentPosts(3); // Last 3 days
+    recentPostTypes = recentPosts
+      .filter(p => p.postType)
+      .map(p => p.postType)
+      .slice(-3); // Last 3 posts
+  } catch (_) {}
+
+  const lastPostType = recentPostTypes.length > 0 ? recentPostTypes[recentPostTypes.length - 1] : null;
+
+  // Build weighted pool, reducing weight of recently-used type
+  const types = Object.keys(weights);
+  const adjustedWeights = types.map(t => {
+    let w = weights[t];
+    if (t === lastPostType) w *= 0.3; // Heavily penalize immediate repeat
+    return w;
+  });
+
+  const totalWeight = adjustedWeights.reduce((a, b) => a + b, 0);
+  let roll = Math.random() * totalWeight;
+
+  for (let i = 0; i < types.length; i++) {
+    roll -= adjustedWeights[i];
+    if (roll <= 0) return types[i];
+  }
+
+  return types[types.length - 1]; // Fallback
+}
+
+// ── Carousel Content Generation ─────────────────────────────────────────────
+
+/**
+ * Carousel slide templates organized by style.
+ * Each style produces 3-7 slides with a cover + body slides + CTA slide.
+ */
+const CAROUSEL_TEMPLATES = {
+  tips: {
+    coverFormat: (hook) => hook,
+    slideFormat: (tip, index) => `${index + 1}. ${tip}`,
+    ctaSlide: 'Save this carousel. Share it with your team. Follow @mediatwist for more.',
+  },
+  data: {
+    coverFormat: (hook) => hook,
+    slideFormat: (stat) => stat,
+    ctaSlide: 'The data doesn\'t lie. Follow @mediatwist for weekly insights.',
+  },
+  quotes: {
+    coverFormat: (hook) => hook,
+    slideFormat: (quote) => `"${quote}"`,
+    ctaSlide: 'Which quote hit hardest? Drop a number in the comments. Follow @mediatwist.',
+  },
+  storytelling: {
+    coverFormat: (hook) => hook,
+    slideFormat: (part) => part,
+    ctaSlide: 'Follow @mediatwist for the stories behind the strategies.',
+  },
+};
+
+/**
+ * Slide content for each category × carousel style.
+ * These are the actual text that appears on each carousel slide.
+ */
+const CAROUSEL_CONTENT = {
+  tips: {
+    'Industry Insight': [
+      'Your competitors aren\'t beating you on product. They\'re beating you on distribution.',
+      'The brands winning right now all have one thing in common: they own their audience.',
+      'Stop chasing algorithms. Start building systems that compound.',
+      'First-mover advantage is overrated. Fast-follower with better execution wins.',
+      'If your marketing team can\'t explain your strategy in one sentence, you don\'t have one.',
+      'The best ROI in marketing? Saying no to 80% of opportunities.',
+    ],
+    'Contrarian Marketing Take': [
+      'Brand awareness campaigns are just expensive guessing without attribution.',
+      'Your "unique value proposition" sounds exactly like your competitor\'s.',
+      'Content calendars kill creativity. Publish when you have something worth saying.',
+      'Most A/B tests are statistically meaningless. You need 10x the sample size you think.',
+      'Influencer marketing ROI is mostly fiction. Prove me wrong.',
+      'If everyone in your industry is on TikTok, that\'s your signal to double down on LinkedIn.',
+    ],
+    'AI & Marketing Strategy': [
+      'AI won\'t replace marketers. Marketers who use AI will replace those who don\'t.',
+      'Automate the repetitive. Humanize the creative. That\'s the AI strategy.',
+      'Your competitors are using AI for content. You should be using it for insights.',
+      'The AI tools don\'t matter. The prompts and processes you build around them do.',
+      'Stop using AI to write generic content. Use it to personalize at scale.',
+      'AI-generated content without human editorial is just sophisticated spam.',
+    ],
+  },
+  data: {
+    'Industry Insight': [
+      '73% of CMOs plan to increase digital spend in 2026.',
+      'Short-form video drives 2.5x more engagement than static posts.',
+      'Email marketing still delivers $42 ROI for every $1 spent.',
+      'Companies with documented strategies are 313% more likely to succeed.',
+      'The average person sees 10,000+ brand messages per day.',
+    ],
+    'Growth Hacking': [
+      'Referral programs generate 3-5x higher conversion rates than cold outreach.',
+      'Landing pages with one CTA convert 266% better than those with multiple.',
+      'Personalized emails deliver 6x higher transaction rates.',
+      'Companies that blog generate 67% more leads monthly.',
+      'Video on landing pages increases conversions by 86%.',
+    ],
+    'Paid Media Intelligence': [
+      'Average CPC on Meta ads increased 14% YoY in 2025.',
+      'Retargeting ads are 76% more likely to get clicked than display ads.',
+      'Creative fatigue sets in after just 4 days on high-frequency campaigns.',
+      'Broad targeting now outperforms detailed targeting on Meta 60% of the time.',
+      'Video ads cost 10-30% less per conversion than static image ads.',
+    ],
+  },
+  quotes: {
+    'Founder/Operator Mindset': [
+      'Revenue is vanity. Profit is sanity. Cash flow is reality.',
+      'The best founders don\'t build features. They solve problems.',
+      'Your culture isn\'t what you put on the wall. It\'s what you tolerate.',
+      'Move fast and break things is dead. Move fast and build trust is the new playbook.',
+      'The hardest part of scaling isn\'t hiring. It\'s letting go.',
+      'If you\'re the smartest person in the room, you\'re in the wrong room.',
+    ],
+    'Brand Authority': [
+      'A brand is a promise delivered consistently.',
+      'People don\'t buy products. They buy better versions of themselves.',
+      'Your brand isn\'t what you say it is. It\'s what Google says it is.',
+      'The brands that last 100 years all started by standing for something unpopular.',
+      'Consistency beats creativity. Every. Single. Time.',
+    ],
+    'Content Strategy': [
+      'Create once. Distribute forever. That\'s content leverage.',
+      'The best content doesn\'t sell. It teaches, entertains, or inspires.',
+      'Your content strategy should be a media company that happens to sell products.',
+      'Stop creating content. Start creating intellectual property.',
+      'Distribution is more important than creation. 80/20 your time accordingly.',
+    ],
+  },
+  storytelling: {
+    'Case Study Breakdown': [
+      'A SaaS company was spending $50K/month on ads with declining returns.',
+      'We audited their funnel and found 67% of ad spend was going to already-converted users.',
+      'We rebuilt their attribution model and reallocated budget to top-of-funnel content.',
+      'Within 90 days: CAC dropped 41%, MQLs increased 2.3x, and ad spend decreased by $18K/month.',
+      'The lesson: most companies don\'t have a spending problem. They have a measurement problem.',
+    ],
+    'Social Media Myth Busting': [
+      'Everyone told them posting 3x a day was the key to Instagram growth.',
+      'They were burning out their team creating 90 posts a month with diminishing returns.',
+      'We cut their posting to 3x per WEEK and invested the saved time in engagement strategy.',
+      'Result: follower growth rate doubled, engagement rate tripled, team morale skyrocketed.',
+      'More content ≠ more growth. Better content + real engagement = unstoppable growth.',
+    ],
+  },
+};
+
+/**
+ * Generate carousel slide content for a given category.
+ * Returns an array of slide texts (cover + body + CTA).
+ *
+ * @param {string} category
+ * @param {string} hook - Cover slide text
+ * @returns {{ slides: string[], carouselStyle: string }}
+ */
+function generateCarouselSlides(category, hook) {
+  const ptConfig = config.postTypes || {};
+  const carouselConfig = ptConfig.carousel || {};
+  const styles = carouselConfig.styles || ['tips', 'data', 'quotes', 'storytelling'];
+  const minSlides = carouselConfig.minSlides || 3;
+  const maxSlides = carouselConfig.maxSlides || 7;
+
+  // Pick a carousel style that has content for this category
+  const availableStyles = styles.filter(s =>
+    CAROUSEL_CONTENT[s] && CAROUSEL_CONTENT[s][category]
+  );
+  const style = availableStyles.length > 0
+    ? selectRandom(availableStyles)
+    : selectRandom(styles);
+
+  const template = CAROUSEL_TEMPLATES[style];
+  const contentPool = (CAROUSEL_CONTENT[style] && CAROUSEL_CONTENT[style][category])
+    || Object.values(CAROUSEL_CONTENT[style] || {})[0]
+    || ['Marketing insight coming soon.'];
+
+  // Determine slide count
+  const slideCount = Math.min(
+    maxSlides,
+    Math.max(minSlides, contentPool.length + 2) // +2 for cover + CTA
+  );
+  const bodySlideCount = slideCount - 2; // Minus cover and CTA
+
+  // Shuffle and pick body slides
+  const shuffled = [...contentPool].sort(() => Math.random() - 0.5);
+  const bodySlides = shuffled.slice(0, bodySlideCount).map((item, i) =>
+    template.slideFormat(item, i)
+  );
+
+  const slides = [
+    template.coverFormat(hook),
+    ...bodySlides,
+    template.ctaSlide,
+  ];
+
+  return { slides, carouselStyle: style };
+}
+
 module.exports = {
   generateDailyContent,
   generateContentByCategory,
   getAvailableCategories,
+  selectPostType,
+  generateCarouselSlides,
   CONTENT_LIBRARY,
-  COMPOSITION_HINTS
+  COMPOSITION_HINTS,
+  CAROUSEL_TEMPLATES,
+  CAROUSEL_CONTENT,
 };

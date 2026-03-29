@@ -213,4 +213,82 @@ async function postVideoToFacebook(videoUrl, caption, options = {}) {
   }
 }
 
-module.exports = { postToFacebook, postVideoToFacebook };
+/**
+ * Posts a carousel (multi-image) to a Facebook Page.
+ *
+ * Flow:
+ *   1. Upload each image as unpublished photo → get photo IDs
+ *   2. Create a feed post with attached_media referencing those IDs
+ *
+ * @param {string[]} imageUrls - Array of publicly accessible image URLs (2-10)
+ * @param {string} caption - Post caption/message text
+ * @param {object} [options={}]
+ * @param {boolean} [options.published=true]
+ * @returns {Promise<object>} API response { id }
+ */
+async function postCarouselToFacebook(imageUrls, caption, options = {}) {
+  const { published = true } = options;
+
+  const { PAGE_ID, ACCESS_TOKEN } = process.env;
+  if (!PAGE_ID) throw new Error('postCarouselToFacebook: PAGE_ID is not set in .env');
+  if (!ACCESS_TOKEN) throw new Error('postCarouselToFacebook: ACCESS_TOKEN is not set in .env');
+  if (!imageUrls || imageUrls.length < 2) throw new Error('postCarouselToFacebook: need at least 2 image URLs');
+
+  logger.info(`Posting carousel to Facebook (${imageUrls.length} images, caption length: ${caption.length})`);
+
+  try {
+    // Step 1: Upload each image as unpublished photo to get media IDs
+    const photoIds = [];
+    for (const url of imageUrls) {
+      const uploadResult = await withRetry(
+        () => axios.post(
+          `https://graph.facebook.com/${GRAPH_API_VERSION}/${PAGE_ID}/photos`,
+          {
+            url,
+            published: false,  // Unpublished — just get the ID
+            access_token: ACCESS_TOKEN,
+          }
+        ),
+        { attempts: 2, delayMs: 2000 }
+      );
+      if (uploadResult.data?.id) {
+        photoIds.push(uploadResult.data.id);
+        logger.info(`  Uploaded photo ${photoIds.length}/${imageUrls.length}: ${uploadResult.data.id}`);
+      }
+    }
+
+    if (photoIds.length < 2) {
+      throw new Error(`Only uploaded ${photoIds.length} photos — need at least 2 for carousel`);
+    }
+
+    // Step 2: Create the carousel post referencing all photo IDs
+    const attachedMedia = photoIds.map(id => ({ media_fbid: id }));
+
+    const result = await withRetry(
+      () => axios.post(
+        `https://graph.facebook.com/${GRAPH_API_VERSION}/${PAGE_ID}/feed`,
+        {
+          message: caption,
+          attached_media: attachedMedia,
+          access_token: ACCESS_TOKEN,
+          published,
+        }
+      ),
+      { attempts: 3, delayMs: 2000, backoff: 'exponential' }
+    );
+
+    if (!result.data?.id) {
+      throw new Error(`Carousel post response missing id: ${JSON.stringify(result.data)}`);
+    }
+
+    logger.success(`Posted carousel to Facebook: id=${result.data.id} (${photoIds.length} images)`);
+    return result.data;
+
+  } catch (err) {
+    const msg = `postCarouselToFacebook: Failed: ${err.message}`;
+    logger.error(msg);
+    throw new Error(msg);
+  }
+}
+
+module.exports = { postToFacebook, postVideoToFacebook, postCarouselToFacebook };

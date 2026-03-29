@@ -23,8 +23,8 @@ require('dotenv').config({
 });
 
 const config = require('../config/engine');
-const { postToFacebook, postVideoToFacebook } = require('./facebook');
-const { postToInstagram } = require('./instagram');
+const { postToFacebook, postVideoToFacebook, postCarouselToFacebook } = require('./facebook');
+const { postToInstagram, postCarouselToInstagram } = require('./instagram');
 const { postToLinkedIn } = require('./linkedin');
 const { createLogger } = require('./logger');
 
@@ -41,6 +41,9 @@ const logger = createLogger('publisher:orchestrator');
  * @param {string} [post.overrides.facebook] - Override caption for Facebook
  * @param {string} [post.overrides.instagram] - Override caption for Instagram
  * @param {string} [post.overrides.linkedin] - Override caption for LinkedIn
+ * @param {object} [post.trendingAudio] - Trending audio params from trendingAudio module
+ * @param {object} [post.trendingAudio.ig] - Instagram trending audio { audio_name }
+ * @param {object} [post.trendingAudio.fb] - Facebook trending audio info
  *
  * @param {string} mediaUrl - Primary media URL (if not specified in post)
  *
@@ -92,14 +95,19 @@ async function publishToAll(post, mediaUrl, options = {}) {
     caption,
     imageUrl,
     videoUrl,
+    mediaUrls,       // Array of URLs for carousel posts
+    postType,        // 'video' | 'static_image' | 'carousel' | 'illustration'
     overrides = {},
+    trendingAudio = {},
   } = post;
+
+  const isCarousel = postType === 'carousel' && Array.isArray(mediaUrls) && mediaUrls.length >= 2;
 
   // Determine media URL to use
   const effectiveMediaUrl = imageUrl || videoUrl || mediaUrl;
 
-  if (!effectiveMediaUrl) {
-    const msg = 'publishToAll: imageUrl, videoUrl, or mediaUrl parameter is required';
+  if (!effectiveMediaUrl && !isCarousel) {
+    const msg = 'publishToAll: imageUrl, videoUrl, mediaUrl, or mediaUrls[] parameter is required';
     logger.error(msg);
     throw new Error(msg);
   }
@@ -133,6 +141,15 @@ async function publishToAll(post, mediaUrl, options = {}) {
       name: 'Facebook',
       shouldSkip: () => skipPlatforms.includes('facebook'),
       publish: async () => {
+        // Carousel post
+        if (isCarousel) {
+          return postCarouselToFacebook(
+            mediaUrls,
+            getTruncatedCaption('facebook'),
+            { published: !testMode }
+          );
+        }
+        // Video post
         if (isVideo && videoUrl) {
           return postVideoToFacebook(
             videoUrl,
@@ -140,6 +157,7 @@ async function publishToAll(post, mediaUrl, options = {}) {
             { published: !testMode }
           );
         }
+        // Single image post (static_image, illustration, or fallback)
         return postToFacebook(
           effectiveMediaUrl,
           getTruncatedCaption('facebook'),
@@ -150,11 +168,25 @@ async function publishToAll(post, mediaUrl, options = {}) {
 
     instagram: {
       name: 'Instagram',
-      shouldSkip: () => skipPlatforms.includes('instagram') || !imageUrl && !isVideo,
+      shouldSkip: () => skipPlatforms.includes('instagram') || (!imageUrl && !isVideo && !isCarousel),
       publish: async () => {
+        // Carousel post
+        if (isCarousel) {
+          return postCarouselToInstagram(
+            mediaUrls,
+            getTruncatedCaption('instagram')
+          );
+        }
+        // Single image or video
+        const igOptions = {};
+        if (isVideo && trendingAudio?.ig?.audio_name) {
+          igOptions.audioName = trendingAudio.ig.audio_name;
+          logger.info(`Instagram: Attaching trending audio "${trendingAudio.ig.audio_name}"`);
+        }
         return postToInstagram(
           effectiveMediaUrl,
-          getTruncatedCaption('instagram')
+          getTruncatedCaption('instagram'),
+          igOptions
         );
       },
     },

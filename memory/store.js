@@ -67,7 +67,7 @@ function hashContent(text) {
 /**
  * Record a published post in memory.
  */
-function recordPost({ platform, category, hook, caption, compositionId, mediaUrl }) {
+function recordPost({ platform, category, hook, caption, compositionId, postType, mediaUrl, visualEngine, audioTrack }) {
   const state = load();
   const hash = hashContent(caption);
 
@@ -76,9 +76,12 @@ function recordPost({ platform, category, hook, caption, compositionId, mediaUrl
     platform,
     category,
     hook,
+    postType: postType || 'video',
     captionHash: hash,
     compositionId: compositionId || null,
     mediaUrl: mediaUrl || null,
+    visualEngine: visualEngine || null,
+    audioTrack: audioTrack || null,
     publishedAt: new Date().toISOString(),
   };
 

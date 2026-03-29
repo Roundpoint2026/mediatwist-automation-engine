@@ -26,6 +26,7 @@ require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') }
 
 const path = require('path');
 const fs   = require('fs');
+const { execSync } = require('child_process');
 
 const config = require('../config/engine');
 
@@ -159,31 +160,54 @@ async function executeEngine(options = {}) {
       return { content, rendered: null, published: null };
     }
 
-    // Step 2: Render visual asset (Canva ↔ Remotion routing)
+    // Step 1b: Select background music track
+    let audioTrack = null;
+    if (config.music?.enabled !== false) {
+      console.log('\n 🎵  Selecting background music...');
+      try {
+        const { selectTrackForCategory, getRecentlyUsedTracks } = require('../music/musicManager');
+        const recentTracks = getRecentlyUsedTracks(10);
+        audioTrack = await selectTrackForCategory(content.facebook.category, recentTracks);
+      } catch (musicErr) {
+        console.warn(`     ⚠️  Music selection failed: ${musicErr.message}`);
+        console.warn('     Continuing without audio...');
+      }
+    } else {
+      console.log('\n 🔇  Music disabled (MUSIC_ENABLED=false)');
+    }
+
+    // Step 1c: Audio branding for Reels (brands the audio label on IG)
+    let trendingAudio = null;
+    if (process.env.TRENDING_AUDIO_ENABLED !== 'false') {
+      console.log('\n 🏷️  Generating audio branding for Reels...');
+      try {
+        const { getAudioBranding } = require('../music/trendingAudio');
+        const trackFilename = audioTrack ? audioTrack.filename : null;
+        trendingAudio = getAudioBranding(content.facebook.category, trackFilename);
+        console.log(`     ✅  Audio label: "${trendingAudio.audioName}"`);
+      } catch (brandErr) {
+        console.warn(`     ⚠️  Audio branding failed: ${brandErr.message}`);
+      }
+    }
+
+    // Step 2: Render visual asset — POST-TYPE AWARE ROUTING
     console.log('\n ⏳  Rendering visual asset...');
+    const postType = content.postType || 'video';
+    console.log(`     Post type: ${postType}`);
+
     let mediaUrl = null;
     let outputPath = null;
+    let mediaUrls = null;  // Array for carousel posts
     let visualEngine = 'unknown';
 
-    const { getVisualEngine, renderWithCanva } = require('../ai/canvaEngine');
+    const {
+      getVisualEngine, renderWithCanva,
+      renderStaticImage, renderCarousel, renderIllustration,
+    } = require('../ai/canvaEngine');
     const engineMode = getVisualEngine();
     console.log(`     Visual engine mode: ${engineMode}`);
 
-    // Determine render order based on engine mode
-    const tryCanva = async () => {
-      console.log('     Trying Canva...');
-      const canvaResult = await renderWithCanva(content.facebook, {
-        format: mapCompositionHint(content.facebook.compositionHint) === 'ReelsPost' ? 'reels' : 'feed',
-      });
-      if (canvaResult) {
-        outputPath = canvaResult.filePath;
-        visualEngine = `canva (${canvaResult.source})`;
-        console.log(` ✅  Canva ${canvaResult.source}: ${path.basename(outputPath)}`);
-        return true;
-      }
-      return false;
-    };
-
+    // ── Remotion video renderer (used for 'video' post type) ──
     const tryRemotion = async () => {
       console.log('     Trying Remotion...');
       const { bundle }                          = require('@remotion/bundler');
@@ -201,6 +225,7 @@ async function executeEngine(options = {}) {
         ctaText:     content.facebook.cta,
         brandColor:  config.brand.colors.primary,
         backgroundImageUrl: content.visual_direction.backgroundImageUrl,
+        audioSrc:    audioTrack ? audioTrack.filePath : undefined,
       };
 
       const bundleLocation = await bundle({ entryPoint, webpackOverride: c => c });
@@ -227,30 +252,104 @@ async function executeEngine(options = {}) {
       return true;
     };
 
+    // ── Canva video renderer (fallback for 'video' type) ──
+    const tryCanva = async () => {
+      console.log('     Trying Canva...');
+      const canvaResult = await renderWithCanva(content.facebook, {
+        format: mapCompositionHint(content.facebook.compositionHint) === 'ReelsPost' ? 'reels' : 'feed',
+      });
+      if (canvaResult) {
+        outputPath = canvaResult.filePath;
+        visualEngine = `canva (${canvaResult.source})`;
+        console.log(` ✅  Canva ${canvaResult.source}: ${path.basename(outputPath)}`);
+        return true;
+      }
+      return false;
+    };
+
     try {
       let rendered = false;
 
-      if (engineMode === 'canva') {
-        // Canva only — no fallback
-        rendered = await tryCanva();
-      } else if (engineMode === 'remotion') {
-        // Remotion only — no fallback
-        rendered = await tryRemotion();
-      } else if (engineMode === 'canva-first') {
-        // Try Canva first, fall back to Remotion
-        rendered = await tryCanva();
+      // ── Route by post type ──
+      if (postType === 'static_image') {
+        // Static branded image via Canva AI (no text overlay)
+        console.log('     Rendering static branded image...');
+        const result = await renderStaticImage(content.facebook);
+        if (result) {
+          outputPath = result.filePath;
+          visualEngine = 'canva (static_image)';
+          rendered = true;
+          console.log(` ✅  Static image: ${path.basename(outputPath)}`);
+        }
+        // Fallback: use Remotion with a still frame export
         if (!rendered) {
-          console.log('     Canva unavailable — falling back to Remotion...');
+          console.log('     Static image failed — falling back to Remotion video...');
           rendered = await tryRemotion();
         }
-      } else if (engineMode === 'remotion-first') {
-        // Try Remotion first, fall back to Canva
-        try {
+
+      } else if (postType === 'carousel') {
+        // Multi-slide carousel via Canva AI
+        const slides = content.carouselData?.slides || ['Slide 1', 'Slide 2', 'CTA'];
+        const style = content.carouselData?.carouselStyle || 'tips';
+        console.log(`     Rendering ${slides.length}-slide carousel (${style})...`);
+        const result = await renderCarousel(content.facebook, slides, style);
+        if (result && result.filePaths.length >= 2) {
+          // Carousel produces multiple files — store as array
+          mediaUrls = []; // Will be populated after Cloudinary upload
+          outputPath = result.filePaths[0]; // Primary for single-asset fallback
+          visualEngine = `canva (carousel:${style})`;
+          rendered = true;
+          // Store file paths for later upload
+          content._carouselFilePaths = result.filePaths;
+          console.log(` ✅  Carousel: ${result.filePaths.length} slides rendered`);
+        }
+        // Fallback: single image post
+        if (!rendered) {
+          console.log('     Carousel render failed — falling back to single image...');
+          const staticResult = await renderStaticImage(content.facebook);
+          if (staticResult) {
+            outputPath = staticResult.filePath;
+            visualEngine = 'canva (carousel→static fallback)';
+            rendered = true;
+          }
+        }
+
+      } else if (postType === 'illustration') {
+        // Illustration-style image via Canva AI
+        console.log('     Rendering illustration-style image...');
+        const result = await renderIllustration(content.facebook);
+        if (result) {
+          outputPath = result.filePath;
+          visualEngine = 'canva (illustration)';
+          rendered = true;
+          console.log(` ✅  Illustration: ${path.basename(outputPath)}`);
+        }
+        // Fallback: Remotion video
+        if (!rendered) {
+          console.log('     Illustration failed — falling back to Remotion video...');
           rendered = await tryRemotion();
-        } catch (remotionErr) {
-          console.warn(`     Remotion failed: ${remotionErr.message}`);
-          console.log('     Falling back to Canva...');
+        }
+
+      } else {
+        // Default: 'video' post type — Remotion ↔ Canva routing
+        if (engineMode === 'canva') {
           rendered = await tryCanva();
+        } else if (engineMode === 'remotion') {
+          rendered = await tryRemotion();
+        } else if (engineMode === 'canva-first') {
+          rendered = await tryCanva();
+          if (!rendered) {
+            console.log('     Canva unavailable — falling back to Remotion...');
+            rendered = await tryRemotion();
+          }
+        } else if (engineMode === 'remotion-first') {
+          try {
+            rendered = await tryRemotion();
+          } catch (remotionErr) {
+            console.warn(`     Remotion failed: ${remotionErr.message}`);
+            console.log('     Falling back to Canva...');
+            rendered = await tryCanva();
+          }
         }
       }
 
@@ -258,11 +357,129 @@ async function executeEngine(options = {}) {
         throw new Error('All visual engines failed');
       }
 
+      // Step 2b: Merge audio into video via ffmpeg (ONLY for video post type)
+      // Layers: (1) "Why Mediatwist?" voice clip at full volume
+      //         (2) Background music ducked underneath the voice
+      // Remotion's <Audio> is unreliable in SSR — ffmpeg guarantees audio in the MP4.
+      // Skip for static_image, carousel, and illustration post types.
+      if (postType === 'video' && outputPath && fs.existsSync(outputPath)) {
+        // Rotate between available voice clips
+        const voiceClips = [
+          { name: 'Why Mediatwist_.mp3', path: path.resolve(__dirname, '../public/audio/Why Mediatwist_.mp3') },
+          { name: 'Mediatwist CEO.mp3',  path: path.resolve(__dirname, '../public/audio/Mediatwist CEO.mp3') },
+        ].filter(clip => fs.existsSync(clip.path));
+
+        const selectedVoice = voiceClips.length > 0
+          ? voiceClips[Math.floor(Math.random() * voiceClips.length)]
+          : null;
+        const voiceClipPath = selectedVoice ? selectedVoice.path : null;
+        const hasVoice = !!selectedVoice;
+        const musicFilePath = audioTrack ? path.resolve(__dirname, '../public', audioTrack.filePath) : null;
+        const hasMusic = musicFilePath && fs.existsSync(musicFilePath);
+
+        if (hasVoice || hasMusic) {
+          console.log('\n 🎵  Merging audio into video via ffmpeg...');
+          if (hasVoice) console.log(`     🎤  Voice: ${selectedVoice.name}`);
+          if (hasMusic) console.log(`     🎶  Music: ${audioTrack.filename}`);
+
+          const outputDir = path.resolve(__dirname, '../outputs');
+          const mergedPath = path.join(outputDir, `daily-merged-${Date.now()}.mp4`);
+          const musicVolume = config.music?.volume || 0.18;
+          const musicDuckedVolume = musicVolume * 0.4; // Duck music to 40% when voice plays
+          const voiceVolume = 0.85; // Voice clip slightly below max to avoid clipping
+          const fadeOut = config.music?.fadeOutFrames ? (config.music.fadeOutFrames / 30) : 1.5;
+
+          try {
+            // Probe video duration for precise timing
+            const durationStr = execSync(
+              `ffprobe -v error -show_entries format=duration -of csv=p=0 "${outputPath}"`,
+              { encoding: 'utf-8', timeout: 10000 }
+            ).trim();
+            const videoDuration = parseFloat(durationStr) || 10;
+            const fadeOutStart = Math.max(0, videoDuration - fadeOut);
+
+            let ffmpegCmd;
+
+            if (hasVoice && hasMusic) {
+              // Both voice clip + background music: mix them with ducking
+              ffmpegCmd = [
+                'ffmpeg -y',
+                `-i "${outputPath}"`,                  // 0: video
+                `-i "${voiceClipPath}"`,               // 1: voice clip
+                `-i "${musicFilePath}"`,               // 2: background music
+                '-filter_complex',
+                `"[1:a]atrim=0:${videoDuration},asetpts=PTS-STARTPTS,volume=${voiceVolume},afade=t=out:st=${fadeOutStart}:d=${fadeOut}[voice];` +
+                `[2:a]atrim=0:${videoDuration},asetpts=PTS-STARTPTS,volume=${musicDuckedVolume},afade=t=in:st=0:d=1,afade=t=out:st=${fadeOutStart}:d=${fadeOut}[music];` +
+                `[voice][music]amix=inputs=2:duration=shortest:normalize=0[aout]"`,
+                '-map 0:v:0', '-map "[aout]"',
+                '-c:v copy', '-c:a aac -b:a 128k',
+                '-shortest', `-t ${videoDuration}`,
+                `"${mergedPath}"`,
+              ].join(' ');
+            } else if (hasVoice) {
+              // Voice clip only (no background music selected)
+              ffmpegCmd = [
+                'ffmpeg -y',
+                `-i "${outputPath}"`,
+                `-i "${voiceClipPath}"`,
+                '-map 0:v:0', '-map 1:a:0',
+                '-c:v copy', '-c:a aac -b:a 128k',
+                `-af "volume=${voiceVolume},atrim=0:${videoDuration},afade=t=out:st=${fadeOutStart}:d=${fadeOut}"`,
+                '-shortest', `-t ${videoDuration}`,
+                `"${mergedPath}"`,
+              ].join(' ');
+            } else {
+              // Background music only (voice clip file missing)
+              ffmpegCmd = [
+                'ffmpeg -y',
+                `-i "${outputPath}"`,
+                `-i "${musicFilePath}"`,
+                '-map 0:v:0', '-map 1:a:0',
+                '-c:v copy', '-c:a aac -b:a 128k',
+                `-af "volume=${musicVolume},afade=t=in:st=0:d=1,afade=t=out:st=${fadeOutStart}:d=${fadeOut}"`,
+                '-shortest', `-t ${videoDuration}`,
+                `"${mergedPath}"`,
+              ].join(' ');
+            }
+
+            execSync(ffmpegCmd, { stdio: 'pipe', timeout: 60000 });
+
+            // Verify merged file exists and has size
+            if (fs.existsSync(mergedPath) && fs.statSync(mergedPath).size > 0) {
+              fs.unlinkSync(outputPath);
+              outputPath = mergedPath;
+              const layers = [hasVoice ? 'voice' : null, hasMusic ? 'music' : null].filter(Boolean).join(' + ');
+              console.log(` ✅  Audio merged: ${path.basename(mergedPath)} (${layers})`);
+            } else {
+              console.warn('     ⚠️  Merged file empty — using silent video');
+            }
+          } catch (ffmpegErr) {
+            console.warn(`     ⚠️  ffmpeg merge failed: ${ffmpegErr.message}`);
+            console.warn('     Continuing with silent video...');
+          }
+        }
+      }
+
       // Step 3: Upload to Cloudinary
       const { uploadMedia } = require('../publishers/cloudinary');
-      console.log('\n ⏳  Uploading to Cloudinary...');
-      mediaUrl = await uploadMedia(outputPath);
-      console.log(` ✅  Uploaded: ${mediaUrl} (via ${visualEngine})`);
+
+      if (postType === 'carousel' && content._carouselFilePaths) {
+        // Carousel: upload ALL slides to Cloudinary
+        console.log(`\n ⏳  Uploading ${content._carouselFilePaths.length} carousel slides to Cloudinary...`);
+        mediaUrls = [];
+        for (const slidePath of content._carouselFilePaths) {
+          const slideUrl = await uploadMedia(slidePath);
+          mediaUrls.push(slideUrl);
+          console.log(`     ✅  Slide uploaded: ${slideUrl}`);
+        }
+        mediaUrl = mediaUrls[0]; // Primary URL for fallback/LinkedIn
+        console.log(` ✅  All ${mediaUrls.length} slides uploaded (via ${visualEngine})`);
+      } else {
+        // Single asset: upload one file
+        console.log('\n ⏳  Uploading to Cloudinary...');
+        mediaUrl = await uploadMedia(outputPath);
+        console.log(` ✅  Uploaded: ${mediaUrl} (via ${visualEngine})`);
+      }
 
     } catch (renderErr) {
       console.warn(` ⚠️  Render/upload failed: ${renderErr.message}`);
@@ -277,15 +494,20 @@ async function executeEngine(options = {}) {
     const { publishToAll } = require('../publishers');
 
     // Bridge content engine format → publisher format
+    const isVideo = postType === 'video' && mediaUrl && mediaUrl.includes('.mp4');
     const postPayload = {
       caption: content.facebook.caption,
-      imageUrl: mediaUrl,
-      videoUrl: mediaUrl && mediaUrl.includes('.mp4') ? mediaUrl : null,
+      imageUrl: isVideo ? null : mediaUrl,
+      videoUrl: isVideo ? mediaUrl : null,
+      mediaUrls: mediaUrls,          // Array for carousel posts
+      postType: postType,             // Post type for publisher routing
       overrides: {
         facebook:  content.facebook.caption,
         instagram: content.instagram.caption,
         linkedin:  content.linkedin.caption,
       },
+      // Pass audio branding for Reels (brands the audio label on IG)
+      trendingAudio: trendingAudio || null,
     };
 
     const results = await publishToAll(postPayload, mediaUrl);
@@ -305,17 +527,23 @@ async function executeEngine(options = {}) {
           hook: post.hook,
           caption: post.caption,
           compositionId: post.compositionHint,
+          postType,           // Track post type for rotation
           mediaUrl,
-          visualEngine, // Track which engine was used
+          visualEngine,       // Track which engine was used
+          audioTrack: audioTrack ? audioTrack.filename : null,
         });
       }
     });
 
     console.log(`\n${DIVIDER}`);
-    console.log(` 🎉  DAILY ENGINE COMPLETE (visual: ${visualEngine})`);
+    console.log(` 🎉  DAILY ENGINE COMPLETE`);
+    console.log(`     Post type: ${postType}`);
+    console.log(`     Visual:   ${visualEngine}`);
+    console.log(`     Audio:    ${audioTrack ? audioTrack.filename : 'none'} (baked into MP4 via ffmpeg)`);
+    console.log(`     IG Label: ${trendingAudio?.audioName || 'none'}`);
     console.log(DIVIDER);
 
-    return { content, outputPath, mediaUrl, visualEngine, results };
+    return { content, outputPath, mediaUrl, visualEngine, audioTrack, trendingAudio, results };
 
   } catch (err) {
     console.error(`\n ❌  Engine failed: ${err.message}`);

@@ -1,0 +1,137 @@
+{
+  "tracks": [
+    {
+      "filename": "ambient-digital-horizon.mp3",
+      "filePath": "audio/ambient-digital-horizon.mp3",
+      "mood": "ambient",
+      "source": "local",
+      "addedAt": "2026-03-28T22:04:57.170Z"
+    },
+    {
+      "filename": "ambient-tech-pulse.mp3",
+      "filePath": "audio/ambient-tech-pulse.mp3",
+      "mood": "ambient",
+      "source": "local",
+      "addedAt": "2026-03-28T22:04:57.170Z"
+    },
+    {
+      "filename": "analytical-data-flow.mp3",
+      "filePath": "audio/analytical-data-flow.mp3",
+      "mood": "analytical",
+      "source": "local",
+      "addedAt": "2026-03-28T22:04:57.170Z"
+    },
+    {
+      "filename": "cinematic-dark-horizon.mp3",
+      "filePath": "audio/cinematic-dark-horizon.mp3",
+      "mood": "cinematic",
+      "source": "local",
+      "addedAt": "2026-03-28T22:04:57.170Z"
+    },
+    {
+      "filename": "cinematic-power-surge.mp3",
+      "filePath": "audio/cinematic-power-surge.mp3",
+      "mood": "cinematic",
+      "source": "local",
+      "addedAt": "2026-03-28T22:04:57.170Z"
+    },
+    {
+      "filename": "corporate-forward-motion.mp3",
+      "filePath": "audio/corporate-forward-motion.mp3",
+      "mood": "corporate",
+      "source": "local",
+      "addedAt": "2026-03-28T22:04:57.170Z"
+    },
+    {
+      "filename": "corporate-success-story.mp3",
+      "filePath": "audio/corporate-success-story.mp3",
+      "mood": "corporate",
+      "source": "local",
+      "addedAt": "2026-03-28T22:04:57.170Z"
+    },
+    {
+      "filename": "creative-chill-wave.mp3",
+      "filePath": "audio/creative-chill-wave.mp3",
+      "mood": "creative",
+      "source": "local",
+      "addedAt": "2026-03-28T22:04:57.170Z"
+    },
+    {
+      "filename": "creative-flow-state.mp3",
+      "filePath": "audio/creative-flow-state.mp3",
+      "mood": "creative",
+      "source": "local",
+      "addedAt": "2026-03-28T22:04:57.170Z"
+    },
+    {
+      "filename": "edgy-dark-beat.mp3",
+      "filePath": "audio/edgy-dark-beat.mp3",
+      "mood": "edgy",
+      "source": "local",
+      "addedAt": "2026-03-28T22:04:57.170Z"
+    },
+    {
+      "filename": "edgy-tension-wire.mp3",
+      "filePath": "audio/edgy-tension-wire.mp3",
+      "mood": "edgy",
+      "source": "local",
+      "addedAt": "2026-03-28T22:04:57.170Z"
+    },
+    {
+      "filename": "energetic-startup-drive.mp3",
+      "filePath": "audio/energetic-startup-drive.mp3",
+      "mood": "energetic",
+      "source": "local",
+      "addedAt": "2026-03-28T22:04:57.170Z"
+    },
+    {
+      "filename": "futuristic-ai-dream.mp3",
+      "filePath": "audio/futuristic-ai-dream.mp3",
+      "mood": "futuristic",
+      "source": "local",
+      "addedAt": "2026-03-28T22:04:57.170Z"
+    },
+    {
+      "filename": "futuristic-neon-city.mp3",
+      "filePath": "audio/futuristic-neon-city.mp3",
+      "mood": "futuristic",
+      "source": "local",
+      "addedAt": "2026-03-28T22:04:57.170Z"
+    },
+    {
+      "filename": "motivational-new-heights.mp3",
+      "filePath": "audio/motivational-new-heights.mp3",
+      "mood": "motivational",
+      "source": "local",
+      "addedAt": "2026-03-28T22:04:57.170Z"
+    },
+    {
+      "filename": "motivational-rise-up.mp3",
+      "filePath": "audio/motivational-rise-up.mp3",
+      "mood": "motivational",
+      "source": "local",
+      "addedAt": "2026-03-28T22:04:57.170Z"
+    },
+    {
+      "filename": "upbeat-social-groove.mp3",
+      "filePath": "audio/upbeat-social-groove.mp3",
+      "mood": "upbeat",
+      "source": "local",
+      "addedAt": "2026-03-28T22:04:57.170Z"
+    }
+  ],
+  "lastRefresh": "2026-03-28T22:04:57.170Z",
+  "totalTracks": 17,
+  "moodBreakdown": {
+    "ambient": 2,
+    "analytical": 1,
+    "cinematic": 2,
+    "corporate": 2,
+    "creative": 2,
+    "edgy": 2,
+    "energetic": 1,
+    "futuristic": 2,
+    "motivational": 2,
+    "upbeat": 1
+  }
+}

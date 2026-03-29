@@ -52,6 +52,24 @@ module.exports = {
     ],
   },
 
+  // ─── Post Types ─────────────────────────────────────────────────────────
+  // Controls the variety of visual post formats to keep the IG grid diverse.
+  // Weights must sum to 1.0.
+  postTypes: {
+    enabled: ['video', 'static_image', 'carousel', 'illustration'],
+    weights: {
+      video:          0.30,  // Remotion animated text videos
+      static_image:   0.30,  // Canva AI-generated branded images (no text overlay)
+      carousel:       0.25,  // Multi-slide carousels (tips, data, quotes, storytelling)
+      illustration:   0.15,  // Illustration / stop-motion style via Canva AI
+    },
+    carousel: {
+      minSlides: 3,
+      maxSlides: 7,
+      styles: ['tips', 'data', 'quotes', 'storytelling'],
+    },
+  },
+
   // ─── Claude API ──────────────────────────────────────────────────────────
   claude: {
     apiKey:     process.env.ANTHROPIC_API_KEY || null,
@@ -87,6 +105,19 @@ module.exports = {
       abstract:  'FAHFP25xi28',  // Abstract & Textures
     },
     enabled:       !!process.env.CANVA_ACCESS_TOKEN,
+  },
+
+  // ─── Music / Audio ──────────────────────────────────────────────────────
+  music: {
+    enabled:        process.env.MUSIC_ENABLED !== 'false',   // Enabled by default
+    volume:         parseFloat(process.env.MUSIC_VOLUME) || 0.18,  // Subtle (0-1)
+    fadeInFrames:   30,   // 1 second at 30fps
+    fadeOutFrames:  45,   // 1.5 seconds at 30fps
+    pixabayApiKey:  process.env.PIXABAY_API_KEY || null,     // Optional — for auto-fetching
+    trending: {
+      enabled:      process.env.TRENDING_AUDIO_ENABLED !== 'false',  // Enabled by default
+      cacheHours:   parseInt(process.env.TRENDING_AUDIO_CACHE_HOURS) || 6,
+    },
   },
 
   // ─── Publishing ──────────────────────────────────────────────────────────

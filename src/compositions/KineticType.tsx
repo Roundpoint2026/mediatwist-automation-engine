@@ -10,6 +10,7 @@ import {
 } from 'remotion';
 import { MEDIATWIST_COLORS } from '../lib/colors';
 import { BackgroundImage } from '../lib/BackgroundImage';
+import { BackgroundMusic } from '../lib/BackgroundMusic';
 
 export interface KineticTypeProps {
   /** The text to display with kinetic animation */
@@ -18,6 +19,8 @@ export interface KineticTypeProps {
   brandColor?: string;
   /** Optional background photo URL */
   backgroundImageUrl?: string;
+  /** Optional audio track path (relative to public/) for background music */
+  audioSrc?: string;
 }
 
 /**
@@ -29,6 +32,7 @@ export const KineticType: React.FC<KineticTypeProps> = ({
   captionText,
   brandColor = MEDIATWIST_COLORS.accent,
   backgroundImageUrl,
+  audioSrc,
 }) => {
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
@@ -75,6 +79,9 @@ export const KineticType: React.FC<KineticTypeProps> = ({
 
   return (
     <AbsoluteFill style={{ backgroundColor: MEDIATWIST_COLORS.dark, opacity: bgOpacity }}>
+
+      {/* Background music (when provided) */}
+      <BackgroundMusic src={audioSrc} />
 
       {/* Photo background (when provided) */}
       <BackgroundImage src={backgroundImageUrl} overlayOpacity={0.55} blur={2} />

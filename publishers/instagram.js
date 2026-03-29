@@ -135,12 +135,13 @@ async function pollContainerStatus(
  * @param {object} [options={}] - Additional options
  * @param {string} [options.mediaType] - Force media type: 'IMAGE' or 'VIDEO'
  * @param {number} [options.pollMaxAttempts=10] - Container status polling max attempts
+ * @param {string} [options.audioName] - Trending audio name to attach to Reels (IG music library)
  * @returns {Promise<object>} API response with post ID
  *
  * @throws {Error} If required env vars missing, validation fails, or API errors
  */
 async function postToInstagram(mediaUrl, caption, options = {}) {
-  const { mediaType: forcedMediaType = null, pollMaxAttempts = 30 } = options;
+  const { mediaType: forcedMediaType = null, pollMaxAttempts = 30, audioName = null } = options;
 
   // Validate credentials
   const { IG_ACCOUNT_ID, ACCESS_TOKEN } = process.env;
@@ -190,6 +191,12 @@ async function postToInstagram(mediaUrl, caption, options = {}) {
       // Instagram deprecated VIDEO media type — all videos are now REELS
       containerPayload.video_url = mediaUrl;
       containerPayload.media_type = 'REELS';
+
+      // Attach trending audio from Instagram's music library (if provided)
+      if (audioName) {
+        containerPayload.audio_name = audioName;
+        logger.info(`Attaching trending audio: "${audioName}"`);
+      }
     } else {
       containerPayload.image_url = mediaUrl;
     }
@@ -282,4 +289,118 @@ async function postToInstagram(mediaUrl, caption, options = {}) {
   }
 }
 
-module.exports = { postToInstagram };
+/**
+ * Posts a carousel (multi-image album) to Instagram.
+ *
+ * Flow:
+ *   1. Create an item container for each image
+ *   2. Create a carousel container referencing all item IDs
+ *   3. Poll carousel container status
+ *   4. Publish the carousel
+ *
+ * @param {string[]} imageUrls - Array of publicly accessible image URLs (2-10)
+ * @param {string} caption - Post caption
+ * @param {object} [options={}]
+ * @returns {Promise<object>} API response with post ID
+ */
+async function postCarouselToInstagram(imageUrls, caption, options = {}) {
+  const { pollMaxAttempts = 30 } = options;
+
+  const { IG_ACCOUNT_ID, ACCESS_TOKEN } = process.env;
+  if (!IG_ACCOUNT_ID) {
+    logger.warn('postCarouselToInstagram: IG_ACCOUNT_ID not set — skipping');
+    return null;
+  }
+  if (!ACCESS_TOKEN) {
+    logger.warn('postCarouselToInstagram: ACCESS_TOKEN not set — skipping');
+    return null;
+  }
+  if (!imageUrls || imageUrls.length < 2) {
+    throw new Error('postCarouselToInstagram: need at least 2 image URLs');
+  }
+
+  logger.info(`Posting carousel to Instagram (${imageUrls.length} images)`);
+
+  try {
+    // Step 1: Create individual item containers for each image
+    const childIds = [];
+    for (const url of imageUrls) {
+      const itemResult = await withRetry(
+        () => axios.post(
+          `${GRAPH_BASE}/${GRAPH_API_VERSION}/${IG_ACCOUNT_ID}/media`,
+          {
+            image_url: url,
+            is_carousel_item: true,
+            access_token: ACCESS_TOKEN,
+          }
+        ),
+        { attempts: 2, delayMs: 2000 }
+      );
+
+      if (itemResult.data?.id) {
+        childIds.push(itemResult.data.id);
+        logger.info(`  Created carousel item ${childIds.length}/${imageUrls.length}: ${itemResult.data.id}`);
+      }
+    }
+
+    if (childIds.length < 2) {
+      throw new Error(`Only created ${childIds.length} items — need at least 2`);
+    }
+
+    // Step 2: Create the carousel container
+    logger.info('Creating Instagram carousel container...');
+    const carouselResult = await withRetry(
+      () => axios.post(
+        `${GRAPH_BASE}/${GRAPH_API_VERSION}/${IG_ACCOUNT_ID}/media`,
+        {
+          media_type: 'CAROUSEL',
+          children: childIds.join(','),
+          caption,
+          access_token: ACCESS_TOKEN,
+        }
+      ),
+      { attempts: 3, delayMs: 2000, backoff: 'exponential' }
+    );
+
+    const carouselId = carouselResult.data?.id;
+    if (!carouselId) {
+      throw new Error(`Carousel container missing id: ${JSON.stringify(carouselResult.data)}`);
+    }
+
+    logger.success(`Created carousel container: ${carouselId}`);
+
+    // Step 3: Poll container status
+    await pollContainerStatus(carouselId, ACCESS_TOKEN, pollMaxAttempts, 3000);
+
+    // Step 4: Publish
+    logger.info('Publishing Instagram carousel...');
+    const publishResult = await withRetry(
+      () => axios.post(
+        `${GRAPH_BASE}/${GRAPH_API_VERSION}/${IG_ACCOUNT_ID}/media_publish`,
+        {
+          creation_id: carouselId,
+          access_token: ACCESS_TOKEN,
+        }
+      ),
+      { attempts: 3, delayMs: 2000, backoff: 'exponential' }
+    );
+
+    if (!publishResult.data?.id) {
+      throw new Error(`Carousel publish missing id: ${JSON.stringify(publishResult.data)}`);
+    }
+
+    logger.success(`Published carousel to Instagram: post_id=${publishResult.data.id} (${childIds.length} images)`);
+    return publishResult.data;
+
+  } catch (err) {
+    const apiError = err.response?.data?.error;
+    const detail = apiError
+      ? `${apiError.message} (code: ${apiError.code})`
+      : err.message;
+    const msg = `postCarouselToInstagram: Failed: ${detail}`;
+    logger.error(msg);
+    throw new Error(msg);
+  }
+}
+
+module.exports = { postToInstagram, postCarouselToInstagram };

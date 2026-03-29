@@ -10,6 +10,7 @@ import {
 } from 'remotion';
 import { MEDIATWIST_COLORS } from '../lib/colors';
 import { BackgroundImage } from '../lib/BackgroundImage';
+import { BackgroundMusic } from '../lib/BackgroundMusic';
 
 export interface DataDashboardProps {
   /** Main title/headline */
@@ -22,6 +23,8 @@ export interface DataDashboardProps {
   brandColor?: string;
   /** Optional background photo URL */
   backgroundImageUrl?: string;
+  /** Optional audio track path (relative to public/) for background music */
+  audioSrc?: string;
 }
 
 /**
@@ -40,6 +43,7 @@ export const DataDashboard: React.FC<DataDashboardProps> = ({
   ],
   brandColor = MEDIATWIST_COLORS.accent,
   backgroundImageUrl,
+  audioSrc,
 }) => {
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
@@ -82,6 +86,9 @@ export const DataDashboard: React.FC<DataDashboardProps> = ({
 
   return (
     <AbsoluteFill style={{ backgroundColor: MEDIATWIST_COLORS.dark, opacity: bgOpacity }}>
+
+      {/* Background music (when provided) */}
+      <BackgroundMusic src={audioSrc} />
 
       {/* Photo background (when provided) */}
       <BackgroundImage src={backgroundImageUrl} overlayOpacity={0.6} blur={3} />

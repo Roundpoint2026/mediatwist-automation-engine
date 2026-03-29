@@ -10,6 +10,7 @@ import {
 } from 'remotion';
 import { MEDIATWIST_COLORS } from '../lib/colors';
 import { BackgroundImage } from '../lib/BackgroundImage';
+import { BackgroundMusic } from '../lib/BackgroundMusic';
 
 export interface BrandedCaptionProps {
   /** The caption or quote to display */
@@ -20,6 +21,8 @@ export interface BrandedCaptionProps {
   brandColor?: string;
   /** Optional background photo URL */
   backgroundImageUrl?: string;
+  /** Optional audio track path (relative to public/) for background music */
+  audioSrc?: string;
 }
 
 /**
@@ -32,6 +35,7 @@ export const BrandedCaption: React.FC<BrandedCaptionProps> = ({
   attribution = '— The Mediatwist Group',
   brandColor = MEDIATWIST_COLORS.accent,
   backgroundImageUrl,
+  audioSrc,
 }) => {
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
@@ -68,6 +72,9 @@ export const BrandedCaption: React.FC<BrandedCaptionProps> = ({
 
   return (
     <AbsoluteFill style={{ backgroundColor: MEDIATWIST_COLORS.dark, opacity: bgOpacity }}>
+
+      {/* Background music (when provided) */}
+      <BackgroundMusic src={audioSrc} />
 
       {/* Photo background (when provided) */}
       <BackgroundImage src={backgroundImageUrl} overlayOpacity={0.5} blur={3} />

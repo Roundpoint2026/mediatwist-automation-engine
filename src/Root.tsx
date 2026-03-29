@@ -44,6 +44,7 @@ export const RemotionRoot: React.FC = () => {
           headline: 'Mediatwist',
           subText: '',
           brandColor: MEDIATWIST_COLORS.accent,
+          audioSrc: undefined,
         }}
       />
 
@@ -60,6 +61,7 @@ export const RemotionRoot: React.FC = () => {
           headline: 'Did you know?',
           ctaText: 'Follow for more → @mediatwist',
           brandColor: MEDIATWIST_COLORS.accent,
+          audioSrc: undefined,
         }}
       />
 
@@ -75,6 +77,7 @@ export const RemotionRoot: React.FC = () => {
           captionText: 'Your bold statement or quote goes here.',
           attribution: '— The Mediatwist Group',
           brandColor: MEDIATWIST_COLORS.accent,
+          audioSrc: undefined,
         }}
       />
 
@@ -96,6 +99,7 @@ export const RemotionRoot: React.FC = () => {
             { label: 'ROI', value: '+220%' },
           ],
           brandColor: MEDIATWIST_COLORS.accent,
+          audioSrc: undefined,
         }}
       />
 
@@ -110,6 +114,7 @@ export const RemotionRoot: React.FC = () => {
         defaultProps={{
           captionText: 'Bold text with dynamic motion. Every word matters.',
           brandColor: MEDIATWIST_COLORS.accent,
+          audioSrc: undefined,
         }}
       />
 
@@ -125,6 +130,7 @@ export const RemotionRoot: React.FC = () => {
           captionText: 'Your audience doesn\'t need more content. They need better positioning.',
           tagline: 'THE MEDIATWIST GROUP',
           brandColor: MEDIATWIST_COLORS.accent,
+          audioSrc: undefined,
         }}
       />
 
@@ -141,6 +147,7 @@ export const RemotionRoot: React.FC = () => {
           headline: 'INSIGHT',
           tagline: 'THE MEDIATWIST GROUP',
           brandColor: MEDIATWIST_COLORS.accent,
+          audioSrc: undefined,
         }}
       />
 
@@ -156,6 +163,7 @@ export const RemotionRoot: React.FC = () => {
           captionText: 'AI won\'t replace your marketing team. But a team using AI will replace yours.',
           tagline: 'MEDIATWIST INSIGHT',
           brandColor: MEDIATWIST_COLORS.accent,
+          audioSrc: undefined,
         }}
       />
 

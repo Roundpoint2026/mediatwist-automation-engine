@@ -26,7 +26,11 @@
     "render:dashboard": "npx remotion render src/index.ts DataDashboard outputs/dashboard-post.mp4 --codec h264",
     "render:kinetic": "npx remotion render src/index.ts KineticType outputs/kinetic-post.mp4 --codec h264",
     "sync:backgrounds": "node scripts/syncCanvaBackgrounds.js",
-    "sync:backgrounds:quick": "node scripts/syncCanvaBackgrounds.js --quick"
+    "sync:backgrounds:quick": "node scripts/syncCanvaBackgrounds.js --quick",
+    "music:seed": "node music/seedLibrary.js",
+    "music:check": "node music/seedLibrary.js --check",
+    "music:refresh": "node -e \"require('./music/musicManager').refreshLibrary(); console.log('Library refreshed')\"",
+    "music:trending": "node music/trendingAudio.js"
   },
   "dependencies": {
     "remotion": "4.0.340",

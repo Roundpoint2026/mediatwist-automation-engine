@@ -10,6 +10,7 @@ import {
 } from 'remotion';
 import { MEDIATWIST_COLORS } from '../lib/colors';
 import { BackgroundImage } from '../lib/BackgroundImage';
+import { BackgroundMusic } from '../lib/BackgroundMusic';
 
 export interface ReelsPostProps {
   /** Main caption / body text */
@@ -22,6 +23,8 @@ export interface ReelsPostProps {
   brandColor?: string;
   /** Optional background photo URL */
   backgroundImageUrl?: string;
+  /** Optional audio track path (relative to public/) for background music */
+  audioSrc?: string;
 }
 
 /**
@@ -35,6 +38,7 @@ export const ReelsPost: React.FC<ReelsPostProps> = ({
   ctaText = 'Follow for more → @mediatwist',
   brandColor = MEDIATWIST_COLORS.accent,
   backgroundImageUrl,
+  audioSrc,
 }) => {
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
@@ -81,6 +85,9 @@ export const ReelsPost: React.FC<ReelsPostProps> = ({
 
   return (
     <AbsoluteFill style={{ backgroundColor: MEDIATWIST_COLORS.dark, opacity: bgOpacity }}>
+
+      {/* Background music (when provided) */}
+      <BackgroundMusic src={audioSrc} />
 
       {/* Photo background (when provided) */}
       <BackgroundImage src={backgroundImageUrl} overlayOpacity={0.5} blur={2} zoomScale={1.12} />

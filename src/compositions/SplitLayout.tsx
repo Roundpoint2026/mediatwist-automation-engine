@@ -10,6 +10,7 @@ import {
 } from 'remotion';
 import { MEDIATWIST_COLORS } from '../lib/colors';
 import { BackgroundImage } from '../lib/BackgroundImage';
+import { BackgroundMusic } from '../lib/BackgroundMusic';
 
 export interface SplitLayoutProps {
   /** Main caption text */
@@ -22,6 +23,8 @@ export interface SplitLayoutProps {
   brandColor?: string;
   /** Optional background photo URL */
   backgroundImageUrl?: string;
+  /** Optional audio track path (relative to public/) for background music */
+  audioSrc?: string;
 }
 
 /**
@@ -36,6 +39,7 @@ export const SplitLayout: React.FC<SplitLayoutProps> = ({
   tagline = 'THE MEDIATWIST GROUP',
   brandColor = MEDIATWIST_COLORS.accent,
   backgroundImageUrl,
+  audioSrc,
 }) => {
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
@@ -73,6 +77,9 @@ export const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   return (
     <AbsoluteFill style={{ backgroundColor: MEDIATWIST_COLORS.dark }}>
+
+      {/* Background music (when provided) */}
+      <BackgroundMusic src={audioSrc} />
 
       {/* Photo background (when provided) — shows through the dark right panel */}
       <BackgroundImage src={backgroundImageUrl} overlayOpacity={0.5} blur={2} />

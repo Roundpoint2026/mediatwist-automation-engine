@@ -181,6 +181,110 @@ function buildReelsPrompt(hook, category, compositionHint) {
     `Modern tech aesthetic, dark and bold. Visual style: ${style}.`;
 }
 
+// ─── Post-Type Prompt Builders ──────────────────────────────────────────────
+
+/**
+ * Build a Canva AI prompt for a STATIC branded image (no text overlay).
+ * These are visual-only posts — abstract brand art, lifestyle photography, textures.
+ * Designed to break up text-heavy posts on the IG grid.
+ */
+function buildStaticImagePrompt(category) {
+  const STATIC_THEMES = {
+    'Industry Insight': 'futuristic technology landscape, glowing data streams, abstract circuit patterns',
+    'Contrarian Marketing Take': 'bold abstract composition, geometric clash, contrasting shapes and textures',
+    'Case Study Breakdown': 'professional workspace, data visualization on screen, modern office aesthetic',
+    'Founder/Operator Mindset': 'dramatic skyline at golden hour, urban architecture, ambition and scale',
+    'Social Media Myth Busting': 'shattered glass effect, broken pattern, deconstructed geometric shapes',
+    'AI & Marketing Strategy': 'neural network visualization, AI brain illustration, futuristic holographic interface',
+    'Growth Hacking': 'upward arrows, exponential curves, rocket trajectory, acceleration visual',
+    'Brand Authority': 'luxury texture, brushed metal, premium materials, authority and craft',
+    'Paid Media Intelligence': 'dashboard analytics glow, graph visualizations, performance metrics aesthetic',
+    'Content Strategy': 'interconnected nodes, content web, strategic grid layout, information architecture',
+  };
+
+  const theme = STATIC_THEMES[category] || 'bold abstract composition with geometric shapes';
+
+  return `Create a STATIC branded image (NOT a video, NOT animated) for "The Mediatwist Group" marketing agency. ` +
+    `This is a VISUAL-ONLY post with NO TEXT on the image — no headlines, no captions, no words at all. ` +
+    `Design requirements: Black (#0A0A0A) background with yellow (#FFD600) accents. ` +
+    `FULL-WIDTH DESIGN: Use the ENTIRE canvas edge-to-edge with rich visual detail. ` +
+    `Theme: ${theme}. ` +
+    `${buildLogoDirective()} ` +
+    `Style: Premium, executive-level, cinematic quality. No stock photo feel. ` +
+    `Think editorial magazine, not corporate PowerPoint. ` +
+    `NO text whatsoever — this post relies purely on stunning visual impact. ` +
+    `Color palette must be primarily black (#0A0A0A) with yellow (#FFD600) accents only. ` +
+    `No other brand colors. No photos of people. No logos other than the logo zone.`;
+}
+
+/**
+ * Build a Canva AI prompt for a single CAROUSEL SLIDE.
+ * Each slide gets its own branded design with consistent styling.
+ *
+ * @param {string} slideText - Text for this specific slide
+ * @param {number} slideIndex - 0-based slide index (0 = cover)
+ * @param {number} totalSlides - Total number of slides
+ * @param {string} carouselStyle - 'tips' | 'data' | 'quotes' | 'storytelling'
+ */
+function buildCarouselSlidePrompt(slideText, slideIndex, totalSlides, carouselStyle) {
+  const isCover = slideIndex === 0;
+  const isCTA = slideIndex === totalSlides - 1;
+
+  const slideTypeLabel = isCover ? 'COVER SLIDE' : isCTA ? 'CTA SLIDE' : `SLIDE ${slideIndex}/${totalSlides - 2}`;
+
+  const styleDirection = {
+    tips: 'numbered list item with bold number accent, clean layout',
+    data: 'data visualization with bold stat number, progress bar or chart element',
+    quotes: 'elegant quote card with oversized quotation marks, serif-accent typography',
+    storytelling: 'narrative chapter card, editorial magazine spread feel',
+  };
+
+  return `Create a STATIC carousel slide image for "The Mediatwist Group" (${slideTypeLabel}). ` +
+    `Black (#0A0A0A) background with yellow (#FFD600) accents. ` +
+    `HEADLINE FONT: Ultra-bold condensed uppercase (Impact/Bebas Neue/Anton style). ` +
+    `Text on slide: "${slideText}" ` +
+    `${isCover ? 'This is the COVER SLIDE — make it bold, attention-grabbing, and scroll-stopping. Large text, dramatic layout.' : ''} ` +
+    `${isCTA ? 'This is the final CTA SLIDE — include @mediatwist handle prominently and a follow prompt.' : ''} ` +
+    `Visual style: ${styleDirection[carouselStyle] || 'bold modern design'}. ` +
+    `${buildLogoDirective()} ` +
+    `CONSISTENT STYLING: Every slide in this carousel must have the same black/yellow palette, same font style, same layout grid. ` +
+    `No photos of people. Premium executive-level design.`;
+}
+
+/**
+ * Build a Canva AI prompt for an ILLUSTRATION / STOP-MOTION style post.
+ * These are artistic, editorial illustrations — not photographic.
+ */
+function buildIllustrationPrompt(hook, category) {
+  const ILLUSTRATION_THEMES = {
+    'Industry Insight': 'isometric 3D illustration of a futuristic city with data flowing between buildings',
+    'Contrarian Marketing Take': 'hand-drawn editorial illustration of a figure swimming against the current',
+    'Case Study Breakdown': 'blueprint-style technical illustration with callouts and measurement lines',
+    'Founder/Operator Mindset': 'bold vector illustration of a mountain summit with strategic path markers',
+    'Social Media Myth Busting': 'pop-art style illustration of myths being shattered, comic book aesthetic',
+    'AI & Marketing Strategy': 'retro-futuristic illustration of a robot and human collaborating at a desk',
+    'Growth Hacking': 'vector illustration of a rocket launch with growth chart trajectory',
+    'Brand Authority': 'art deco illustration of a crown or throne with geometric precision',
+    'Paid Media Intelligence': 'technical illustration of a control panel with dials and gauges',
+    'Content Strategy': 'editorial illustration of a printing press or content assembly line',
+  };
+
+  const theme = ILLUSTRATION_THEMES[category] || 'bold vector illustration with geometric elements';
+
+  return `Create an ILLUSTRATION-STYLE image (NOT a photo, NOT animated) for "The Mediatwist Group". ` +
+    `This should look like an editorial magazine illustration or bold vector artwork. ` +
+    `STYLE: Hand-crafted illustration feel — vector art, bold lines, flat design with depth. ` +
+    `NOT a photograph. NOT AI-generated photo-realism. Think editorial illustration, infographic art, or bold graphic design. ` +
+    `Color palette: Black (#0A0A0A) background with yellow (#FFD600) as the primary accent color. ` +
+    `White (#FFFFFF) for contrast elements. No other colors. ` +
+    `Theme: ${theme}. ` +
+    `Include subtle text: "${hook.substring(0, 50)}" in ultra-bold condensed uppercase. ` +
+    `${buildLogoDirective()} ` +
+    `"@mediatwist" handle at the BOTTOM-RIGHT corner. ` +
+    `Premium quality, would look at home in a design magazine or gallery wall. ` +
+    `Full-width design, no margins, edge-to-edge visual impact.`;
+}
+
 // ─── 1. Queue Mode — Pull designs from Social Queue folder ───────────────────
 
 /**
@@ -689,6 +793,193 @@ async function renderWithCanva(post, options = {}) {
   };
 }
 
+// ─── 5b. Static Image Pipeline ──────────────────────────────────────────────
+
+/**
+ * Render a static branded image via Canva AI (no text overlay).
+ * Used for 'static_image' post type to break up text-heavy IG grid.
+ *
+ * @param {Object} post - Content engine output
+ * @param {Object} [options]
+ * @returns {Promise<{filePath: string, engine: string, postType: string} | null>}
+ */
+async function renderStaticImage(post, options = {}) {
+  const { outputDir = path.resolve(__dirname, '../outputs') } = options;
+
+  if (!CANVA_ACCESS_TOKEN) {
+    logger.warn('CANVA_ACCESS_TOKEN not set — cannot render static image');
+    return null;
+  }
+
+  try {
+    logger.info('Generating static branded image via Canva AI...');
+
+    const prompt = buildStaticImagePrompt(post.category);
+
+    // Create design via Canva
+    const createResult = await withRetry(
+      () => canvaPost('/designs', {
+        design_type: { type: 'preset', name: 'instagram_post' },
+        title: `Static — ${post.category} — ${Date.now()}`,
+      }),
+      { attempts: 2, delayMs: 3000 }
+    );
+
+    const designId = (createResult.design || createResult).id;
+    if (!designId) {
+      logger.error('Failed to create static image design');
+      return null;
+    }
+
+    // Export as high-quality PNG
+    const downloadUrl = await exportDesign(designId, 'png');
+    if (!downloadUrl) return null;
+
+    if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
+    const outputPath = path.join(outputDir, `static-${Date.now()}.png`);
+    await downloadExport(downloadUrl, outputPath);
+
+    applyLogoOverlay(outputPath);
+
+    logger.success(`Static image rendered: ${path.basename(outputPath)}`);
+    return { filePath: outputPath, engine: 'canva', postType: 'static_image', designId };
+
+  } catch (err) {
+    logger.error(`Static image render failed: ${err.message}`);
+    return null;
+  }
+}
+
+// ─── 5c. Carousel Pipeline ─────────────────────────────────────────────────
+
+/**
+ * Render a multi-slide carousel via Canva AI.
+ * Creates each slide as a separate design, exports as PNG, returns array of file paths.
+ *
+ * @param {Object} post - Content engine output
+ * @param {string[]} slides - Array of slide text content
+ * @param {string} carouselStyle - 'tips' | 'data' | 'quotes' | 'storytelling'
+ * @param {Object} [options]
+ * @returns {Promise<{filePaths: string[], engine: string, postType: string} | null>}
+ */
+async function renderCarousel(post, slides, carouselStyle, options = {}) {
+  const { outputDir = path.resolve(__dirname, '../outputs') } = options;
+
+  if (!CANVA_ACCESS_TOKEN) {
+    logger.warn('CANVA_ACCESS_TOKEN not set — cannot render carousel');
+    return null;
+  }
+
+  if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
+
+  try {
+    logger.info(`Generating ${slides.length}-slide carousel (${carouselStyle}) via Canva AI...`);
+    const filePaths = [];
+
+    for (let i = 0; i < slides.length; i++) {
+      logger.info(`  Rendering slide ${i + 1}/${slides.length}...`);
+
+      // Create design for each slide
+      const createResult = await withRetry(
+        () => canvaPost('/designs', {
+          design_type: { type: 'preset', name: 'instagram_post' },
+          title: `Carousel ${carouselStyle} — Slide ${i + 1}/${slides.length}`,
+        }),
+        { attempts: 2, delayMs: 3000 }
+      );
+
+      const designId = (createResult.design || createResult).id;
+      if (!designId) {
+        logger.warn(`Failed to create slide ${i + 1} design, skipping`);
+        continue;
+      }
+
+      // Export as PNG
+      const downloadUrl = await exportDesign(designId, 'png');
+      if (!downloadUrl) continue;
+
+      const slidePath = path.join(outputDir, `carousel-${Date.now()}-slide${i + 1}.png`);
+      await downloadExport(downloadUrl, slidePath);
+
+      // Apply logo to first and last slides only (cover + CTA)
+      if (i === 0 || i === slides.length - 1) {
+        applyLogoOverlay(slidePath);
+      }
+
+      filePaths.push(slidePath);
+
+      // Rate limit between slides
+      if (i < slides.length - 1) await sleep(2000);
+    }
+
+    if (filePaths.length < 2) {
+      logger.error('Carousel needs at least 2 slides — not enough rendered');
+      return null;
+    }
+
+    logger.success(`Carousel rendered: ${filePaths.length} slides`);
+    return { filePaths, engine: 'canva', postType: 'carousel', carouselStyle };
+
+  } catch (err) {
+    logger.error(`Carousel render failed: ${err.message}`);
+    return null;
+  }
+}
+
+// ─── 5d. Illustration Pipeline ──────────────────────────────────────────────
+
+/**
+ * Render an illustration-style image via Canva AI.
+ * Produces editorial/vector-style art, not photographic content.
+ *
+ * @param {Object} post - Content engine output
+ * @param {Object} [options]
+ * @returns {Promise<{filePath: string, engine: string, postType: string} | null>}
+ */
+async function renderIllustration(post, options = {}) {
+  const { outputDir = path.resolve(__dirname, '../outputs') } = options;
+
+  if (!CANVA_ACCESS_TOKEN) {
+    logger.warn('CANVA_ACCESS_TOKEN not set — cannot render illustration');
+    return null;
+  }
+
+  try {
+    logger.info('Generating illustration-style image via Canva AI...');
+
+    const createResult = await withRetry(
+      () => canvaPost('/designs', {
+        design_type: { type: 'preset', name: 'instagram_post' },
+        title: `Illustration — ${post.category} — ${Date.now()}`,
+      }),
+      { attempts: 2, delayMs: 3000 }
+    );
+
+    const designId = (createResult.design || createResult).id;
+    if (!designId) {
+      logger.error('Failed to create illustration design');
+      return null;
+    }
+
+    // Export as PNG
+    const downloadUrl = await exportDesign(designId, 'png');
+    if (!downloadUrl) return null;
+
+    if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
+    const outputPath = path.join(outputDir, `illustration-${Date.now()}.png`);
+    await downloadExport(downloadUrl, outputPath);
+
+    applyLogoOverlay(outputPath);
+
+    logger.success(`Illustration rendered: ${path.basename(outputPath)}`);
+    return { filePath: outputPath, engine: 'canva', postType: 'illustration', designId };
+
+  } catch (err) {
+    logger.error(`Illustration render failed: ${err.message}`);
+    return null;
+  }
+}
+
 // ─── 6. Decision Helper — Should this run use Canva? ─────────────────────────
 
 /**
@@ -742,6 +1033,11 @@ module.exports = {
   downloadExport,
   archiveDesign,
 
+  // Post-type-specific pipelines
+  renderStaticImage,
+  renderCarousel,
+  renderIllustration,
+
   // Logo overlay (also usable by Remotion pipeline)
   applyLogoOverlay,
   overlayLogoOnImage,
@@ -754,6 +1050,9 @@ module.exports = {
   // Prompt builders (for external use / testing)
   buildFeedPrompt,
   buildReelsPrompt,
+  buildStaticImagePrompt,
+  buildCarouselSlidePrompt,
+  buildIllustrationPrompt,
   buildLogoDirective,
   getStyleForHint,
   LOGO_ZONE_RULES,

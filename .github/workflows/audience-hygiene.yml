@@ -1,0 +1,179 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Audience Hygiene — Weekly Instagram Audit
+#
+# Runs every Monday at 9:00 AM Eastern Time.
+# Analyzes follower/following CSVs committed to audience-hygiene/data/
+# and produces risk reports + cleanup batches.
+#
+# DATA REQUIREMENTS:
+#   Commit your CSV exports to audience-hygiene/data/:
+#     - followers.csv (required)
+#     - following.csv (required)
+#   See audience-hygiene/README.md for expected CSV format.
+#
+# Required GitHub Secrets (only for email delivery):
+#   SMTP_USER, SMTP_PASS, ALERT_EMAIL
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: Audience Hygiene
+
+on:
+  schedule:
+    # Monday 9:00 AM Eastern (covers EDT and EST)
+    - cron: '0 13 * * 1'   # 9:00 AM EDT (summer)
+    - cron: '0 14 * * 1'   # 9:00 AM EST (winter)
+
+  # Manual trigger with options
+  workflow_dispatch:
+    inputs:
+      use_sample_data:
+        description: 'Use built-in sample data instead of committed CSVs'
+        required: false
+        default: 'false'
+        type: boolean
+
+# Prevent overlapping runs
+concurrency:
+  group: audience-hygiene
+  cancel-in-progress: false
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # ── Data Preparation ──────────────────────────────────────────
+      - name: Prepare data
+        run: |
+          cd audience-hygiene
+
+          if [ "${{ github.event.inputs.use_sample_data }}" = "true" ]; then
+            echo "📦 Generating sample data for test run..."
+            node cli.js --sample
+            DATA_DIR="data/sample"
+          else
+            DATA_DIR="data"
+          fi
+
+          # Verify CSV files exist
+          if ! ls "$DATA_DIR"/followers*.csv 1>/dev/null 2>&1; then
+            echo "❌ No followers CSV found in $DATA_DIR/"
+            echo "   Upload followers.csv and following.csv to audience-hygiene/data/"
+            echo "   Or run manually with 'Use sample data' checked."
+            exit 1
+          fi
+
+          if ! ls "$DATA_DIR"/following*.csv 1>/dev/null 2>&1; then
+            echo "❌ No following CSV found in $DATA_DIR/"
+            exit 1
+          fi
+
+          FOLLOWER_COUNT=$(tail -n +2 "$DATA_DIR"/followers*.csv | wc -l)
+          FOLLOWING_COUNT=$(tail -n +2 "$DATA_DIR"/following*.csv | wc -l)
+          echo "✓ Found $FOLLOWER_COUNT followers and $FOLLOWING_COUNT following in $DATA_DIR/"
+          echo "DATA_DIR=$DATA_DIR" >> $GITHUB_ENV
+
+      # ── Run Analysis ──────────────────────────────────────────────
+      - name: Run audience analysis
+        id: analysis
+        run: |
+          cd audience-hygiene
+          node run.js --data-dir "$DATA_DIR" --output-dir output 2>&1 | tee analysis.log
+
+          # Parse key stats for notification
+          QUALITY=$(grep -oP 'Audience Quality Score.*?(\d+)' output/SUMMARY.md | grep -oP '\d+' | tail -1 || echo "0")
+          REMOVE=$(grep -oP 'REMOVE.*?(\d+)' output/SUMMARY.md | grep -oP '\d+' | head -1 || echo "0")
+          echo "quality=$QUALITY" >> $GITHUB_OUTPUT
+          echo "remove=$REMOVE" >> $GITHUB_OUTPUT
+
+      # ── Write Job Summary ─────────────────────────────────────────
+      - name: Write job summary
+        if: always()
+        run: |
+          if [ -f audience-hygiene/output/SUMMARY.md ]; then
+            cat audience-hygiene/output/SUMMARY.md >> $GITHUB_STEP_SUMMARY
+          fi
+
+      # ── Upload Reports ────────────────────────────────────────────
+      - name: Upload analysis reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: audience-hygiene-report-${{ github.run_number }}
+          path: |
+            audience-hygiene/output/*.csv
+            audience-hygiene/output/*.json
+            audience-hygiene/output/*.html
+            audience-hygiene/output/SUMMARY.md
+          retention-days: 90
+
+      # ── Commit History Tracking ───────────────────────────────────
+      - name: Commit updated history
+        run: |
+          cd audience-hygiene
+          if [ -f data/history.json ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add data/history.json
+            git diff --cached --quiet || git commit -m "chore: update audience hygiene history [skip ci]"
+            git push || echo "⚠️ Could not push history update"
+          fi
+        continue-on-error: true
+
+      # ── Email Report ──────────────────────────────────────────────
+      - name: Send weekly report email
+        if: success() && secrets.SMTP_USER != ''
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.SMTP_USER }}
+          password: ${{ secrets.SMTP_PASS }}
+          subject: '[Mediatwist] Weekly Audience Hygiene — Quality: ${{ steps.analysis.outputs.quality }}% | ${{ steps.analysis.outputs.remove }} to remove'
+          to: ${{ secrets.ALERT_EMAIL }}
+          from: Mediatwist Engine <${{ secrets.SMTP_USER }}>
+          html_body: file://audience-hygiene/output/report_${{ github.run_number }}.html
+          attachments: audience-hygiene/output/audit_dashboard_*.csv,audience-hygiene/output/daily_batches_*.csv
+          body: |
+            Weekly Audience Hygiene Report
+
+            Audience Quality Score: ${{ steps.analysis.outputs.quality }}%
+            Accounts to Remove: ${{ steps.analysis.outputs.remove }}
+
+            Full reports attached as CSVs. HTML report also attached.
+            View the full run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        continue-on-error: true
+
+      # ── Failure Alert ─────────────────────────────────────────────
+      - name: Send failure alert
+        if: failure() && secrets.SMTP_USER != ''
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.SMTP_USER }}
+          password: ${{ secrets.SMTP_PASS }}
+          subject: '[Mediatwist] Audience Hygiene FAILED'
+          to: ${{ secrets.ALERT_EMAIL }}
+          from: Mediatwist Engine <${{ secrets.SMTP_USER }}>
+          body: |
+            Audience Hygiene weekly analysis FAILED.
+
+            This usually means CSV data is missing or malformed.
+            Upload fresh followers.csv and following.csv to audience-hygiene/data/
+
+            View the run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        continue-on-error: true
+
+      - name: Log completion
+        if: success()
+        run: echo "✅ Audience hygiene analysis complete at $(date -u '+%Y-%m-%d %H:%M UTC')"

@@ -1,0 +1,34 @@
+[
+  {
+    "totalAccounts": 33,
+    "totalFollowers": 23,
+    "totalFollowing": 20,
+    "mutualFollows": 10,
+    "notFollowingBack": 10,
+    "dontFollowBack": 13,
+    "keepCount": 15,
+    "reviewCount": 13,
+    "removeCount": 5,
+    "spamCount": 16,
+    "inactiveCount": 18,
+    "audienceQualityScore": 43,
+    "totalDays": 1,
+    "timestamp": "2026-03-30"
+  },
+  {
+    "totalAccounts": 362,
+    "totalFollowers": 352,
+    "totalFollowing": 10,
+    "mutualFollows": 0,
+    "notFollowingBack": 10,
+    "dontFollowBack": 352,
+    "keepCount": 12,
+    "reviewCount": 340,
+    "removeCount": 10,
+    "spamCount": 350,
+    "inactiveCount": 362,
+    "audienceQualityScore": 3,
+    "totalDays": 1,
+    "timestamp": "2026-03-30"
+  }
+]
